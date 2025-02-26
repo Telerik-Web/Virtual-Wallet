@@ -1,12 +1,9 @@
-package com.telerikacademy.web.virtual_wallet.controllers;
+package com.telerikacademy.web.virtual_wallet.controllers.mvc;
 
-import com.telerikacademy.web.virtual_wallet.exceptions.AuthenticationFailureException;
-import com.telerikacademy.web.virtual_wallet.exceptions.EntityNotFoundException;
 import com.telerikacademy.web.virtual_wallet.models.User;
 import com.telerikacademy.web.virtual_wallet.services.UserService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 

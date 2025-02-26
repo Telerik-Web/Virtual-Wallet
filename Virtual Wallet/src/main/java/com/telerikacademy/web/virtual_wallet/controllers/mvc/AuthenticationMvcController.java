@@ -1,7 +1,8 @@
-package com.telerikacademy.web.virtual_wallet.controllers;
+package com.telerikacademy.web.virtual_wallet.controllers.mvc;
 
 
 import com.telerikacademy.web.virtual_wallet.exceptions.AuthenticationFailureException;
+import com.telerikacademy.web.virtual_wallet.exceptions.DuplicateEntityException;
 import com.telerikacademy.web.virtual_wallet.exceptions.EntityNotFoundException;
 import com.telerikacademy.web.virtual_wallet.helpers.AuthenticationHelper;
 import com.telerikacademy.web.virtual_wallet.mappers.UserMapper;
@@ -45,15 +46,15 @@ public class AuthenticationMvcController {
     @GetMapping("/login")
     public String showLogin(Model model) {
         model.addAttribute("login", new LogInDto());
-        return "login";
+        return "Login";
     }
 
     @PostMapping("/login")
     public String processLogin(@Valid @ModelAttribute("login") LogInDto login,
                                HttpSession session,
                                BindingResult errors) {
-        if(errors.hasErrors()) {
-            return "login";
+        if (errors.hasErrors()) {
+            return "Login";
         }
 
         try {
@@ -73,6 +74,28 @@ public class AuthenticationMvcController {
     @GetMapping("/register")
     public String showRegister(Model model) {
         model.addAttribute("register", new RegisterDto());
-        return "register";
+        return "Register";
+    }
+
+    @PostMapping("/register")
+    public String processRegister(@Valid @ModelAttribute("register") RegisterDto registerDto,
+                                  BindingResult errors) {
+        if (errors.hasErrors()) {
+            return "Register";
+        }
+
+        if(!registerDto.getPassword().equals(registerDto.getPasswordConfirm())) {
+            return "Register";
+        }
+
+        try {
+            User user = userMapper.fromRegisterDto(registerDto);
+            userService.create(user);
+            return "redirect:/auth/login";
+        } catch (DuplicateEntityException e) {
+            errors.rejectValue("username", "duplicate.username",
+                    "Username is already taken!");
+            return "Register";
+        }
     }
 }
