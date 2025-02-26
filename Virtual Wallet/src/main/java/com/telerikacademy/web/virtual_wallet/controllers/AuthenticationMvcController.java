@@ -6,6 +6,7 @@ import com.telerikacademy.web.virtual_wallet.exceptions.EntityNotFoundException;
 import com.telerikacademy.web.virtual_wallet.helpers.AuthenticationHelper;
 import com.telerikacademy.web.virtual_wallet.mappers.UserMapper;
 import com.telerikacademy.web.virtual_wallet.models.LogInDto;
+import com.telerikacademy.web.virtual_wallet.models.RegisterDto;
 import com.telerikacademy.web.virtual_wallet.models.User;
 import com.telerikacademy.web.virtual_wallet.services.UserService;
 import jakarta.servlet.http.HttpSession;
@@ -67,5 +68,11 @@ public class AuthenticationMvcController {
             errors.reject("invalid.credentials", "Invalid username or password");
             return "Login";
         }
+    }
+
+    @GetMapping("/register")
+    public String showRegister(Model model) {
+        model.addAttribute("register", new RegisterDto());
+        return "register";
     }
 }

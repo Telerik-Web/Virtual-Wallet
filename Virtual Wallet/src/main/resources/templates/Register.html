@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/PageLayout.html :: head('Register')}"></head>
+<body>
+
+<nav th:replace="~{fragments/PageLayout.html :: navbar}"></nav>
+
+<section class="container mt-5">
+    <div class="masthead vh-100 justify-content-center">
+        <div class="container d-flex align-items-center flex-column">
+            <form action="#" th:action="@{/auth/register}" th:object="${register}" method="post">
+
+                <h2 class="page-title">Create an Account</h2>
+
+                <label class="fieldName" th:text="#{username}">Username</label>
+                <br/>
+                <input class="input-group-text" type="text" th:field="*{username}"/>
+                <label class="error" th:errors="*{username}">Username Error</label>
+                <br/><br/>
+
+                <label class="fieldName" th:text="#{password}">Password</label>
+                <br/>
+                <input class="input-group-text" type="password" th:field="*{password}"/>
+                <label class="error" th:errors="*{password}">Password Error</label>
+                <br/><br/>
+
+                <label class="fieldName" th:text="#{passwordConfirm}">Password Confirm</label>
+                <br/>
+                <input class="input-group-text" type="password" th:field="*{passwordConfirm}"/>
+                <label class="error" th:errors="*{passwordConfirm}">Password Confirm Error</label>
+                <br/><br/>
+
+                <label class="fieldName" th:text="#{firstName}">First Name</label>
+                <br/>
+                <input class="input-group-text" type="text" th:field="*{firstName}"/>
+                <label class="error" th:errors="*{firstName}">First Name Error</label>
+                <br/><br/>
+
+                <label class="lastName" th:text="#{lastName}">Last Name</label>
+                <br/>
+                <input class="input-group-text" type="text" th:field="*{lastName}"/>
+                <label class="error" th:errors="*{lastName}">Last Name Error</label>
+                <br/><br/>
+
+                <label class="lastName" th:text="#{email}">Last Name</label>
+                <br/>
+                <input class="input-group-text" type="text" th:field="*{email}"/>
+                <label class="error" th:errors="*{email}">Email Error</label>
+                <br/><br/>
+
+                <input class="btn btn-primary" type="submit" value="Register"/>
+            </form>
+        </div>
+    </div>
+</section>
+
+
+<footer th:replace="~{fragments/PageLayout.html :: footer}"></footer>
+<div th:replace="~{/fragments/PageLayout.html :: scripts}"></div>
+
+</body>
+</html>
