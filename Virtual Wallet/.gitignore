@@ -21,6 +21,7 @@ logs/
 /src/main/resources/application.properties
 application-*.yml
 application-*.properties
+datasource.xml
 .env
 *.key
 *.pem

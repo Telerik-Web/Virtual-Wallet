@@ -1,10 +1,9 @@
 package com.telerikacademy.web.virtual_wallet.models;
 
-import jakarta.persistence.Column;
+
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
+
 
 public class RegisterDto extends LogInDto {
     @NotEmpty(message = "Password confirmation cannot be empty!")

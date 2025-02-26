@@ -16,17 +16,12 @@ public class Card {
     @Column(name = "id")
     private long id;
 
-    @NotNull(message = "Card number is required.")
-    @Pattern(regexp = "^\\d{16}$", message = "Card number must be exactly 16 digits.")
     @Column(name = "card_number")
     private String cardNumber;
 
-    @NotNull(message = "Expiration date is required.")
     @Column(name = "expiration_Date")
     private LocalDate expirationDate;
 
-    @NotNull(message = "Check number is required.")
-    @Pattern(regexp = "^\\d{3}$", message = "Check number must be exactly 3 digits.")
     @Column(name = "check_Number")
     private String checkNumber;
 
