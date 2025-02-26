@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/PageLayout.html :: head('Login')}"></head>
+<body>
+
+<nav th:replace="~{fragments/PageLayout.html :: navbar}"></nav>
+
+<section class="container mt-5">
+    <div class="masthead vh-100 justify-content-center">
+        <div class="container d-flex align-items-center flex-column mt-5">
+            <form action="#" th:action="@{/auth/login}" th:object="${login}" method="post">
+
+                <h2 class="page-title">My Account</h2>
+
+                <div th:if="${#fields.hasErrors() and login.username!='' and login.password!=''}">
+                    <p class="error">Wrong username or password!</p>
+                </div>
+
+                <label class="fieldName" th:text="#{username}">Username</label>
+                <br/>
+                <input class="input-group-text" type="text" th:field="*{username}"/>
+                <label class="error" th:errors="*{username}">Username error</label>
+                <br/><br/>
+
+                <label class="fieldName" th:text="#{password}">Password</label>
+                <br/>
+                <input class="input-group-text" type="password" th:field="*{password}"/>
+                <label class="error" th:errors="*{password}">Password error</label>
+                <br/><br/>
+
+                <input class="btn btn-primary" type="submit" value="Login"/>
+            </form>
+        </div>
+    </div>
+</section>
+
+
+<footer th:replace="~{fragments/PageLayout.html :: footer}"></footer>
+<div th:replace="~{/fragments/PageLayout.html :: scripts}"></div>
+
+</body>
+</html>
