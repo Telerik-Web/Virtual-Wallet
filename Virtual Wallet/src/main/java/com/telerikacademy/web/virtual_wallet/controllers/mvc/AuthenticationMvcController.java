@@ -60,7 +60,7 @@ public class AuthenticationMvcController {
         try {
             User user = authenticationHelper.verifyAuthentication(login.getUsername(), login.getPassword());
             session.setAttribute("currentUser", user.getUsername());
-            session.setAttribute("isAdmin", user.isAdmin());
+            session.setAttribute("isAdmin", user.getIsAdmin());
             return "redirect:/";
         } catch (AuthenticationFailureException e) {
             errors.reject("Invalid authentication");
