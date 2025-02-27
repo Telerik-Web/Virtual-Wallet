@@ -5,10 +5,7 @@ import com.telerikacademy.web.virtual_wallet.exceptions.EntityNotFoundException;
 import com.telerikacademy.web.virtual_wallet.exceptions.UnauthorizedOperationException;
 import com.telerikacademy.web.virtual_wallet.helpers.AuthenticationHelper;
 import com.telerikacademy.web.virtual_wallet.mappers.UserMapper;
-import com.telerikacademy.web.virtual_wallet.models.FilterUserOptions;
-import com.telerikacademy.web.virtual_wallet.models.User;
-import com.telerikacademy.web.virtual_wallet.models.UserDTO;
-import com.telerikacademy.web.virtual_wallet.models.UserDtoOut;
+import com.telerikacademy.web.virtual_wallet.models.*;
 import com.telerikacademy.web.virtual_wallet.services.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -16,10 +13,12 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.Set;
 
 
 //get each card by id and all cards
@@ -76,6 +75,15 @@ public class UserRestController {
         } catch (UnauthorizedOperationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         }
+    }
+
+    @Operation(summary = "Gets all cards of a user", description = "Fetches all cards for a unique user.")
+    @GetMapping("/{userId}/cards")
+    @SecurityRequirement(name = "authHeader")
+    public ResponseEntity<Set<CardDTO>> getUserCards(@PathVariable int userId) {
+        User user = userService.getById(userId);
+        //return ResponseEntity.ok(user.getCards());
+        return ResponseEntity.ok(userService.getAllCardsForUser(userId));
     }
 
     @Operation(summary = "Create a User", description = "Create a user with unique all its fields.")

@@ -1,10 +1,12 @@
 package com.telerikacademy.web.virtual_wallet.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.Data;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -15,7 +17,7 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private long id;
+    private int id;
 
     @Column(name = "username")
     private String username;
@@ -36,7 +38,8 @@ public class User {
     private String phoneNumber;
 
     @Lob
-    @Basic(fetch = FetchType.LAZY)
+    @JsonIgnore
+    @Basic(fetch = FetchType.EAGER)
     @Column(name = "photo")
     private byte[] photo;
 
@@ -51,8 +54,12 @@ public class User {
 //            joinColumns = @JoinColumn(name = "user_id"),
 //            inverseJoinColumns = @JoinColumn(name = "card_id")
 //    )
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @JsonManagedReference
     private Set<Card> cards;
+
+    @Column(name = "balance")
+    private double Balance;
 
     public User() {
     }

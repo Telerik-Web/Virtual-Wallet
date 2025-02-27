@@ -7,6 +7,7 @@ CREATE TABLE users
     password   VARCHAR(255) NOT NULL,
     email      VARCHAR(255) NOT NULL UNIQUE,
     phone      VARCHAR(10)  NOT NULL UNIQUE,
+    balance    VARCHAR(255) NOT NULL,
     photo      LONGBLOB,
     isAdmin    BOOLEAN      NOT NULL,
     isBlocked  BOOLEAN      NOT NULL
@@ -22,11 +23,23 @@ CREATE TABLE cards
     FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
 );
 
-CREATE TABLE users_cards
+CREATE TABLE transactions
 (
-    id      BIGINT AUTO_INCREMENT PRIMARY KEY,
-    card_id BIGINT NOT NULL,
-    FOREIGN KEY (card_id) REFERENCES cards (id) ON DELETE CASCADE,
-    user_id BIGINT NOT NULL,
-    FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
+    id           BIGINT AUTO_INCREMENT PRIMARY KEY,
+    sender_id    BIGINT                                  NOT NULL,
+    FOREIGN KEY (sender_id) REFERENCES users (id) ON DELETE CASCADE,
+    recipient_id BIgINT                                  NOT NULL,
+    FOREIGN KEY (recipient_id) REFERENCES users (id) ON DELETE CASCADE,
+    amount       DECIMAL(10, 2)                          NOT NULL,
+    status       ENUM ('PENDING', 'COMPLETED', 'FAILED') NOT NULL DEFAULT 'PENDING',
+    created_at   TIMESTAMP                                        DEFAULT CURRENT_TIMESTAMP
 );
+
+# CREATE TABLE users_cards
+# (
+#     id      BIGINT AUTO_INCREMENT PRIMARY KEY,
+#     card_id BIGINT NOT NULL,
+#     FOREIGN KEY (card_id) REFERENCES cards (id) ON DELETE CASCADE,
+#     user_id BIGINT NOT NULL,
+#     FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
+# );
