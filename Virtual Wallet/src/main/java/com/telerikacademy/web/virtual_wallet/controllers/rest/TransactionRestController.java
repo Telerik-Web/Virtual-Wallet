@@ -8,8 +8,16 @@ import com.telerikacademy.web.virtual_wallet.services.TransactionService;
 import com.telerikacademy.web.virtual_wallet.services.UserService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.data.domain.Pageable;
+
+import java.time.LocalDateTime;
 
 @RestController
 @RequestMapping("/api/transactions")
@@ -37,7 +45,7 @@ public class TransactionRestController {
     }
 
     @PostMapping("/send")
-    public Transaction sendByPhone(@RequestHeader HttpHeaders headers,
+    public Transaction sendMoney(@RequestHeader HttpHeaders headers,
                                    @RequestParam String type,
                                    @RequestParam String value,
                                    @RequestBody Transaction transaction) {

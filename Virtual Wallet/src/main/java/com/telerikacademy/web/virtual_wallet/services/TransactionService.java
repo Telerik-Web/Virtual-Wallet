@@ -2,7 +2,9 @@ package com.telerikacademy.web.virtual_wallet.services;
 
 import com.telerikacademy.web.virtual_wallet.enums.Status;
 import com.telerikacademy.web.virtual_wallet.models.Transaction;
+import org.springframework.data.domain.Page;
 import com.telerikacademy.web.virtual_wallet.models.User;
+import org.springframework.data.domain.Pageable;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
