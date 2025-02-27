@@ -28,7 +28,7 @@ public class HibernateConfig {
     public LocalSessionFactoryBean sessionFactory() {
         LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
         sessionFactory.setDataSource(dataSource());
-        sessionFactory.setPackagesToScan("com.telerikacademy.web.forumsystem.models");
+        sessionFactory.setPackagesToScan("com.telerikacademy.web.virtual_wallet.models");
         sessionFactory.setHibernateProperties(hibernateProperties());
         return sessionFactory;
     }
