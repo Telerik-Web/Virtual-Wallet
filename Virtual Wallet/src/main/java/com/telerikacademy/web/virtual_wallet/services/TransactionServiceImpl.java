@@ -79,7 +79,7 @@ public class TransactionServiceImpl implements TransactionService {
             throw new IllegalArgumentException("Amount must be greater than zero.");
         }
 
-        if (sender.getBalance() <= 0) {
+        if (sender.getBalance() < amount) {
             throw new IllegalArgumentException("Sender balance must be greater than zero.");
         }
 

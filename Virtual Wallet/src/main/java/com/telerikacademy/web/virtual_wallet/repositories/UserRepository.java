@@ -19,6 +19,8 @@ public interface UserRepository {
 
     User getByEmail(String email);
 
+    User getByPhoneNumber(String phoneNumber);
+
     void alterAdminPermissions(User user);
 
     void alterBlock(User user);

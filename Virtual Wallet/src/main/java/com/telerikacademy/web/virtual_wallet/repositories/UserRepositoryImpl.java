@@ -104,6 +104,18 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
+    public User getByPhoneNumber(String phoneNumber) {
+        try (Session session = sessionFactory.openSession()) {
+            Query<User> user = session.createQuery("From User where phoneNumber = :phoneNumber", User.class);
+            user.setParameter("phoneNumber", phoneNumber);
+            return user
+                    .stream()
+                    .findFirst()
+                    .orElseThrow(() -> new EntityNotFoundException("User", "phoneNumber", phoneNumber));
+        }
+    }
+
+    @Override
     public void alterAdminPermissions(User user) {
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
@@ -161,8 +173,8 @@ public class UserRepositoryImpl implements UserRepository {
         };
 
         orderBy = String.format(" order by %s", orderBy);
-        if(filterOptions.getSortOrder().isPresent() &&
-                filterOptions.getSortOrder().get().equalsIgnoreCase("desc")){
+        if (filterOptions.getSortOrder().isPresent() &&
+                filterOptions.getSortOrder().get().equalsIgnoreCase("desc")) {
             orderBy = String.format("%s desc", orderBy);
         }
 

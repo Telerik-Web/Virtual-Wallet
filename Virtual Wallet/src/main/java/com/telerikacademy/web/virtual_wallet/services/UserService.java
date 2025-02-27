@@ -24,6 +24,8 @@ public interface UserService {
 
     User getByEmail(String email);
 
+    User getByPhoneNumber(String phoneNumber);
+
     void alterAdminPermissions(int id, User user, boolean isAdmin);
 
     void create(User user);

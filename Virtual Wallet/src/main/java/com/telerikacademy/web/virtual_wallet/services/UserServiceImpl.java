@@ -67,6 +67,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public User getByPhoneNumber(String phoneNumber) {
+        return userRepository.getByPhoneNumber(phoneNumber);
+    }
+
+    @Override
     public void alterAdminPermissions(int id, User user, boolean isAdmin) {
         checkIfAdmin(user);
 

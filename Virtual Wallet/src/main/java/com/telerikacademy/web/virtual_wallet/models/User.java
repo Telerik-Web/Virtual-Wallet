@@ -56,6 +56,7 @@ public class User {
 //    )
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @JsonManagedReference
+    @JsonIgnore
     private Set<Card> cards;
 
     @Column(name = "balance")
