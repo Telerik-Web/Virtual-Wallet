@@ -26,7 +26,7 @@ public class Card {
     private String checkNumber;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     @PrePersist

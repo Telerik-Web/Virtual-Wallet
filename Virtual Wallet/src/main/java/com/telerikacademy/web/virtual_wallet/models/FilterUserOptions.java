@@ -1,7 +1,10 @@
 package com.telerikacademy.web.virtual_wallet.models;
 
+import lombok.Data;
+
 import java.util.Optional;
 
+@Data
 public class FilterUserOptions {
 
     private Optional<String> username;
@@ -21,25 +24,5 @@ public class FilterUserOptions {
         this.phoneNumber = Optional.ofNullable(phoneNumber);
         this.sortBy = Optional.ofNullable(sortBy);
         this.sortOrder = Optional.ofNullable(sortOrder);
-    }
-
-    public Optional<String> getUsername() {
-        return username;
-    }
-
-    public Optional<String> getEmail() {
-        return email;
-    }
-
-    public Optional<String> getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public Optional<String> getSortBy() {
-        return sortBy;
-    }
-
-    public Optional<String> getSortOrder() {
-        return sortOrder;
     }
 }

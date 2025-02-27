@@ -28,7 +28,7 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public List<User> getAll(FilterUserOptions filterOptions) {
         try (Session session = sessionFactory.openSession()) {
-            StringBuilder sb = new StringBuilder();
+            StringBuilder sb = new StringBuilder("FROM User");
             List<String> filters = new ArrayList<>();
             Map<String, Object> params = new HashMap<>();
 
@@ -43,11 +43,11 @@ public class UserRepositoryImpl implements UserRepository {
             });
 
             filterOptions.getPhoneNumber().ifPresent(value -> {
-                filters.add("PhoneNumber like :phoneNumber");
+                filters.add("phoneNumber like :phoneNumber");
                 params.put("phoneNumber", String.format("%%%s%%", value));
             });
 
-            if (filters.isEmpty()) {
+            if (!filters.isEmpty()) {
                 sb.append(" WHERE ").append(String.join(" AND ", filters));
             } else {
                 sb.append(" order by id asc");

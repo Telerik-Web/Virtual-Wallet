@@ -1,12 +1,14 @@
 package com.telerikacademy.web.virtual_wallet.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.Data;
+
 import java.util.Set;
 
-@Data
 @Entity
+@Data
 @Table(name = "users")
 public class User {
 
@@ -31,7 +33,7 @@ public class User {
     private String email;
 
     @Column(name = "phone")
-    private String phone;
+    private String phoneNumber;
 
     @Lob
     @Basic(fetch = FetchType.LAZY)
@@ -44,8 +46,16 @@ public class User {
     @Column(name = "isBlocked")
     private Boolean isBlocked;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    //    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+//    @JoinTable(name = "users_cards",
+//            joinColumns = @JoinColumn(name = "user_id"),
+//            inverseJoinColumns = @JoinColumn(name = "card_id")
+//    )
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Card> cards;
+
+    public User() {
+    }
 
     @AssertTrue(message = "Full name must be between 2 and 32 characters.")
     public boolean isFullNameValid() {

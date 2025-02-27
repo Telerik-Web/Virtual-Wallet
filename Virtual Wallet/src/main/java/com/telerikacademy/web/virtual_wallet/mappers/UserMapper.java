@@ -24,7 +24,7 @@ public class UserMapper {
         user.setUsername(userDto.getUsername());
         user.setPassword(userDto.getPassword());
         user.setEmail(userDto.getEmail());
-        user.setPhone(userDto.getPhone());
+        user.setPhoneNumber(userDto.getPhone());
         return user;
     }
 
@@ -33,7 +33,7 @@ public class UserMapper {
         user.setUsername(registerDto.getUsername());
         user.setPassword(registerDto.getPassword());
         user.setEmail(registerDto.getEmail());
-        user.setPhone(registerDto.getPhone());
+        user.setPhoneNumber(registerDto.getPhone());
         return user;
     }
 
@@ -44,7 +44,7 @@ public class UserMapper {
             userDtoOut.setId(user.getId());
             userDtoOut.setUsername(user.getUsername());
             userDtoOut.setEmail(user.getEmail());
-            userDtoOut.setPhone(user.getPhone());
+            userDtoOut.setPhone(user.getPhoneNumber());
             userDto.add(userDtoOut);
         }
         return userDto;
@@ -60,9 +60,10 @@ public class UserMapper {
 
     public UserDtoOut toUserDtoOut(User user2) {
         UserDtoOut user = new UserDtoOut();
+        user.setId(user2.getId());
         user.setUsername(user2.getUsername());
         user.setEmail(user2.getEmail());
-        user.setPhone(user2.getPhone());
+        user.setPhone(user2.getPhoneNumber());
         return user;
     }
 
@@ -72,7 +73,7 @@ public class UserMapper {
         user.setUsername(userDto.getUsername());
         user.setPassword(userDto.getPassword());
         user.setEmail(userDto.getEmail());
-        user.setPhone(userDto.getPhone());
+        user.setPhoneNumber(userDto.getPhone());
         return user;
     }
 }

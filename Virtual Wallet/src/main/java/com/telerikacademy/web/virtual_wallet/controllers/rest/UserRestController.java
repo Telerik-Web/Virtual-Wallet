@@ -21,6 +21,9 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
+
+//get each card by id and all cards
+
 @RestController
 @RequestMapping("/api/users")
 @Tag(name = "User Controller", description = "APIs for managing users")
@@ -51,9 +54,22 @@ public class UserRestController {
     @Operation(summary = "Get user by ID", description = "Fetches a user by their unique ID")
     @GetMapping("/{userId}")
     @SecurityRequirement(name = "authHeader")
-    public User getById(@RequestHeader HttpHeaders headers, @PathVariable int userId) {
+    public UserDtoOut getById(@RequestHeader HttpHeaders headers, @PathVariable int userId) {
         try {
             User user = authorizationHelper.tryGetUser(headers);
+            User userToReturn = userService.getById(user, userId);
+            return userMapper.toUserDtoOut(userToReturn);
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        } catch (UnauthorizedOperationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        }
+    }
+
+    public User getById2(@RequestHeader HttpHeaders headers, @PathVariable int userId) {
+        try {
+            User user = authorizationHelper.tryGetUser(headers);
+            User userToReturn = userService.getById(user, userId);
             return userService.getById(user, userId);
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
@@ -86,7 +102,7 @@ public class UserRestController {
             User user = userMapper.fromUserDtoToUser(userDto, userId);
             user.setUsername(getById(headers, userId).getUsername());
             userService.update(user, userFromHeader, userId);
-            return userMapper.toUserDtoOut(getById(headers, userId));
+            return userMapper.toUserDtoOut(getById2(headers, userId));
             //return userDto;
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
