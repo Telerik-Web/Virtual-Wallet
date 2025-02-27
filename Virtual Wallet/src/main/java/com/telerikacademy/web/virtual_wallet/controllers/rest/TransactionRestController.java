@@ -35,4 +35,33 @@ public class TransactionRestController {
         User sender = authenticationHelper.tryGetUser(headers);
         return transactionService.transferFunds(sender, recipient, transaction.getAmount());
     }
+
+    @PostMapping("/send")
+    public Transaction sendByPhone(@RequestHeader HttpHeaders headers,
+                                   @RequestParam String type,
+                                   @RequestParam String value,
+                                   @RequestBody Transaction transaction) {
+        User recipient;
+        User sender;
+        switch (type) {
+            case "phone":
+                recipient = userService.getByPhoneNumber(value);
+                sender = authenticationHelper.tryGetUser(headers);
+                break;
+            case "email":
+                recipient = userService.getByEmail(value);
+                sender = authenticationHelper.tryGetUser(headers);
+                break;
+            case "username":
+                recipient = userService.getByUsername(value);
+                sender = authenticationHelper.tryGetUser(headers);
+                break;
+            default:
+                recipient = null;
+                sender = null;
+                break;
+        }
+
+        return transactionService.transferFunds(sender, recipient, transaction.getAmount());
+    }
 }
