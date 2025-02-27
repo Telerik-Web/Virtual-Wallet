@@ -6,8 +6,6 @@ import com.telerikacademy.web.virtual_wallet.models.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.math.BigDecimal;
-import java.math.BigInteger;
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
 

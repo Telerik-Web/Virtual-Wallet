@@ -31,6 +31,6 @@ public class Transaction {
     private Status status;
 
     @Column(name = "created_at")
-    private LocalDateTime timestamp;
+    private LocalDateTime createdAt;
 
 }

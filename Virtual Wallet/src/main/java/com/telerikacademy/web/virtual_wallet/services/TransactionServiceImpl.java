@@ -94,7 +94,7 @@ public class TransactionServiceImpl implements TransactionService {
         transaction.setStatus(Status.COMPLETED);
         transaction.setSender(sender);
         transaction.setRecipient(recipient);
-        transaction.setTimestamp(LocalDateTime.now());
+        transaction.setCreatedAt(LocalDateTime.now());
 
         return transactionRepository.save(transaction);
     }
