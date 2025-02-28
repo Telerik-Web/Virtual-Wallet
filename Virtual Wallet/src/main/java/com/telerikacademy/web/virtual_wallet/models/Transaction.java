@@ -27,6 +27,7 @@ public class Transaction {
     @Column(name = "amount")
     private double amount;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "status")
     private Status status;
 

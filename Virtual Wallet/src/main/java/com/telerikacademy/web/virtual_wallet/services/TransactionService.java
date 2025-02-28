@@ -2,10 +2,10 @@ package com.telerikacademy.web.virtual_wallet.services;
 
 import com.telerikacademy.web.virtual_wallet.enums.Status;
 import com.telerikacademy.web.virtual_wallet.models.Transaction;
+import com.telerikacademy.web.virtual_wallet.models.TransactionDTO;
 import com.telerikacademy.web.virtual_wallet.models.TransactionFilter;
-import org.springframework.data.domain.Page;
 import com.telerikacademy.web.virtual_wallet.models.User;
-import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -32,12 +32,15 @@ public interface TransactionService {
 
     Transaction transferFunds(User sender, User recipient, Double amount);
 
-//    List<TransactionFilter> filterTransactions(LocalDateTime startDate,
-//                                                      LocalDateTime endDate,
-//                                                      String recipient,
-//                                                      Boolean isIncoming);
-//
-//    List<TransactionFilter> sortTransactions(List<TransactionFilter> transactions,
-//                                                    String sortBy,
-//                                                    boolean ascending);
+    List<Transaction> getAllTransactionsForUser(int userId);
+
+    List<Transaction> filterTransactions(LocalDateTime startDate,
+                                         LocalDateTime endDate,
+                                         String recipient,
+                                         Boolean isIncoming,
+                                         User user);
+
+    List<TransactionDTO> sortTransactions(List<TransactionDTO> transactions,
+                                       String sortBy,
+                                       boolean ascending);
 }

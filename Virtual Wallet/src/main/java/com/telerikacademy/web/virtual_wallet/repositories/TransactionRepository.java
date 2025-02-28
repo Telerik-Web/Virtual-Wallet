@@ -42,6 +42,7 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
     // 8. Get transactions filtered by recipient and status
     List<Transaction> findByRecipientAndStatus(User recipient, Status status);
 
-//    List<TransactionFilter> getAllTransactions();
+    @Query("SELECT t FROM Transaction t WHERE t.sender.id = :userId OR t.recipient.id = :userId")
+    List<Transaction> findAllByUserId(@Param("userId") int userId);
 
 }

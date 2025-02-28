@@ -1,8 +1,10 @@
 package com.telerikacademy.web.virtual_wallet.controllers.rest;
 
+import com.telerikacademy.web.virtual_wallet.exceptions.EntityNotFoundException;
 import com.telerikacademy.web.virtual_wallet.helpers.AuthenticationHelper;
 import com.telerikacademy.web.virtual_wallet.mappers.UserMapper;
 import com.telerikacademy.web.virtual_wallet.models.Transaction;
+import com.telerikacademy.web.virtual_wallet.models.TransactionDTO;
 import com.telerikacademy.web.virtual_wallet.models.TransactionFilter;
 import com.telerikacademy.web.virtual_wallet.models.User;
 import com.telerikacademy.web.virtual_wallet.services.TransactionService;
@@ -20,6 +22,7 @@ import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/transactions")
@@ -48,9 +51,9 @@ public class TransactionRestController {
 
     @PostMapping("/send")
     public Transaction sendMoney(@RequestHeader HttpHeaders headers,
-                                   @RequestParam String type,
-                                   @RequestParam String value,
-                                   @RequestBody Transaction transaction) {
+                                 @RequestParam String type,
+                                 @RequestParam String value,
+                                 @RequestBody Transaction transaction) {
         User recipient;
         User sender;
         switch (type) {
@@ -75,23 +78,49 @@ public class TransactionRestController {
         return transactionService.transferFunds(sender, recipient, transaction.getAmount());
     }
 
-//    @GetMapping("/filter")
-//    public List<TransactionFilter> getFilteredTransactions(
-//            @RequestParam(required = false) String startDate,
-//            @RequestParam(required = false) String endDate,
-//            @RequestParam(required = false) String recipient,
-//            @RequestParam(required = false) Boolean isIncoming,
-//            @RequestParam(defaultValue = "date") String sortBy,
-//            @RequestParam(defaultValue = "true") boolean ascending) {
+    @GetMapping("/filter")
+    public List<TransactionDTO> getFilteredTransactions(
+            @RequestHeader HttpHeaders headers,
+            @RequestParam(required = false) String startDate,
+            @RequestParam(required = false) String endDate,
+            @RequestParam(required = false) String recipient,
+            @RequestParam(required = false) Boolean isIncoming,
+            @RequestParam(defaultValue = "date") String sortBy,
+            @RequestParam(defaultValue = "true") boolean ascending) {
+
+        LocalDateTime start = (startDate != null) ? LocalDateTime.parse(startDate) : null;
+        LocalDateTime end = (endDate != null) ? LocalDateTime.parse(endDate) : null;
+
+        User user = authenticationHelper.tryGetUser(headers);
+
+        List<Transaction> filteredTransactions =
+                transactionService.filterTransactions(start, end, recipient, isIncoming, user);
+        List<TransactionDTO> TransactionDTOList = filteredTransactions.stream().map(transaction -> new TransactionDTO(
+                transaction.getSender().getId() != user.getId(),
+                transaction.getSender().getId(),
+                transaction.getRecipient().getId(),
+                transaction.getAmount(),
+                transaction.getStatus(),
+                transaction.getCreatedAt()
+        )).toList();
+
+        return transactionService.sortTransactions(TransactionDTOList, sortBy, ascending);
+    }
+//    public List<TransactionDTO> getUserTransactions(@RequestHeader HttpHeaders headers) {
+//        User user;
+//        try {
+//            user = authenticationHelper.tryGetUser(headers);
+//        } catch (EntityNotFoundException e) {
+//            user = null;
+//        }
+//        List<Transaction> transactions = transactionService.getAllTransactionsForUser(user.getId());
 //
-//        // Convert date strings to LocalDateTime (if provided)
-//        LocalDateTime start = (startDate != null) ? LocalDateTime.parse(startDate) : null;
-//        LocalDateTime end = (endDate != null) ? LocalDateTime.parse(endDate) : null;
-//
-//        // Filter transactions
-//        List<TransactionFilter> filteredTransactions = transactionService.filterTransactions(start, end, recipient, isIncoming);
-//
-//        // Sort transactions
-//        return transactionService.sortTransactions(filteredTransactions, sortBy, ascending);
+//        return transactions.stream().map(transaction -> new TransactionDTO(
+//                transaction.getSender().getId(),
+//                transaction.getRecipient().getId(),
+//                transaction.getAmount(),
+//                transaction.getStatus(),
+//                transaction.getCreatedAt()
+//        )).collect(Collectors.toList());
 //    }
 }

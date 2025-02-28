@@ -1,15 +1,17 @@
 package com.telerikacademy.web.virtual_wallet.services;
 
 import com.telerikacademy.web.virtual_wallet.enums.Status;
+import com.telerikacademy.web.virtual_wallet.helpers.AuthenticationHelper;
+import com.telerikacademy.web.virtual_wallet.mappers.TransactionMapper;
 import com.telerikacademy.web.virtual_wallet.models.Transaction;
+import com.telerikacademy.web.virtual_wallet.models.TransactionDTO;
 import com.telerikacademy.web.virtual_wallet.models.TransactionFilter;
 import com.telerikacademy.web.virtual_wallet.models.User;
 import com.telerikacademy.web.virtual_wallet.repositories.TransactionRepository;
 import com.telerikacademy.web.virtual_wallet.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
-import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -22,11 +24,15 @@ public class TransactionServiceImpl implements TransactionService {
 
     private final TransactionRepository transactionRepository;
     private final UserRepository userRepository;
+    private final TransactionMapper transactionMapper;
+    private final AuthenticationHelper authenticationHelper;
 
     @Autowired
-    public TransactionServiceImpl(TransactionRepository transactionRepository, UserRepository userRepository) {
+    public TransactionServiceImpl(TransactionRepository transactionRepository, UserRepository userRepository, TransactionMapper transactionMapper, AuthenticationHelper authenticationHelper) {
         this.transactionRepository = transactionRepository;
         this.userRepository = userRepository;
+        this.transactionMapper = transactionMapper;
+        this.authenticationHelper = authenticationHelper;
     }
 
     @Override
@@ -104,35 +110,47 @@ public class TransactionServiceImpl implements TransactionService {
         return transactionRepository.save(transaction);
     }
 
-//    @Override
-//    public List<TransactionFilter> filterTransactions(LocalDateTime startDate,
-//                                                      LocalDateTime endDate,
-//                                                      String recipient,
-//                                                      Boolean isIncoming) {
-//        return transactionRepository
-//                .getAllTransactions()
-//                .stream()
-//                .filter(t -> (startDate == null || t.getDate().isAfter(startDate)) &&
-//                        (endDate == null || t.getDate().isBefore(endDate)) &&
-//                        (recipient == null || t.getRecipient().equalsIgnoreCase(recipient)) &&
-//                        (isIncoming == null || t.isIncoming() == isIncoming))
-//                .collect(Collectors.toList());
-//    }
-//
-//    @Override
-//    public List<TransactionFilter> sortTransactions(List<TransactionFilter> transactions,
-//                                                    String sortBy,
-//                                                    boolean ascending) {
-//        Comparator<TransactionFilter> comparator = switch (sortBy.toLowerCase()) {
-//            case "amount" -> Comparator.comparing(TransactionFilter::getAmount);
-//            case "date" -> Comparator.comparing(TransactionFilter::getDate);
-//            default -> throw new IllegalStateException("Unexpected value: " + sortBy);
-//        };
-//
-//        if (!ascending) {
-//            comparator = comparator.reversed();
-//        }
-//
-//        return transactions.stream().sorted(comparator).collect(Collectors.toList());
-//    }
+    @Override
+    public List<Transaction> getAllTransactionsForUser(int userId) {
+        return transactionRepository.findAllByUserId(userId);
+    }
+
+    @Override
+    public List<Transaction> filterTransactions(LocalDateTime startDate,
+                                                LocalDateTime endDate,
+                                                String recipient,
+                                                Boolean isIncoming,
+                                                User user) {
+        List<Transaction> allTransactions = transactionRepository.findAllByUserId(user.getId());
+        return allTransactions.stream()
+                .filter(t -> startDate == null || t.getCreatedAt().isAfter(startDate))
+                .filter(t -> endDate == null || t.getCreatedAt().isBefore(endDate))
+                .filter(t -> recipient == null || t.getRecipient().getUsername().equalsIgnoreCase(recipient))
+                .filter(t -> {
+                    if (isIncoming == null) return true;
+                    boolean transactionIsIncoming = t.getRecipient().getId() == (user.getId());
+                    return isIncoming == transactionIsIncoming;
+                })
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<TransactionDTO> sortTransactions(List<TransactionDTO> transactions,
+                                                 String sortBy,
+                                                 boolean ascending) {
+        Comparator<TransactionDTO> comparator = switch (sortBy.toLowerCase()) {
+            case "amount" -> Comparator.comparing(TransactionDTO::getAmount);
+            case "date" -> Comparator.comparing(TransactionDTO::getCreatedAt);
+            default -> throw new IllegalStateException("Unexpected value: " + sortBy);
+        };
+
+        if (!ascending) {
+            comparator = comparator.reversed();
+        }
+
+        return transactions
+                .stream()
+                .sorted(comparator)
+                .collect(Collectors.toList());
+    }
 }

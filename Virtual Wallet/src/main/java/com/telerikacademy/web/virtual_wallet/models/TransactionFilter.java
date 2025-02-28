@@ -1,11 +1,12 @@
 package com.telerikacademy.web.virtual_wallet.models;
 
+import lombok.Data;
 import lombok.Getter;
 import org.springframework.cglib.core.Local;
 
 import java.time.LocalDateTime;
 
-@Getter
+@Data
 public class TransactionFilter {
 
     private double amount;
@@ -20,6 +21,9 @@ public class TransactionFilter {
         this.recipient = recipient;
         this.sender = sender;
         this.isIncoming = isIncoming;
+    }
+
+    public TransactionFilter() {
     }
 
     @Override
