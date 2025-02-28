@@ -2,6 +2,7 @@ package com.telerikacademy.web.virtual_wallet.services;
 
 import com.telerikacademy.web.virtual_wallet.enums.Status;
 import com.telerikacademy.web.virtual_wallet.models.Transaction;
+import com.telerikacademy.web.virtual_wallet.models.TransactionFilter;
 import com.telerikacademy.web.virtual_wallet.models.User;
 import com.telerikacademy.web.virtual_wallet.repositories.TransactionRepository;
 import com.telerikacademy.web.virtual_wallet.repositories.UserRepository;
@@ -12,7 +13,9 @@ import org.springframework.data.domain.Pageable;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class TransactionServiceImpl implements TransactionService {
@@ -100,4 +103,36 @@ public class TransactionServiceImpl implements TransactionService {
 
         return transactionRepository.save(transaction);
     }
+
+//    @Override
+//    public List<TransactionFilter> filterTransactions(LocalDateTime startDate,
+//                                                      LocalDateTime endDate,
+//                                                      String recipient,
+//                                                      Boolean isIncoming) {
+//        return transactionRepository
+//                .getAllTransactions()
+//                .stream()
+//                .filter(t -> (startDate == null || t.getDate().isAfter(startDate)) &&
+//                        (endDate == null || t.getDate().isBefore(endDate)) &&
+//                        (recipient == null || t.getRecipient().equalsIgnoreCase(recipient)) &&
+//                        (isIncoming == null || t.isIncoming() == isIncoming))
+//                .collect(Collectors.toList());
+//    }
+//
+//    @Override
+//    public List<TransactionFilter> sortTransactions(List<TransactionFilter> transactions,
+//                                                    String sortBy,
+//                                                    boolean ascending) {
+//        Comparator<TransactionFilter> comparator = switch (sortBy.toLowerCase()) {
+//            case "amount" -> Comparator.comparing(TransactionFilter::getAmount);
+//            case "date" -> Comparator.comparing(TransactionFilter::getDate);
+//            default -> throw new IllegalStateException("Unexpected value: " + sortBy);
+//        };
+//
+//        if (!ascending) {
+//            comparator = comparator.reversed();
+//        }
+//
+//        return transactions.stream().sorted(comparator).collect(Collectors.toList());
+//    }
 }

@@ -3,6 +3,7 @@ package com.telerikacademy.web.virtual_wallet.controllers.rest;
 import com.telerikacademy.web.virtual_wallet.helpers.AuthenticationHelper;
 import com.telerikacademy.web.virtual_wallet.mappers.UserMapper;
 import com.telerikacademy.web.virtual_wallet.models.Transaction;
+import com.telerikacademy.web.virtual_wallet.models.TransactionFilter;
 import com.telerikacademy.web.virtual_wallet.models.User;
 import com.telerikacademy.web.virtual_wallet.services.TransactionService;
 import com.telerikacademy.web.virtual_wallet.services.UserService;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/transactions")
@@ -72,4 +74,24 @@ public class TransactionRestController {
 
         return transactionService.transferFunds(sender, recipient, transaction.getAmount());
     }
+
+//    @GetMapping("/filter")
+//    public List<TransactionFilter> getFilteredTransactions(
+//            @RequestParam(required = false) String startDate,
+//            @RequestParam(required = false) String endDate,
+//            @RequestParam(required = false) String recipient,
+//            @RequestParam(required = false) Boolean isIncoming,
+//            @RequestParam(defaultValue = "date") String sortBy,
+//            @RequestParam(defaultValue = "true") boolean ascending) {
+//
+//        // Convert date strings to LocalDateTime (if provided)
+//        LocalDateTime start = (startDate != null) ? LocalDateTime.parse(startDate) : null;
+//        LocalDateTime end = (endDate != null) ? LocalDateTime.parse(endDate) : null;
+//
+//        // Filter transactions
+//        List<TransactionFilter> filteredTransactions = transactionService.filterTransactions(start, end, recipient, isIncoming);
+//
+//        // Sort transactions
+//        return transactionService.sortTransactions(filteredTransactions, sortBy, ascending);
+//    }
 }

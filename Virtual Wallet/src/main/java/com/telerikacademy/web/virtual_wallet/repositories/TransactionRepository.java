@@ -2,6 +2,7 @@ package com.telerikacademy.web.virtual_wallet.repositories;
 
 import com.telerikacademy.web.virtual_wallet.enums.Status;
 import com.telerikacademy.web.virtual_wallet.models.Transaction;
+import com.telerikacademy.web.virtual_wallet.models.TransactionFilter;
 import com.telerikacademy.web.virtual_wallet.models.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -40,5 +41,7 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
 
     // 8. Get transactions filtered by recipient and status
     List<Transaction> findByRecipientAndStatus(User recipient, Status status);
+
+//    List<TransactionFilter> getAllTransactions();
 
 }
