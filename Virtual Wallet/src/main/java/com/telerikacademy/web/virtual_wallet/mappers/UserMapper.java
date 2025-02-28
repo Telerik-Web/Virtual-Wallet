@@ -1,9 +1,6 @@
 package com.telerikacademy.web.virtual_wallet.mappers;
 
-import com.telerikacademy.web.virtual_wallet.models.RegisterDto;
-import com.telerikacademy.web.virtual_wallet.models.User;
-import com.telerikacademy.web.virtual_wallet.models.UserDTO;
-import com.telerikacademy.web.virtual_wallet.models.UserDtoOut;
+import com.telerikacademy.web.virtual_wallet.models.*;
 import com.telerikacademy.web.virtual_wallet.repositories.UserRepository;
 import org.springframework.stereotype.Component;
 
@@ -22,9 +19,13 @@ public class UserMapper {
     public User fromUserDto(UserDTO userDto) {
         User user = new User();
         user.setUsername(userDto.getUsername());
+        user.setFirstName(userDto.getFirstName());
+        user.setLastName(userDto.getLastName());
         user.setPassword(userDto.getPassword());
         user.setEmail(userDto.getEmail());
         user.setPhoneNumber(userDto.getPhone());
+        user.setIsAdmin(false);
+        user.setIsBlocked(false);
         return user;
     }
 
@@ -67,13 +68,19 @@ public class UserMapper {
         return user;
     }
 
-    public User fromUserDtoToUser(UserDTO userDto, int id) {
+    public User fromUserDtoUpdateToUser(UserDTOUpdate userDtoUpdate, int id) {
         User user = new User();
+        User currentUser = userRepository.getById(id);
         user.setId(id);
-        user.setUsername(userDto.getUsername());
-        user.setPassword(userDto.getPassword());
-        user.setEmail(userDto.getEmail());
-        user.setPhoneNumber(userDto.getPhone());
+        user.setUsername(currentUser.getUsername());
+        user.setIsAdmin(currentUser.getIsAdmin());
+        user.setIsBlocked(currentUser.getIsBlocked());
+
+        user.setFirstName(userDtoUpdate.getFirstName());
+        user.setLastName(userDtoUpdate.getLastName());
+        user.setPassword(userDtoUpdate.getPassword());
+        user.setEmail(userDtoUpdate.getEmail());
+        user.setPhoneNumber(userDtoUpdate.getPhone());
         return user;
     }
 }

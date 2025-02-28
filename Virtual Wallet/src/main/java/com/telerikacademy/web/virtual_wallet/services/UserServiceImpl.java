@@ -110,6 +110,9 @@ public class UserServiceImpl implements UserService {
 
         try {
             userRepository.getByEmail(user.getEmail());
+            if (user.getId() == id) {
+                exists = false;
+            }
         } catch (EntityNotFoundException e) {
             exists = false;
         }

@@ -48,13 +48,15 @@ public class AuthenticationHelper {
         String password = getPassword(userInfo);
 
         try {
+
             User user = userService.getByUsername(username);
 
-            if (!user.getPassword().equals(password)) {
+            if(!user.getPassword().equals(password)){
                 throw new UnauthorizedOperationException(INVALID_AUTHENTICATION_ERROR);
             }
 
             return user;
+
         } catch (EntityNotFoundException e) {
             throw new UnauthorizedOperationException(INVALID_AUTHENTICATION_ERROR);
         }

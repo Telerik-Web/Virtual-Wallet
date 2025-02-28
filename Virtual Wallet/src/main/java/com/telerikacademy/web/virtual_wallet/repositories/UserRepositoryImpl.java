@@ -2,18 +2,18 @@ package com.telerikacademy.web.virtual_wallet.repositories;
 
 
 import com.telerikacademy.web.virtual_wallet.exceptions.EntityNotFoundException;
+import com.telerikacademy.web.virtual_wallet.models.Card;
 import com.telerikacademy.web.virtual_wallet.models.FilterUserOptions;
 import com.telerikacademy.web.virtual_wallet.models.User;
+import jakarta.transaction.Transactional;
+import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Repository
 public class UserRepositoryImpl implements UserRepository {
@@ -151,10 +151,22 @@ public class UserRepositoryImpl implements UserRepository {
         }
     }
 
+    @Transactional
     @Override
     public void delete(int id) {
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
+
+            User user = getById(id);
+            if (user.getCards() != null) {
+                Iterator<Card> cards;
+                Hibernate.initialize(cards = user.getCards().iterator());
+                while (cards.hasNext()) {
+                    cards.next();
+                    cards.remove();
+                }
+            }
+
             session.remove(getById(id));
             session.getTransaction().commit();
         }

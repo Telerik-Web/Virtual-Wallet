@@ -31,6 +31,13 @@ public class Card {
     @JsonBackReference
     private User user;
 
+    public Card(User user) {
+        this.user = user;
+    }
+
+    public Card() {
+    }
+
     @PrePersist
     protected void onCreate() {
         if (expirationDate == null) {

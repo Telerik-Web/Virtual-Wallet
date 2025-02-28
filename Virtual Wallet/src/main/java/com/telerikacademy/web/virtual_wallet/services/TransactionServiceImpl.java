@@ -25,15 +25,12 @@ public class TransactionServiceImpl implements TransactionService {
 
     private final TransactionRepository transactionRepository;
     private final UserRepository userRepository;
-    private final TransactionMapper transactionMapper;
-    private final AuthenticationHelper authenticationHelper;
 
     @Autowired
-    public TransactionServiceImpl(TransactionRepository transactionRepository, UserRepository userRepository, TransactionMapper transactionMapper, AuthenticationHelper authenticationHelper) {
+    public TransactionServiceImpl(TransactionRepository transactionRepository,
+                                  UserRepository userRepository) {
         this.transactionRepository = transactionRepository;
         this.userRepository = userRepository;
-        this.transactionMapper = transactionMapper;
-        this.authenticationHelper = authenticationHelper;
     }
 
     @Override

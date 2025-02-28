@@ -104,11 +104,10 @@ public class UserRestController {
     @PutMapping("/{userId}")
     @SecurityRequirement(name = "authHeader")
     public UserDtoOut update(@RequestHeader HttpHeaders headers, @PathVariable int userId,
-                             @RequestBody UserDTO userDto) {
+                             @RequestBody UserDTOUpdate userDtoUpdate) {
         try {
             User userFromHeader = authorizationHelper.tryGetUser(headers);
-            User user = userMapper.fromUserDtoToUser(userDto, userId);
-            user.setUsername(getById(headers, userId).getUsername());
+            User user = userMapper.fromUserDtoUpdateToUser(userDtoUpdate, userId);
             userService.update(user, userFromHeader, userId);
             return userMapper.toUserDtoOut(getById2(headers, userId));
             //return userDto;
