@@ -98,6 +98,14 @@ public class UserRestController {
         } catch (DuplicateEntityException e) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
         }
+//        {
+//            "firstName": "Johgn",
+//                "lastName": "Doe",
+//                "username": "newUser",
+//                "email": "newuser@example.com",
+//                "phone": "123456789",
+//                "password": "securePassword"
+//        }
     }
 
     @Operation(summary = "Updates user by an Id", description = "Updates the desired fields in an User")
@@ -118,6 +126,13 @@ public class UserRestController {
         } catch (UnauthorizedOperationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         }
+//        {
+//            "firstName": "Ivan",
+//                "lastName": "Doe",
+//                "email": "newuser@example.com",
+//                "phone": "123456789",
+//                "password": "securePassword"
+//        }
     }
 
     @Operation(summary = "Alter admin permissions", description = "Changes user permissions " +
