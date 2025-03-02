@@ -115,4 +115,33 @@ public class AuthenticationMvcController {
             return "AccessDenied";
         }
     }
+
+    @GetMapping("/account/update")
+    public String showUpdatePage(Model model,
+                                 HttpSession session) {
+        try {
+            User user = authenticationHelper.tryGetUser(session);
+            model.addAttribute("user", user);
+            return "UpdateUser";
+        } catch (AuthenticationFailureException e) {
+            return "AccessDenied";
+        }
+    }
+
+    @PostMapping("/account/update")
+    public String showUserUpdateForm(@Valid @ModelAttribute("user") User user,
+                                     BindingResult errors,
+                                     HttpSession session) {
+        if (errors.hasErrors()) {
+            return "UpdateUser";
+        }
+
+        try {
+            userService.update(user, user, authenticationHelper.tryGetUser(session).getId());
+            return "redirect:/auth/account";
+        } catch (DuplicateEntityException e) {
+            errors.rejectValue("password", "password_error", e.getMessage());
+            return "UpdateUser";
+        }
+    }
 }
