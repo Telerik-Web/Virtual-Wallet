@@ -11292,3 +11292,36 @@ body.sidebar-toggled footer.sticky-footer {
   background-color: #121212;
   color: #f8f9fa;
 }
+
+.access-denied-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 80vh;
+  text-align: center;
+}
+
+.access-denied-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.access-denied-message {
+  font-size: 1.2rem;
+  font-weight: 400;
+  margin-top: 10px;
+}
+
+.access-denied-button {
+  margin-top: 20px;
+  padding: 10px 20px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+  text-decoration: none;
+  display: inline-block;
+}
