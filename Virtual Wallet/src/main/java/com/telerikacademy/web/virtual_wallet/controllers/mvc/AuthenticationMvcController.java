@@ -98,4 +98,17 @@ public class AuthenticationMvcController {
             return "Register";
         }
     }
+
+    @GetMapping("/account")
+    public String showAccountPage(Model model,
+                                  HttpSession session) {
+        try {
+            User user = authenticationHelper.tryGetUser(session);
+            UserDTO userDto = userMapper.fromUsertoUserDto(user);
+            model.addAttribute("user", userDto);
+            return "Account";
+        } catch (AuthenticationFailureException e) {
+            return "AccessDenied";
+        }
+    }
 }
