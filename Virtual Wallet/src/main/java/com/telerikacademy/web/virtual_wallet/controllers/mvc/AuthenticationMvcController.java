@@ -7,8 +7,8 @@ import com.telerikacademy.web.virtual_wallet.exceptions.EntityNotFoundException;
 import com.telerikacademy.web.virtual_wallet.helpers.AuthenticationHelper;
 import com.telerikacademy.web.virtual_wallet.mappers.UserMapper;
 import com.telerikacademy.web.virtual_wallet.models.LogInDto;
-import com.telerikacademy.web.virtual_wallet.models.RegisterDto;
 import com.telerikacademy.web.virtual_wallet.models.User;
+import com.telerikacademy.web.virtual_wallet.models.UserDTO;
 import com.telerikacademy.web.virtual_wallet.services.UserService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -73,12 +73,12 @@ public class AuthenticationMvcController {
 
     @GetMapping("/register")
     public String showRegister(Model model) {
-        model.addAttribute("register", new RegisterDto());
+        model.addAttribute("register", new UserDTO());
         return "Register";
     }
 
     @PostMapping("/register")
-    public String processRegister(@Valid @ModelAttribute("register") RegisterDto registerDto,
+    public String processRegister(@Valid @ModelAttribute("register") UserDTO registerDto,
                                   BindingResult errors) {
         if (errors.hasErrors()) {
             return "Register";
@@ -89,7 +89,7 @@ public class AuthenticationMvcController {
         }
 
         try {
-            User user = userMapper.fromRegisterDto(registerDto);
+            User user = userMapper.fromUserDto(registerDto);
             userService.create(user);
             return "redirect:/auth/login";
         } catch (DuplicateEntityException e) {

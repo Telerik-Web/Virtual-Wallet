@@ -3,53 +3,77 @@
 <head th:replace="~{fragments/PageLayout.html :: head('Register')}"></head>
 <body>
 
+<!--<button onclick="toggleDarkMode()">Toggle Dark Mode</button>-->
+
 <nav th:replace="~{fragments/PageLayout.html :: navbar}"></nav>
 
-<section class="container mt-5">
+<section class="container-fluid d-flex align-items-center justify-content-center vh-100">
     <div class="masthead vh-100 justify-content-center">
-        <div class="container d-flex align-items-center flex-column">
-            <form action="#" th:action="@{/auth/register}" th:object="${register}" method="post">
+        <div class="card o-hidden border-0 shadow-lg my-5">
+            <div class="card-body p-5">
+                <form action="#" th:action="@{/auth/register}" th:object="${register}" method="post">
 
-                <h2 class="page-title">Create an Account</h2>
+                    <h2 class="text-center text-gray-900 font-weight-bold">Create an Account</h2>
 
-                <label class="fieldName" th:text="#{username}">Username</label>
-                <br/>
-                <input class="input-group-text" type="text" th:field="*{username}"/>
-                <label class="error" th:errors="*{username}">Username Error</label>
-                <br/><br/>
+                    <div class="form-group">
+                        <label class="text-gray-900 small font-weight-bold">First name</label>
+                        <input type="text" class="form-control form-control-user"
+                               th:field="*{firstName}" placeholder="Enter First name">
+                    </div>
+                    <label class="error" th:errors="*{firstName}">First name Error</label>
+                    <br/><br/>
 
-                <label class="fieldName" th:text="#{password}">Password</label>
-                <br/>
-                <input class="input-group-text" type="password" th:field="*{password}"/>
-                <label class="error" th:errors="*{password}">Password Error</label>
-                <br/><br/>
+                    <div class="form-group">
+                        <label class="text-gray-900 small font-weight-bold">Last name</label>
+                        <input type="text" class="form-control form-control-user"
+                               th:field="*{lastName}" placeholder="Enter Last name">
+                    </div>
+                    <label class="error" th:errors="*{lastName}">Last name Error</label>
+                    <br/><br/>
 
-                <label class="fieldName" th:text="#{passwordConfirm}">Password Confirm</label>
-                <br/>
-                <input class="input-group-text" type="password" th:field="*{passwordConfirm}"/>
-                <label class="error" th:errors="*{passwordConfirm}">Password Confirm Error</label>
-                <br/><br/>
+                    <div class="form-group">
+                        <label class="text-gray-900 small font-weight-bold">Username</label>
+                        <input type="text" class="form-control form-control-user"
+                               th:field="*{username}" placeholder="Enter Username">
+                    </div>
+                    <label class="error" th:errors="*{username}">Username Error</label>
+                    <br/><br/>
 
-                <label class="fieldName" th:text="#{firstName}">First Name</label>
-                <br/>
-                <input class="input-group-text" type="text" th:field="*{firstName}"/>
-                <label class="error" th:errors="*{firstName}">First Name Error</label>
-                <br/><br/>
+                    <div class="form-group">
+                        <label class="text-gray-900 small font-weight-bold">Password</label>
+                        <input type="password" class="form-control form-control-user"
+                               th:field="*{password}" placeholder="Enter Password">
+                    </div>
+                    <label class="error" th:errors="*{password}">Password Error</label>
+                    <br/><br/>
 
-                <label class="lastName" th:text="#{lastName}">Last Name</label>
-                <br/>
-                <input class="input-group-text" type="text" th:field="*{lastName}"/>
-                <label class="error" th:errors="*{lastName}">Last Name Error</label>
-                <br/><br/>
+                    <div class="form-group">
+                        <label class="text-gray-900 small font-weight-bold">Password Confirm</label>
+                        <input type="password" class="form-control form-control-user"
+                               th:field="*{passwordConfirm}" placeholder="Enter Password Confirm">
+                    </div>
+                    <label class="error" th:errors="*{passwordConfirm}">Password Confirm Error</label>
+                    <br/><br/>
 
-                <label class="lastName" th:text="#{email}">Last Name</label>
-                <br/>
-                <input class="input-group-text" type="text" th:field="*{email}"/>
-                <label class="error" th:errors="*{email}">Email Error</label>
-                <br/><br/>
+                    <div class="form-group">
+                        <label class="text-gray-900 small font-weight-bold">Email</label>
+                        <input type="text" class="form-control form-control-user"
+                               th:field="*{email}" placeholder="Enter Email">
+                    </div>
+                    <label class="error" th:errors="*{email}">Email Error</label>
+                    <br/><br/>
 
-                <input class="btn btn-primary" type="submit" value="Register"/>
-            </form>
+                    <div class="form-group">
+                        <label class="text-gray-900 small font-weight-bold">Phone Number</label>
+                        <input type="text" class="form-control form-control-user"
+                               th:field="*{phone}" placeholder="Enter Phone Number">
+                    </div>
+                    <label class="error" th:errors="*{phone}">Phone Number Error</label>
+                    <br/><br/>
+
+                    <button class="btn btn-primary btn-user btn-block" type="submit">Register</button>
+                </form>
+            </div>
         </div>
     </div>
 </section>

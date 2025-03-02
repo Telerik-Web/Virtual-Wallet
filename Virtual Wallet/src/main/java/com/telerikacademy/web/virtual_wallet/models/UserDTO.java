@@ -29,15 +29,20 @@ public class UserDTO {
     )
     private String password;
 
+    @NotEmpty(message = "Password confirm can't be empty.")
+    @Size(min = 8, message = "Password confirm must be at least 8 symbols long.")
+    @Pattern(
+            regexp = "^(?=.*[A-Z])(?=.*\\d)(?=.*[@#$%^&+=!]).*$",
+            message = "Password confirm must contain at least one uppercase letter, one digit, and one special character."
+    )
+    private String passwordConfirm;
+
     @NotEmpty(message = "Email can't be empty.")
     @Email(message = "Email must be valid.")
     private String email;
 
     @NotEmpty(message = "Phone number can't be empty.")
-    @Pattern(
-            regexp = "(?=.*\\d{10})",
-            message = "Phone number must be 10 digits!"
-    )
+    @Pattern(regexp = "^[0-9]{10}$", message = "Phone number must be exactly 10 digits")
     private String phone;
 
 
