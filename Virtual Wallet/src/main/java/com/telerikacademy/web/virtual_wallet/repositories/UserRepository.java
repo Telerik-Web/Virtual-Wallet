@@ -13,7 +13,7 @@ public interface UserRepository {
 
     long getUserCount();
 
-    User getById(int id);
+    User getById(long id);
 
     User getByUsername(String username);
 
@@ -27,7 +27,7 @@ public interface UserRepository {
 
     void create(@Valid User user);
 
-    void update(@Valid User user, int id);
+    void update(@Valid User user, long id);
 
-    void delete(int id);
+    void delete(long id);
 }
