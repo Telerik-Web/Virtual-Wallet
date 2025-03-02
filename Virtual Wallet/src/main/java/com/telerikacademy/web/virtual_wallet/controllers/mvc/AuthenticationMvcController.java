@@ -55,8 +55,8 @@ public class AuthenticationMvcController {
 
     @PostMapping("/login")
     public String processLogin(@Valid @ModelAttribute("login") LogInDto login,
-                               HttpSession session,
-                               BindingResult errors) {
+                               BindingResult errors,
+                               HttpSession session) {
         if (errors.hasErrors()) {
             return "Login";
         }
@@ -83,7 +83,7 @@ public class AuthenticationMvcController {
 
     @PostMapping("/register")
     public String processRegister(@Valid @ModelAttribute("register") UserDTO registerDto,
-                                  BindingResult errors, Model model) {
+                                  BindingResult errors) {
         if (errors.hasErrors()) {
             return "Register";
         }
@@ -137,6 +137,9 @@ public class AuthenticationMvcController {
         }
 
         try {
+            user.setId(authenticationHelper.tryGetUser(session).getId());
+            user.setAdmin(authenticationHelper.tryGetUser(session).getIsAdmin());
+            user.setIsBlocked(authenticationHelper.tryGetUser(session).getIsBlocked());
             userService.update(user, user, authenticationHelper.tryGetUser(session).getId());
             return "redirect:/auth/account";
         } catch (DuplicateEntityException e) {

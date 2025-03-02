@@ -16,84 +16,60 @@
                     <div class="form-group">
                         <label class="text-gray-900 font-weight-bold">First name</label>
                         <input type="text" class="form-control form-control-user"
-                               th:field="*{firstName}" placeholder="Enter First name">
+                               th:field="*{firstName}">
                     </div>
-                    <label class="error" th:if="${#fields.hasErrors()} and ${register.firstName == null or
-                    register.firstName.isEmpty()}">
-                        First name can't be empty
-                    </label>
-                    <label class="error" th:if="${#fields.hasErrors()} and ${not #strings.isEmpty(register.firstName)}">
-                        First name must be between 1 and 16 characters.
-                    </label>
-                    <br/><br/>
+                    <label class="error" th:if="${#fields.hasErrors('firstName')}"
+                           th:text="${#fields.errors('firstName')[0]}"></label>
 
                     <div class="form-group">
                         <label class="text-gray-900 font-weight-bold">Last name</label>
                         <input type="text" class="form-control form-control-user"
-                               th:field="*{lastName}" placeholder="Enter Last name">
+                               th:field="*{lastName}">
                     </div>
-                    <label class="error"
-                           th:if="${#fields.hasErrors()} and ${register.lastName == null or register.lastName.isEmpty()}">
-                        Last name can't be empty.
-                    </label>
-                    <label class="error" th:if="${#fields.hasErrors()} and ${not #strings.isEmpty(register.lastName)}">
-                        Last name must be between 1 and 16 characters.
-                    </label>
-                    <br/><br/>
-
-                    <div class="form-group">
-                        <label class="text-gray-900 font-weight-bold">Username</label>
-                        <input type="text" class="form-control form-control-user"
-                               th:field="*{username}" placeholder="Enter Username">
-                    </div>
-                    <label class="error"
-                           th:if="${#fields.hasErrors()} and ${register.username == null or register.username.isEmpty()}">
-                        Username can't be empty.
-                    </label>
-                    <label class="error" th:if="${#fields.hasErrors()} and ${not #strings.isEmpty(register.username)}">
-                        Username must be between 2 and 20 symbols.
-                    </label>
-                    <br/><br/>
+                    <label class="error" th:if="${#fields.hasErrors('lastName')}"
+                           th:text="${#fields.errors('lastName')[0]}"></label>
 
                     <div class="form-group">
                         <label class="text-gray-900 font-weight-bold">Password</label>
                         <input type="password" class="form-control form-control-user"
-                               th:field="*{password}" placeholder="Enter Password">
+                               th:field="*{password}">
                     </div>
-                    <label class="error" th:if="${#fields.hasErrors()} and ${register.password == null or
-                    register.password.isEmpty()}">
-                        Password can't be empty.
-                    </label>
-                    <label class="error" th:if="${#fields.hasErrors()} and ${register.password.length() < 8 and
-                    register.password != null and not register.password.isEmpty()}">
-                        Password must be at least 8 symbols long.
-                    </label>
-                    <label class="error"
-                           th:if="${#fields.hasErrors('password') and register.password != null and register.password.length() >= 8}">
-                        Password must contain at least one uppercase letter, one digit, and one special character.
-                    </label>
-                    <br/><br/>
+<!--                    <label class="error" th:if="${#fields.hasErrors()} and ${user.password == null or-->
+<!--                    user.password.isEmpty()}">-->
+<!--                        Password can't be empty.-->
+<!--                    </label>-->
+<!--                    <label class="error" th:if="${#fields.hasErrors()} and ${user.password.length() < 8 and-->
+<!--                    user.password != null and not user.password.isEmpty()}">-->
+<!--                        Password must be at least 8 symbols long.-->
+<!--                    </label>-->
+<!--                    <label class="error"-->
+<!--                           th:if="${#fields.hasErrors('password') and user.password != null and user.password.length() >= 8}">-->
+<!--                        Password must contain at least one uppercase letter, one digit, and one special character.-->
+<!--                    </label>-->
+                    <label class="error" th:if="${#fields.hasErrors('password')}"
+                           th:text="${#fields.errors('password')[0]}"></label>
 
                     <div class="form-group">
                         <label class="text-gray-900 font-weight-bold">Email</label>
                         <input type="text" class="form-control form-control-user"
-                               th:field="*{email}" placeholder="Enter Email">
+                               th:field="*{email}">
                     </div>
                     <label class="error" th:errors="*{email}">Email Error</label>
-                    <br/><br/>
 
                     <div class="form-group">
                         <label class="text-gray-900 font-weight-bold">Phone Number</label>
                         <input type="text" class="form-control form-control-user"
-                               th:field="*{phoneNumber}" placeholder="Enter Phone Number">
+                               th:field="*{phoneNumber}">
                     </div>
-                    <label class="error"
-                           th:if="${#fields.hasErrors()} and ${register.phoneNumber == null or register.phoneNumber.isEmpty()}">
-                        Phone number can't be empty.
-                    </label>
-                    <label class="error" th:if="${#fields.hasErrors()} and ${not #strings.isEmpty(register.phoneNumber)}">
-                        Phone number must be exactly 10 digits
-                    </label>
+                    <label class="error" th:if="${#fields.hasErrors('phoneNumber')}"
+                           th:text="${#fields.errors('phoneNumber')[0]}"></label>
+<!--                    <label class="error"-->
+<!--                           th:if="${#fields.hasErrors()} and ${user.phoneNumber == null or user.phoneNumber.isEmpty()}">-->
+<!--                        Phone number can't be empty.-->
+<!--                    </label>-->
+<!--                    <label class="error" th:if="${#fields.hasErrors()} and ${not #strings.isEmpty(user.phoneNumber)}">-->
+<!--                        Phone number must be exactly 10 digits-->
+<!--                    </label>-->
                     <br/><br/>
 
                     <input class="btn btn-primary" type="submit" value="Update"/>

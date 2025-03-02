@@ -27,7 +27,6 @@
                     <label class="error" th:if="${#fields.hasErrors()} and ${not #strings.isEmpty(register.firstName)}">
                         First name must be between 1 and 16 characters.
                     </label>
-                    <br/><br/>
 
                     <div class="form-group">
                         <label class="text-gray-900 font-weight-bold">Last name</label>
@@ -41,7 +40,6 @@
                     <label class="error" th:if="${#fields.hasErrors()} and ${not #strings.isEmpty(register.lastName)}">
                         Last name must be between 1 and 16 characters.
                     </label>
-                    <br/><br/>
 
                     <div class="form-group">
                         <label class="text-gray-900 font-weight-bold">Username</label>
@@ -55,7 +53,6 @@
                     <label class="error" th:if="${#fields.hasErrors()} and ${not #strings.isEmpty(register.username)}">
                         Username must be between 2 and 20 symbols.
                     </label>
-                    <br/><br/>
 
                     <div class="form-group">
                         <label class="text-gray-900 font-weight-bold">Password</label>
@@ -74,7 +71,6 @@
                            th:if="${#fields.hasErrors('password') and register.password != null and register.password.length() >= 8}">
                         Password must contain at least one uppercase letter, one digit, and one special character.
                     </label>
-                    <br/><br/>
 
                     <div class="form-group">
                         <label class="text-gray-900 font-weight-bold">Password Confirm</label>
@@ -94,7 +90,6 @@
                            register.passwordConfirm.length() >= 8}">
                         Password confirm must contain at least one uppercase letter, one digit, and one special character.
                     </label>
-                    <br/><br/>
 
                     <div class="form-group">
                         <label class="text-gray-900 font-weight-bold">Email</label>
@@ -102,7 +97,6 @@
                                th:field="*{email}" placeholder="Enter Email">
                     </div>
                     <label class="error" th:errors="*{email}">Email Error</label>
-                    <br/><br/>
 
                     <div class="form-group">
                         <label class="text-gray-900 font-weight-bold">Phone Number</label>

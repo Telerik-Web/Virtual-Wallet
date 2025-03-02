@@ -11,17 +11,20 @@
             <div class="card-body p-5">
                 <h2 class="text-center text-gray-900 font-weight-bold">Account Information</h2>
 
+                <h4 class="text-gray-900 font-weight-bold">First Name</h4>
+                <p th:text="${user.firstName}">First Name</p>
+                <br/>
+                <h4 class="text-gray-900 font-weight-bold">Last Name</h4>
+                <p th:text="${user.lastName}">Last Name</p>
+                <br/>
                 <h4 class="text-gray-900 font-weight-bold">Username</h4>
                 <p th:text="${user.username}">Username</p>
                 <br/>
                 <h4 class="text-gray-900 font-weight-bold">Email</h4>
                 <p th:text="${user.email}">Email</p>
                 <br/>
-                <h4 class="text-gray-900 font-weight-bold">First Name</h4>
-                <p th:text="${user.firstName}">First Name</p>
-                <br/>
-                <h4 class="text-gray-900 font-weight-bold">Last Name</h4>
-                <p th:text="${user.lastName}">Last Name</p>
+                <h4 class="text-gray-900 font-weight-bold">Phone number</h4>
+                <p th:text="${user.phone}">Phone number</p>
                 <br/>
 
                 <a class="btn btn-primary" th:href="@{/auth/account/update}">Update</a>
