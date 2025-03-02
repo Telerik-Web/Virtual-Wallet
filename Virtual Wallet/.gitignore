@@ -19,7 +19,7 @@ bin/
 !**/src/test/**/bin/
 
 ### IntelliJ IDEA ###
-.idea
+.idea/
 *.iws
 *.iml
 *.ipr
@@ -62,6 +62,12 @@ out/
 # Gradle
 .idea/**/gradle.xml
 .idea/**/libraries
+.gradle/
+*.lock
+*.bin
+
+# Ignore specific XML files (optional)
+*.xml
 
 # Gradle and Maven with auto-import
 # When using Gradle or Maven with auto-import, you should exclude module files,
@@ -81,11 +87,6 @@ cmake-build-*/
 
 # Mongo Explorer plugin
 .idea/**/mongoSettings.xml
-
-
-# IntelliJ
-
-.idea/
 
 # mpeltonen/sbt-idea plugin
 .idea_modules/
@@ -187,7 +188,6 @@ replay_pid*
 *.xhtml
 
 ### Gradle ###
-.gradle/
 **/build/
 !src/**/build/
 

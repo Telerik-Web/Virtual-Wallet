@@ -110,7 +110,7 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
-    public List<Transaction> getAllTransactionsForUser(int userId) {
+    public List<Transaction> getAllTransactionsForUser(long userId) {
         return transactionRepository.findAllByUserId(userId);
     }
 

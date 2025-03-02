@@ -82,7 +82,7 @@ public class UserMapper {
         return user;
     }
 
-    public User fromUserDtoUpdateToUser(UserDTOUpdate userDtoUpdate, int id) {
+    public User fromUserDtoUpdateToUser(UserDTOUpdate userDtoUpdate, long id) {
         User user = new User();
         User currentUser = userRepository.getById(id);
         user.setId(id);

@@ -16,9 +16,9 @@ public interface UserService {
 
     long getUserCount();
 
-    User getById(int id);
+    User getById(long id);
 
-    User getById(User user, int id);
+    User getById(User user, long id);
 
     User getByUsername(String username);
 
@@ -26,17 +26,17 @@ public interface UserService {
 
     User getByPhoneNumber(String phoneNumber);
 
-    void alterAdminPermissions(int id, User user, boolean isAdmin);
+    void alterAdminPermissions(long id, User user, boolean isAdmin);
 
     void create(User user);
 
-    void update(User user, User userFromHeader, int id);
+    void update(User user, User userFromHeader, long id);
 
-    void delete(int id, User userFromHeader);
-
-    @Transactional
-    public void addCardToUser(int userId, Card card);
+    void delete(long id, User userFromHeader);
 
     @Transactional
-    public Set<CardDTO> getAllCardsForUser(int userId);
+    public void addCardToUser(long userId, Card card);
+
+    @Transactional
+    public Set<CardDTO> getAllCardsForUser(long userId);
 }
