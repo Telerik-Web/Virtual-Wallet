@@ -43,6 +43,6 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
     List<Transaction> findByRecipientAndStatus(User recipient, Status status);
 
     @Query("SELECT t FROM Transaction t WHERE t.sender.id = :userId OR t.recipient.id = :userId")
-    List<Transaction> findAllByUserId(@Param("userId") int userId);
+    List<Transaction> findAllByUserId(@Param("userId") long userId);
 
 }

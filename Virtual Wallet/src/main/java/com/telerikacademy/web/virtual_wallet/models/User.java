@@ -7,9 +7,7 @@ import jakarta.validation.constraints.*;
 import lombok.Data;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @Data
@@ -62,7 +60,7 @@ public class User {
     private List<Card> cards = new ArrayList<>();
 
     @Column(name = "balance")
-    private double Balance;
+    private double balance;
 
     public User() {
     }

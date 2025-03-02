@@ -12,9 +12,9 @@ public class TransactionDTO {
     @JsonIgnore
     private boolean isIncoming;
 
-    private int sender_id;
+    private long sender_id;
 
-    private int recipient_id;
+    private long recipient_id;
 
     private double amount;
 
@@ -25,8 +25,8 @@ public class TransactionDTO {
     private String transactionType;
 
     public TransactionDTO(boolean isIncoming,
-                          int sender_id,
-                          int recipient_id,
+                          long sender_id,
+                          long recipient_id,
                           double amount,
                           Status status,
                           LocalDateTime createdAt) {
