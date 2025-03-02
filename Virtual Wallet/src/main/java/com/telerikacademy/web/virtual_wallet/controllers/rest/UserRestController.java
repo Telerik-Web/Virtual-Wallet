@@ -53,7 +53,7 @@ public class UserRestController {
     @Operation(summary = "Get user by ID", description = "Fetches a user by their unique ID")
     @GetMapping("/{userId}")
     @SecurityRequirement(name = "authHeader")
-    public UserDtoOut getById(@RequestHeader HttpHeaders headers, @PathVariable int userId) {
+    public UserDtoOut getById(@RequestHeader HttpHeaders headers, @PathVariable long userId) {
         try {
             User user = authorizationHelper.tryGetUser(headers);
             User userToReturn = userService.getById(user, userId);
@@ -65,7 +65,7 @@ public class UserRestController {
         }
     }
 
-    public User getById2(@RequestHeader HttpHeaders headers, @PathVariable int userId) {
+    public User getById2(@RequestHeader HttpHeaders headers, @PathVariable long userId) {
         try {
             User user = authorizationHelper.tryGetUser(headers);
             User userToReturn = userService.getById(user, userId);
@@ -80,7 +80,7 @@ public class UserRestController {
     @Operation(summary = "Gets all cards of a user", description = "Fetches all cards for a unique user.")
     @GetMapping("/{userId}/cards")
     @SecurityRequirement(name = "authHeader")
-    public ResponseEntity<Set<CardDTO>> getUserCards(@PathVariable int userId) {
+    public ResponseEntity<Set<CardDTO>> getUserCards(@PathVariable long userId) {
         User user = userService.getById(userId);
         //return ResponseEntity.ok(user.getCards());
         return ResponseEntity.ok(userService.getAllCardsForUser(userId));
@@ -111,7 +111,7 @@ public class UserRestController {
     @Operation(summary = "Updates user by an Id", description = "Updates the desired fields in an User")
     @PutMapping("/{userId}")
     @SecurityRequirement(name = "authHeader")
-    public UserDtoOut update(@RequestHeader HttpHeaders headers, @PathVariable int userId,
+    public UserDtoOut update(@RequestHeader HttpHeaders headers, @PathVariable long userId,
                              @RequestBody UserDTOUpdate userDtoUpdate) {
         try {
             User userFromHeader = authorizationHelper.tryGetUser(headers);
@@ -139,7 +139,7 @@ public class UserRestController {
             "if isAdmin is true, promotes the user to admin, else removes admin permissions")
     @PatchMapping("/{userId}/admin")
     @SecurityRequirement(name = "authHeader")
-    public void alterAdminPermissions(@PathVariable int userId, @RequestHeader HttpHeaders headers,
+    public void alterAdminPermissions(@PathVariable long userId, @RequestHeader HttpHeaders headers,
                                       @RequestParam boolean isAdmin) {
         try {
             User user = authorizationHelper.tryGetUser(headers);
@@ -154,7 +154,7 @@ public class UserRestController {
     @Operation(summary = "Deletes an user by Id", description = "Deletes an user by their unique ID")
     @DeleteMapping("/{userId}")
     @SecurityRequirement(name = "authHeader")
-    public void delete(@RequestHeader HttpHeaders headers, @PathVariable int userId) {
+    public void delete(@RequestHeader HttpHeaders headers, @PathVariable long userId) {
         try {
             User userFromHeader = authorizationHelper.tryGetUser(headers);
             userService.delete(userId, userFromHeader);

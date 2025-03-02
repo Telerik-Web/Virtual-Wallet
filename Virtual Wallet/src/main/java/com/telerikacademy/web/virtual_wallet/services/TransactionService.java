@@ -32,7 +32,7 @@ public interface TransactionService {
 
     Transaction transferFunds(User sender, User recipient, Double amount);
 
-    List<Transaction> getAllTransactionsForUser(int userId);
+    List<Transaction> getAllTransactionsForUser(long userId);
 
     List<Transaction> filterTransactions(LocalDateTime startDate,
                                          LocalDateTime endDate,

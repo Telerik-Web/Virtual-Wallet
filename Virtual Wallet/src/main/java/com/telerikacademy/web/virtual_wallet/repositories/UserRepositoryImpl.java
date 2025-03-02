@@ -69,7 +69,7 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public User getById(int id) {
+    public User getById(long id) {
         try (Session session = sessionFactory.openSession()) {
             User user = session.get(User.class, id);
             if (user == null) {
@@ -143,7 +143,7 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public void update(User user, int id) {
+    public void update(User user, long id) {
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
             session.merge(user);
@@ -153,7 +153,7 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Transactional
     @Override
-    public void delete(int id) {
+    public void delete(long id) {
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
 

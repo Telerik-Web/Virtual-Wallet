@@ -2,7 +2,7 @@ package com.telerikacademy.web.virtual_wallet.exceptions;
 
 public class EntityNotFoundException extends RuntimeException {
 
-    public EntityNotFoundException(String type, int id) {
+    public EntityNotFoundException(String type, long id) {
         this(type, "id", String.valueOf(id));
     }
 

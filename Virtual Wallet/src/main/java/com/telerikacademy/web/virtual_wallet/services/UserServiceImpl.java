@@ -46,13 +46,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getById(User user, int id) {
+    public User getById(User user, long id) {
         checkIfAdmin(user);
         return userRepository.getById(id);
     }
 
     @Override
-    public User getById(int id) {
+    public User getById(long id) {
         return userRepository.getById(id);
     }
 
@@ -72,7 +72,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void alterAdminPermissions(int id, User user, boolean isAdmin) {
+    public void alterAdminPermissions(long id, User user, boolean isAdmin) {
         checkIfAdmin(user);
 
         User userToUpdate = getById(user, id);
@@ -103,7 +103,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void update(User user, User userFromHeader, int id) {
+    public void update(User user, User userFromHeader, long id) {
         checkIfCreatorOrAdminForUser(userFromHeader, user);
 
         boolean exists = true;
@@ -125,7 +125,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void delete(int id, User userFromHeader) {
+    public void delete(long id, User userFromHeader) {
         User user = getById(userFromHeader, id);
         checkIfCreatorOrAdminForUser(userFromHeader, user);
         userRepository.delete(id);
@@ -133,7 +133,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void addCardToUser(int userId, Card card) {
+    public void addCardToUser(long userId, Card card) {
         User user = userRepository.getById(userId);
         card.setUser(user);
         cardRepository.create(card);
@@ -141,7 +141,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public Set<CardDTO> getAllCardsForUser(int userId) {
+    public Set<CardDTO> getAllCardsForUser(long userId) {
         User user = userRepository.getById(userId);
         Hibernate.initialize(user.getCards());
         Set<CardDTO> cards = new HashSet<>();
