@@ -4,10 +4,12 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
 @Data
+@NoArgsConstructor
 @Entity
 @Table(name = "cards")
 public class Card {
@@ -30,13 +32,6 @@ public class Card {
     @JoinColumn(name = "user_id", nullable = false)
     @JsonBackReference
     private User user;
-
-    public Card(User user) {
-        this.user = user;
-    }
-
-    public Card() {
-    }
 
     @PrePersist
     protected void onCreate() {
