@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/PageLayout.html :: head('AccessDenied')}"></head>
+<body>
+
+<nav th:replace="~{fragments/PageLayout.html :: navbar}"></nav>
+
+<div class="access-denied-container">
+    <h1 class="access-denied-title">Access Denied</h1>
+    <p class="fieldName">Oops! You're not authorized to view this page!</p>
+
+    <div th:if="${isAuthenticated}">
+        <a class="btn btn-primary" href="/" th:href="@{/}">Go Back Home</a>
+    </div>
+    <div th:unless="${isAuthenticated}">
+        <a class="btn btn-primary" href="/auth/login" th:href="@{/auth/login}">LogIn</a>
+    </div>
+</div>
+
+</body>
+</html>
