@@ -5,12 +5,12 @@ VALUES ('John', 'Doe', 'johndoe', 'pass1', 'john.doe@example.com', '1234567890',
        ('Emma', 'Brown', 'emmabrown', 'pass4', 'emma.brown@example.com', '4567890123', '1000', NULL, false, true);
 
 
-INSERT INTO cards (card_number, expiration_date, check_number, user_id)
-VALUES ('1111222233334444', DATE_ADD(CURDATE(), INTERVAL 5 YEAR), '123', 1),
-       ('5555666677778888', DATE_ADD(CURDATE(), INTERVAL 5 YEAR), '456', 2),
-       ('9999000011112222', DATE_ADD(CURDATE(), INTERVAL 5 YEAR), '789', 2),
-       ('3333444455556666', DATE_ADD(CURDATE(), INTERVAL 5 YEAR), '321', 3),
-       ('7777888899990000', DATE_ADD(CURDATE(), INTERVAL 5 YEAR), '654', 4);
+INSERT INTO cards (card_number, check_number, user_id)
+VALUES ('1111222233334444', '123', 1),
+       ('5555666677778888',  '456', 2),
+       ('9999000011112222',  '789', 2),
+       ('3333444455556666',  '321', 3),
+       ('7777888899990000',  '654', 4);
 
 
 INSERT INTO transactions (sender_id, recipient_id, amount, status, created_at)

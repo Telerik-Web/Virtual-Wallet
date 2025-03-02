@@ -17,7 +17,7 @@ CREATE TABLE cards
 (
     id              BIGINT AUTO_INCREMENT PRIMARY KEY,
     card_number     VARCHAR(16) NOT NULL UNIQUE,
-    expiration_date DATE        NOT NULL,
+    expiration_date TIMESTAMP   DEFAULT (CURRENT_TIMESTAMP + INTERVAL 5 YEAR),
     check_number    VARCHAR(3)  NOT NULL,
     user_id         BIGINT      NOT NULL,
     FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
@@ -28,7 +28,7 @@ CREATE TABLE transactions
     id           BIGINT AUTO_INCREMENT PRIMARY KEY,
     sender_id    BIGINT                                  NOT NULL,
     FOREIGN KEY (sender_id) REFERENCES users (id) ON DELETE CASCADE,
-    recipient_id BIgINT                                  NOT NULL,
+    recipient_id BIGINT                                  NOT NULL,
     FOREIGN KEY (recipient_id) REFERENCES users (id) ON DELETE CASCADE,
     amount       DECIMAL(10, 2)                          NOT NULL,
     status       ENUM ('PENDING', 'COMPLETED', 'FAILED') NOT NULL DEFAULT 'PENDING',

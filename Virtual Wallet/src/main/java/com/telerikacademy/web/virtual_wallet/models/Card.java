@@ -1,6 +1,7 @@
 package com.telerikacademy.web.virtual_wallet.models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.Data;
@@ -22,15 +23,15 @@ public class Card {
     @Column(name = "card_number")
     private String cardNumber;
 
-    @Column(name = "expiration_Date")
+    @Column(name = "expiration_date")
     private LocalDate expirationDate;
 
-    @Column(name = "check_Number")
+    @Column(name = "check_number")
     private String checkNumber;
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
-    @JsonBackReference
+    @JsonManagedReference
     private User user;
 
     @PrePersist
