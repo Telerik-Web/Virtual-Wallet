@@ -16,14 +16,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-
-import java.util.HashMap;
-import java.util.Map;
 
 @Controller
 @RequestMapping("/auth")
@@ -145,6 +141,20 @@ public class AuthenticationMvcController {
         } catch (DuplicateEntityException e) {
             errors.rejectValue("password", "password_error", e.getMessage());
             return "UpdateUser";
+        }
+    }
+
+    @GetMapping("/account/cards")
+    public String showAccountCards(Model model,
+                                  HttpSession session) {
+        try {
+            User user = authenticationHelper.tryGetUser(session);
+            UserDTO userDto = userMapper.fromUsertoUserDto(user);
+            model.addAttribute("user", userDto);
+            model.addAttribute("cards", user.getCards());
+            return "UserCards";
+        } catch (AuthenticationFailureException e) {
+            return "AccessDenied";
         }
     }
 }

@@ -1,28 +1,19 @@
 package com.telerikacademy.web.virtual_wallet.controllers.rest;
 
-import com.telerikacademy.web.virtual_wallet.exceptions.EntityNotFoundException;
 import com.telerikacademy.web.virtual_wallet.helpers.AuthenticationHelper;
 import com.telerikacademy.web.virtual_wallet.mappers.UserMapper;
 import com.telerikacademy.web.virtual_wallet.models.Transaction;
 import com.telerikacademy.web.virtual_wallet.models.TransactionDTO;
-import com.telerikacademy.web.virtual_wallet.models.TransactionFilter;
 import com.telerikacademy.web.virtual_wallet.models.User;
 import com.telerikacademy.web.virtual_wallet.services.TransactionService;
 import com.telerikacademy.web.virtual_wallet.services.UserService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/transactions")
@@ -34,7 +25,9 @@ public class TransactionRestController {
     private final AuthenticationHelper authenticationHelper;
 
     @Autowired
-    public TransactionRestController(TransactionService transactionService, UserService userService, UserMapper userMapper, AuthenticationHelper authenticationHelper) {
+    public TransactionRestController(TransactionService transactionService,
+                                     UserService userService,
+                                     AuthenticationHelper authenticationHelper) {
         this.transactionService = transactionService;
         this.userService = userService;
         this.authenticationHelper = authenticationHelper;

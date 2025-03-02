@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/PageLayout.html :: head('Cards')}"></head>
+<body>
+
+<nav th:replace="~{fragments/PageLayout.html :: navbar}"></nav>
+<br/><br/>
+<header class="masthead">
+    <div class="container">
+        <div class="access-denied-title">Here are your available cards!</div>
+    </div>
+</header>
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div th:each="card : ${cards}" class="col-lg-4 col-md-6 col-sm-12 mb-4">
+            <div class="card shadow border-0">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Card ID: <span th:text="${card.getId()}"></span></h5>
+                    <p class="card-text"><strong>Card Number:</strong> <span th:text="${card.getCardNumber()}"></span></p>
+                    <p class="card-text"><strong>Expiration Date:</strong> <span th:text="${card.getExpirationDate()}"></span></p>
+
+                    <div class="d-flex justify-content-center gap-2">
+                        <form>
+                            <button type="submit" class="btn btn-danger btn-danger:hover">
+                                Delete Card
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<footer th:replace="~{fragments/PageLayout.html :: footer}"></footer>
+<div th:replace="~{/fragments/PageLayout.html :: scripts}"></div>
+
+</body>
+</html>
