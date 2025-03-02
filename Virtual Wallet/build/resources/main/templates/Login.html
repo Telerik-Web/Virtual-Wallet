@@ -13,12 +13,16 @@
 
                     <h2 class="text-center text-gray-900 font-weight-bold">My Account</h2>
 
-                    <div class="text-danger small text-center">
-                        <p th:if="${#fields.hasErrors()}" th:text="${#fields.errors('login.*')}"></p>
+<!--                    <div class="text-danger small text-center">-->
+<!--                        <p th:if="${#fields.hasErrors()}" th:text="${#fields.errors('login.*')}"></p>-->
+<!--                    </div>-->
+
+                    <div th:if="${#fields.hasErrors() and login.username!='' and login.password!=''}">
+                        <p class="error">Wrong username or password!</p>
                     </div>
 
                     <div class="form-group">
-                        <label class="text-gray-900 small font-weight-bold">Username</label>
+                        <label class="text-gray-900 font-weight-bold">Username</label>
                         <input type="text" class="form-control form-control-user"
                                th:field="*{username}" placeholder="Enter Username">
                     </div>
@@ -26,7 +30,7 @@
                     <br/><br/>
 
                     <div class="form-group">
-                        <label class="text-gray-900 small font-weight-bold">Password</label>
+                        <label class="text-gray-900 font-weight-bold">Password</label>
                         <input type="password" class="form-control form-control-user"
                                th:field="*{password}" placeholder="Enter Password">
                     </div>
