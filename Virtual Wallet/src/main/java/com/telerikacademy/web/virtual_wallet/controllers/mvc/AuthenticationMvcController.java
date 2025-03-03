@@ -62,6 +62,7 @@ public class AuthenticationMvcController {
             User user = authenticationHelper.verifyAuthentication(login.getUsername(), login.getPassword());
             session.setAttribute("currentUser", user.getUsername());
             session.setAttribute("isAdmin", user.getIsAdmin());
+            session.setAttribute("cards", user.getCards());
             return "redirect:/";
         } catch (AuthenticationFailureException e) {
             errors.reject("Invalid authentication");
