@@ -10,6 +10,7 @@ import org.springframework.http.HttpHeaders;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 public interface TransactionService {
     List<Transaction> findBySender(User sender);
