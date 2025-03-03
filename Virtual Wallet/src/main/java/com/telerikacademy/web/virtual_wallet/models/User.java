@@ -49,12 +49,7 @@ public class User {
     @Column(name = "isBlocked")
     private Boolean isBlocked;
 
-    //    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-//    @JoinTable(name = "users_cards",
-//            joinColumns = @JoinColumn(name = "user_id"),
-//            inverseJoinColumns = @JoinColumn(name = "card_id")
-//    )
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.EAGER)
     @JsonManagedReference
     @JsonIgnore
     private List<Card> cards = new ArrayList<>();
