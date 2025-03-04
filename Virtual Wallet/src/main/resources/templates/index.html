@@ -445,6 +445,7 @@
                                     <thead>
                                     <tr>
                                         <th>Transaction Id</th>
+                                        <th>Sender</th>
                                         <th>Recipient</th>
                                         <th>Email</th>
                                         <th>Sent</th>
@@ -454,6 +455,7 @@
                                     <tbody>
                                     <tr th:each="transaction : ${allTransactions}">
                                         <td th:text="${transaction.id}"></td>
+                                        <td th:text="${transaction.sender.username}"></td>
                                         <td th:text="${transaction.recipient.username}"></td>
                                         <td th:text="${transaction.recipient.email}"></td>
                                         <td th:text="${transaction.sender.id == currentUser.id} ? ${transaction.amount} : '0'"></td>
@@ -549,60 +551,60 @@
 </script>
 
 
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        var ctx = document.getElementById("earningsChart").getContext("2d");
+<!--<script>-->
+<!--    document.addEventListener("DOMContentLoaded", function () {-->
+<!--        var ctx = document.getElementById("earningsChart").getContext("2d");-->
 
-        // Function to fetch earnings data
-        function fetchEarnings(days) {
-            fetch(`/api/transactions/earnings/${days}`)
-                .then(response => response.json())
-                .then(data => {
-                    updateChart(data);
-                });
-        }
+<!--        // Function to fetch earnings data-->
+<!--        function fetchEarnings(days) {-->
+<!--            fetch(`/api/transactions/earnings/${days}`)-->
+<!--                .then(response => response.json())-->
+<!--                .then(data => {-->
+<!--                    updateChart(data);-->
+<!--                });-->
+<!--        }-->
 
-        // Function to update chart with new data
-        function updateChart(data) {
-            let labels = Object.keys(data);
-            let values = Object.values(data);
+<!--        // Function to update chart with new data-->
+<!--        function updateChart(data) {-->
+<!--            let labels = Object.keys(data);-->
+<!--            let values = Object.values(data);-->
 
-            if (window.earningsChart) {
-                window.earningsChart.destroy();
-            }
+<!--            if (window.earningsChart) {-->
+<!--                window.earningsChart.destroy();-->
+<!--            }-->
 
-            window.earningsChart = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: labels,
-                    datasets: [{
-                        label: "Total Transactions ($)",
-                        data: values,
-                        borderColor: "#4e73df",
-                        backgroundColor: "rgba(78, 115, 223, 0.1)",
-                        borderWidth: 2
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        x: {title: {display: true, text: 'Date'}},
-                        y: {title: {display: true, text: 'Amount ($)'}, beginAtZero: true}
-                    }
-                }
-            });
-        }
+<!--            window.earningsChart = new Chart(ctx, {-->
+<!--                type: 'line',-->
+<!--                data: {-->
+<!--                    labels: labels,-->
+<!--                    datasets: [{-->
+<!--                        label: "Total Transactions ($)",-->
+<!--                        data: values,-->
+<!--                        borderColor: "#4e73df",-->
+<!--                        backgroundColor: "rgba(78, 115, 223, 0.1)",-->
+<!--                        borderWidth: 2-->
+<!--                    }]-->
+<!--                },-->
+<!--                options: {-->
+<!--                    responsive: true,-->
+<!--                    maintainAspectRatio: false,-->
+<!--                    scales: {-->
+<!--                        x: {title: {display: true, text: 'Date'}},-->
+<!--                        y: {title: {display: true, text: 'Amount ($)'}, beginAtZero: true}-->
+<!--                    }-->
+<!--                }-->
+<!--            });-->
+<!--        }-->
 
-        // Load initial data for 7 days
-        fetchEarnings(7);
+<!--        // Load initial data for 7 days-->
+<!--        fetchEarnings(7);-->
 
-        // Handle dropdown change
-        document.getElementById("transactionPeriod").addEventListener("change", function () {
-            fetchEarnings(this.value);
-        });
-    });
-</script>
+<!--        // Handle dropdown change-->
+<!--        document.getElementById("transactionPeriod").addEventListener("change", function () {-->
+<!--            fetchEarnings(this.value);-->
+<!--        });-->
+<!--    });-->
+<!--</script>-->
 
 
 <!--&lt;!&ndash; Bootstrap core JavaScript&ndash;&gt;-->

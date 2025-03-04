@@ -44,7 +44,8 @@ public class HomeMvcController {
                 null, null, true, user).stream().mapToDouble(Transaction::getAmount).sum();
         double sumOutgoingTransactions = transactionService.filterTransactions(null,
                 null, null, false, user).stream().mapToDouble(Transaction::getAmount).sum();
-        model.addAttribute("allTransactions", transactionService.getAllTransactionsForUser(user.getId()));
+        model.addAttribute("allTransactions", transactionService.getAllTransactionsForUser(user.getId())
+                .stream().limit(4));
         model.addAttribute("incomingTransactions", sumIncomingTransactions);
         model.addAttribute("outgoingTransactions", sumOutgoingTransactions);
         model.addAttribute("currentUser", user);
