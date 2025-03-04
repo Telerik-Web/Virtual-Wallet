@@ -136,7 +136,7 @@ public class AuthenticationMvcController {
 
         try {
             user.setId(authenticationHelper.tryGetUser(session).getId());
-            user.setAdmin(authenticationHelper.tryGetUser(session).getIsAdmin());
+            user.setIsAdmin(authenticationHelper.tryGetUser(session).getIsAdmin());
             user.setIsBlocked(authenticationHelper.tryGetUser(session).getIsBlocked());
             userService.update(user, user, authenticationHelper.tryGetUser(session).getId());
             return "redirect:/auth/account";
@@ -161,11 +161,11 @@ public class AuthenticationMvcController {
     }
 
     @GetMapping("/delete/{id}")
-    public String deletePost(@PathVariable int id,
+    public String deleteCard(@PathVariable int id,
                              HttpSession session) {
         User user = authenticationHelper.tryGetUser(session);
         Card card = cardService.getById(id);
-        cardService.delete(card);
+        cardService.delete(card, user);
         return "redirect:/auth/account/cards";
 
     }

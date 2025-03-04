@@ -7,7 +7,9 @@ import jakarta.validation.constraints.*;
 import lombok.Data;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Data
@@ -51,8 +53,7 @@ public class User {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.EAGER)
     @JsonManagedReference
-    @JsonIgnore
-    private List<Card> cards = new ArrayList<>();
+    private Set<Card> cards = new HashSet<>();
 
     @Column(name = "balance")
     private double balance;
@@ -69,9 +70,5 @@ public class User {
     @Transient
     public String getFullName() {
         return firstName + " " + lastName;
-    }
-
-    public void setAdmin(boolean admin) {
-        isAdmin = admin;
     }
 }

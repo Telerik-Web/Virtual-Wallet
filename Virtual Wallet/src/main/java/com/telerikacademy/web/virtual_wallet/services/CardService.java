@@ -1,6 +1,7 @@
 package com.telerikacademy.web.virtual_wallet.services;
 
 import com.telerikacademy.web.virtual_wallet.models.Card;
+import com.telerikacademy.web.virtual_wallet.models.User;
 
 import java.util.Set;
 
@@ -8,11 +9,11 @@ public interface CardService {
 
     Card getById(long id);
 
-    Set<Card> getCardsByUserId(long userId);
+    Set<Card> getCardsByUserId(long userId, User user);
 
-    void create(Card card);
+    void create(Card card, User user);
 
-    void update(Card card);
+    void update(Card card, User user);
 
-    void delete(Card card);
+    void delete(Card card, User user);
 }

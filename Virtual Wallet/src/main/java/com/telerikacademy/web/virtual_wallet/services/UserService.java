@@ -34,9 +34,4 @@ public interface UserService {
 
     void delete(long id, User userFromHeader);
 
-    @Transactional
-    public void addCardToUser(long userId, Card card);
-
-    @Transactional
-    public Set<CardDTO> getAllCardsForUser(long userId);
 }

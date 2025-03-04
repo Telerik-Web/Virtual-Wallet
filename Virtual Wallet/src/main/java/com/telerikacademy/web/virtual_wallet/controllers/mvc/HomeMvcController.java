@@ -21,16 +21,13 @@ public class HomeMvcController {
     private final TransactionService transactionService;
     private final UserService userService;
     private final AuthenticationHelper authenticationHelper;
-    private final CardService cardService;
 
     public HomeMvcController(TransactionService transactionService,
                              UserService userService,
-                             AuthenticationHelper authenticationHelper,
-                             CardService cardService) {
+                             AuthenticationHelper authenticationHelper) {
         this.transactionService = transactionService;
         this.userService = userService;
         this.authenticationHelper = authenticationHelper;
-        this.cardService = cardService;
     }
 
     @ModelAttribute("isAuthenticated")
