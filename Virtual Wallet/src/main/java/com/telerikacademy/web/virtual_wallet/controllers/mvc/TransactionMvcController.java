@@ -50,16 +50,32 @@ public class TransactionMvcController {
 //    }
 
     @GetMapping("/all")
-    public String showAllTransactions(@ModelAttribute("startDate") LocalDateTime startDate,
-                                      @ModelAttribute("endDate") LocalDateTime endDate,
-                                      @ModelAttribute("recipient") String recipient,
-                                      @ModelAttribute("isIncoming") boolean isIncoming,
-                                      Model model,
-                                      HttpSession session) {
+    public String showAllTransactions(
+            HttpSession session,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDate,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDate,
+            @RequestParam(required = false) String recipient,
+            @RequestParam(required = false) Boolean isIncoming,
+            Model model) {
         User user = authenticationHelper.tryGetUser(session);
+        if (recipient != null && recipient.isEmpty()) {
+            recipient = null;
+        }
         List<Transaction> transactions = transactionService.filterTransactions(startDate, endDate, recipient, isIncoming, user);
+//
+//        System.out.println("Start Date: " + startDate);
+//        System.out.println("End Date: " + endDate);
+//        System.out.println("Recipient: " + recipient);
+//        System.out.println("Is Incoming: " + isIncoming);
+//        System.out.println();
+//        System.out.println("Filtered Transactions Count: " + transactions.size());
+
+        model.addAttribute("startDate", startDate);
+        model.addAttribute("endDate", endDate);
+        model.addAttribute("recipient", recipient);
         model.addAttribute("transactions", transactions);
-        model.addAttribute("currentUser", user);
+        model.addAttribute("isIncoming", isIncoming);
+
         return "TransactionsView";
     }
 

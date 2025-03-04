@@ -121,6 +121,7 @@ public class TransactionServiceImpl implements TransactionService {
                 .filter(t -> startDate == null || t.getCreatedAt().isAfter(startDate))
                 .filter(t -> endDate == null || t.getCreatedAt().isBefore(endDate))
                 .filter(t -> recipient == null || t.getRecipient().getUsername().equalsIgnoreCase(recipient))
+//                .filter(t -> user.getUsername() == null || t.getSender().getUsername().equalsIgnoreCase(user.getUsername()))
                 .filter(t -> {
                     if (isIncoming == null) return true;
                     boolean transactionIsIncoming = t.getRecipient().getId() == (user.getId());
