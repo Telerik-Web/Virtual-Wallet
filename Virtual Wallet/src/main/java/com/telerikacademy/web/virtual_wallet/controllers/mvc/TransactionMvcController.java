@@ -3,6 +3,7 @@ package com.telerikacademy.web.virtual_wallet.controllers.mvc;
 import com.telerikacademy.web.virtual_wallet.helpers.AuthenticationHelper;
 import com.telerikacademy.web.virtual_wallet.models.Transaction;
 import com.telerikacademy.web.virtual_wallet.models.TransactionDTO;
+import com.telerikacademy.web.virtual_wallet.models.TransactionFilter;
 import com.telerikacademy.web.virtual_wallet.models.User;
 import com.telerikacademy.web.virtual_wallet.services.CardService;
 import com.telerikacademy.web.virtual_wallet.services.TransactionService;
@@ -12,10 +13,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -39,10 +37,29 @@ public class TransactionMvcController {
         this.cardService = cardService;
     }
 
+    @ModelAttribute("isAuthenticated")
+    public boolean populateIsAuthenticated(HttpSession session) {
+        return session.getAttribute("currentUser") != null;
+    }
+
+//    @GetMapping("/all")
+//    public String getFilteredTransactions(HttpSession session, Model model) {
+//        User user = authenticationHelper.tryGetUser(session);
+//        model.addAttribute("transactions", transactionService.getAllTransactionsForUser(user.getId()));
+//        return "TransactionsView";
+//    }
+
     @GetMapping("/all")
-    public String getFilteredTransactions(HttpSession session, Model model) {
+    public String showAllTransactions(@ModelAttribute("startDate") LocalDateTime startDate,
+                                      @ModelAttribute("endDate") LocalDateTime endDate,
+                                      @ModelAttribute("recipient") String recipient,
+                                      @ModelAttribute("isIncoming") boolean isIncoming,
+                                      Model model,
+                                      HttpSession session) {
         User user = authenticationHelper.tryGetUser(session);
-        model.addAttribute("transactions", transactionService.getAllTransactionsForUser(user.getId()));
+        List<Transaction> transactions = transactionService.filterTransactions(startDate, endDate, recipient, isIncoming, user);
+        model.addAttribute("transactions", transactions);
+        model.addAttribute("currentUser", user);
         return "TransactionsView";
     }
 

@@ -53,7 +53,7 @@ public class User {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.EAGER)
     @JsonManagedReference
-    private Set<Card> cards = new HashSet<>();
+    private List<Card> cards = new ArrayList<>();
 
     @Column(name = "balance")
     private double balance;

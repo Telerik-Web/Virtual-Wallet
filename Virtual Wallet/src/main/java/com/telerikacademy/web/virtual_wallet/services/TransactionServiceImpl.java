@@ -1,24 +1,19 @@
 package com.telerikacademy.web.virtual_wallet.services;
 
 import com.telerikacademy.web.virtual_wallet.enums.Status;
-import com.telerikacademy.web.virtual_wallet.helpers.AuthenticationHelper;
-import com.telerikacademy.web.virtual_wallet.mappers.TransactionMapper;
 import com.telerikacademy.web.virtual_wallet.models.Transaction;
 import com.telerikacademy.web.virtual_wallet.models.TransactionDTO;
-import com.telerikacademy.web.virtual_wallet.models.TransactionFilter;
 import com.telerikacademy.web.virtual_wallet.models.User;
 import com.telerikacademy.web.virtual_wallet.repositories.TransactionRepository;
 import com.telerikacademy.web.virtual_wallet.repositories.UserRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.http.HttpHeaders;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service

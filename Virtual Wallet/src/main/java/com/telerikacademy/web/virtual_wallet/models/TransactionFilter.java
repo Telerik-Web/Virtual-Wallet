@@ -1,8 +1,7 @@
 package com.telerikacademy.web.virtual_wallet.models;
 
+import com.telerikacademy.web.virtual_wallet.enums.Status;
 import lombok.Data;
-import lombok.Getter;
-import org.springframework.cglib.core.Local;
 
 import java.time.LocalDateTime;
 
@@ -10,17 +9,19 @@ import java.time.LocalDateTime;
 public class TransactionFilter {
 
     private double amount;
-    private LocalDateTime date;
-    private String recipient;
-    private String sender;
+    private User recipient;
+    private User sender;
+    private Status status;
+    private LocalDateTime createdAt;
     private boolean isIncoming;
 
-    public TransactionFilter(double amount, LocalDateTime date, String recipient, String sender, boolean isIncoming) {
+    public TransactionFilter(double amount, LocalDateTime createdAt, User recipient, User sender, boolean isIncoming, Status status) {
         this.amount = amount;
-        this.date = date;
+        this.createdAt = createdAt;
         this.recipient = recipient;
         this.sender = sender;
         this.isIncoming = isIncoming;
+        this.status = status;
     }
 
     public TransactionFilter() {
@@ -30,7 +31,7 @@ public class TransactionFilter {
     public String toString() {
         return "Transaction{" +
                 "amount=" + amount +
-                ", date=" + date +
+                ", date=" + createdAt +
                 ", recipient='" + recipient + '\'' +
                 ", sender='" + sender + '\'' +
                 ", isIncoming=" + (isIncoming ? "Incoming" : "Outgoing") +

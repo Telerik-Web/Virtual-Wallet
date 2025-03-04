@@ -1,9 +1,4 @@
 package com.telerikacademy.web.virtual_wallet.mappers;
-
-import com.telerikacademy.web.virtual_wallet.models.Transaction;
-import com.telerikacademy.web.virtual_wallet.models.TransactionFilter;
-import com.telerikacademy.web.virtual_wallet.models.User;
-import com.telerikacademy.web.virtual_wallet.models.UserDTO;
 import com.telerikacademy.web.virtual_wallet.repositories.TransactionRepository;
 import org.springframework.stereotype.Component;
 
