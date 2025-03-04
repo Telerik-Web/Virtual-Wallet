@@ -1,5 +1,6 @@
 package com.telerikacademy.web.virtual_wallet.controllers.mvc;
 
+import com.telerikacademy.web.virtual_wallet.exceptions.AuthenticationFailureException;
 import com.telerikacademy.web.virtual_wallet.helpers.AuthenticationHelper;
 import com.telerikacademy.web.virtual_wallet.models.Transaction;
 import com.telerikacademy.web.virtual_wallet.models.User;
@@ -39,21 +40,25 @@ public class HomeMvcController {
 
     @GetMapping
     public String showHomePage(Model model, HttpSession session) {
-        User user = authenticationHelper.tryGetUser(session);
-        double sumIncomingTransactions = transactionService.filterTransactions(null,
-                null, null, true, user).stream().mapToDouble(Transaction::getAmount).sum();
-        double sumOutgoingTransactions = transactionService.filterTransactions(null,
-                null, null, false, user).stream().mapToDouble(Transaction::getAmount).sum();
-        model.addAttribute("allTransactions", transactionService.getAllTransactionsForUser(user.getId())
-                .stream().limit(4));
-        model.addAttribute("incomingTransactions", sumIncomingTransactions);
-        model.addAttribute("outgoingTransactions", sumOutgoingTransactions);
-        model.addAttribute("currentUser", user);
-        if (populateIsAuthenticated(session)) {
-            String currentUsername = (String) session.getAttribute("currentUser");
-            model.addAttribute("currentUser", userService.getByUsername(currentUsername));
+        try {
+            User user = authenticationHelper.tryGetUser(session);
+            double sumIncomingTransactions = transactionService.filterTransactions(null,
+                    null, null, true, user).stream().mapToDouble(Transaction::getAmount).sum();
+            double sumOutgoingTransactions = transactionService.filterTransactions(null,
+                    null, null, false, user).stream().mapToDouble(Transaction::getAmount).sum();
+            model.addAttribute("allTransactions", transactionService.getAllTransactionsForUser(user.getId())
+                    .stream().limit(4));
+            model.addAttribute("incomingTransactions", sumIncomingTransactions);
+            model.addAttribute("outgoingTransactions", sumOutgoingTransactions);
+            model.addAttribute("currentUser", user);
+            if (populateIsAuthenticated(session)) {
+                String currentUsername = (String) session.getAttribute("currentUser");
+                model.addAttribute("currentUser", userService.getByUsername(currentUsername));
+            }
+            return "index";
+        } catch (AuthenticationFailureException e) {
+            return "AccessDenied";
         }
-        return "index";
     }
 
 

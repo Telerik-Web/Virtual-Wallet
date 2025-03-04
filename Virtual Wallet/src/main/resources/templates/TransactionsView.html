@@ -1,10 +1,41 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/PageLayout.html :: head('Transactions')}"></head>
 <body>
+
+<nav th:replace="~{fragments/PageLayout.html :: navbar}"></nav>
+<br/><br/>
+<header class="masthead">
+    <div class="container">
+        <div class="access-denied-title">Transactions</div>
+    </div>
+</header>
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div th:each="transaction : ${transactions}" class="col-lg-4 col-md-6 col-sm-12 mb-4">
+            <div class="card shadow border-0">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Transaction ID: <span th:text="${transaction.getId()}"></span></h5>
+                    <p class="card-text"><strong>Sender full name:</strong> <span th:text="${transaction.sender.fullName}"></span></p>
+                    <p class="card-text"><strong>Recipient full name:</strong> <span th:text="${transaction.recipient.fullName}"></span></p>
+                    <p class="card-text"><strong>Amount:</strong> <span th:text="${transaction.amount}"></span></p>
+                    <p class="card-text"><strong>Date:</strong> <span th:text="${transaction.createdAt}"></span></p>
+                    <p class="card-text"><strong>Status:</strong> <span th:text="${transaction.status}"></span></p>
+
+<!--                    <div class="d-flex justify-content-center gap-2">-->
+<!--                        <form>-->
+<!--                            <a th:href="@{/auth/delete/{id}(id=${card.getId()})}"-->
+<!--                               type="submit" class="btn btn-danger btn-danger:hover">Delete Card</a>-->
+<!--                        </form>-->
+<!--                    </div>-->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<footer th:replace="~{fragments/PageLayout.html :: footer}"></footer>
+<div th:replace="~{/fragments/PageLayout.html :: scripts}"></div>
 
 </body>
 </html>
