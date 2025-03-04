@@ -77,15 +77,6 @@ public class UserRestController {
         }
     }
 
-    @Operation(summary = "Gets all cards of a user", description = "Fetches all cards for a unique user.")
-    @GetMapping("/{userId}/cards")
-    @SecurityRequirement(name = "authHeader")
-    public ResponseEntity<Set<CardDTO>> getUserCards(@PathVariable long userId) {
-        User user = userService.getById(userId);
-        //return ResponseEntity.ok(user.getCards());
-        return ResponseEntity.ok(userService.getAllCardsForUser(userId));
-    }
-
     @Operation(summary = "Create a User", description = "Create a user with unique all its fields.")
     @PostMapping
     public UserDtoOut create(@RequestBody UserDTO userDto) {

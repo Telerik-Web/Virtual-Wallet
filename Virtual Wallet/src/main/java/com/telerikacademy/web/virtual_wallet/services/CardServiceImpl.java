@@ -10,9 +10,10 @@ import com.telerikacademy.web.virtual_wallet.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Set;
 
-import static com.telerikacademy.web.virtual_wallet.helpers.PermissionHelper.checkIfCreatorOrAdminForUser;
+import static com.telerikacademy.web.virtual_wallet.helpers.PermissionHelper.*;
 
 @Service
 public class CardServiceImpl implements CardService {
@@ -27,19 +28,29 @@ public class CardServiceImpl implements CardService {
     }
 
     @Override
-    public Card getById(long id) {
+    public List<Card> getAllCards(User user) {
+        checkIfAdmin(user);
+        return cardRepository.findAll();
+    }
+
+    @Override
+    public Card getById(long id, User user) {
+
         Card card = cardRepository.findById(id);
+
         if(card == null){
             throw new EntityNotFoundException("Card", id);
         }
+
+        checkIfCreatorOrAdminForUser(user, card.getUser());
         return card;
     }
 
     @Override
-    public Set<Card> getCardsByUserId(long userId, User userFromHeader) {
+    public List<Card> getCardsByUserId(long userId, User userFromHeader) {
         User user = userRepository.getById(userId);
 
-        checkIfCreatorOrAdminForUser(user, userFromHeader);
+        checkIfCreatorOrAdminForUser(userFromHeader, user);
 
         return cardRepository.findByUser(user);
     }
@@ -47,28 +58,24 @@ public class CardServiceImpl implements CardService {
     @Override
     public void create(Card card, User userFromHeader) {
 
-        boolean exists = userFromHeader.getCards().stream()
-                    .anyMatch(existingCard -> existingCard.getId() == card.getId());
-
-        if(exists){
+        if (cardRepository.existsByUserAndNumber(userFromHeader, card.getCardNumber())) {
             throw new DuplicateEntityException("Card", "user", userFromHeader.getUsername());
         }
-        else{
-            card.setUser(userFromHeader);
-            cardRepository.save(card);
-        }
+
+        card.setUser(userFromHeader);
+        cardRepository.save(card);
 
     }
 
     @Override
     public void update(Card card, User userFromHeader) {
-        checkIfCreatorOrAdminForUser(userFromHeader, card.getUser());
+        checkIfCreatorOrAdminForCard(userFromHeader, card);
         cardRepository.save(card);
     }
 
     @Override
     public void delete(Card card, User userFromHeader) {
-        checkIfCreatorOrAdminForUser(userFromHeader, card.getUser());
+        checkIfCreatorOrAdminForCard(userFromHeader, card);
         cardRepository.delete(card);
     }
 }

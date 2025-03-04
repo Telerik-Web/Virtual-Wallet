@@ -34,8 +34,5 @@ public interface UserService {
 
     void delete(long id, User userFromHeader);
 
-    void addCardToUser(long userId, Card card);
-
-    Set<CardDTO> getAllCardsForUser(long userId);
 
 }
