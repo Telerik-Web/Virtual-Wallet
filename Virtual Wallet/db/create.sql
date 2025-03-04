@@ -34,13 +34,3 @@ CREATE TABLE transactions
     status       ENUM ('PENDING', 'COMPLETED', 'FAILED') NOT NULL DEFAULT 'PENDING',
     created_at   TIMESTAMP                                        DEFAULT CURRENT_TIMESTAMP
 );
-
-create table cards_users
-(
-    id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    card_number    varchar(16) not null unique,
-    card_id    BIGINT      NOT NULL,
-    FOREIGN KEY (card_id) REFERENCES cards(id) ON DELETE CASCADE,
-    user_id    BIGINT      NOT NULL,
-    FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
-);
