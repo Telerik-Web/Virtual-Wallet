@@ -41,4 +41,8 @@ public interface TransactionService {
     List<TransactionDTO> sortTransactions(List<TransactionDTO> transactions,
                                        String sortBy,
                                        boolean ascending);
+
+    List<Transaction> sortTransactions2(List<Transaction> transactions,
+                                        String sortBy,
+                                        boolean ascending);
 }

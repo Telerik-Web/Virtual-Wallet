@@ -56,12 +56,19 @@ public class TransactionMvcController {
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDate,
             @RequestParam(required = false) String recipient,
             @RequestParam(required = false) Boolean isIncoming,
+            @RequestParam(required = false) String sortBy,
+            @RequestParam(required = false) boolean isAscending,
             Model model) {
         User user = authenticationHelper.tryGetUser(session);
         if (recipient != null && recipient.isEmpty()) {
             recipient = null;
         }
+        if(sortBy == null) {
+            sortBy = "amount";
+        }
         List<Transaction> transactions = transactionService.filterTransactions(startDate, endDate, recipient, isIncoming, user);
+
+        List<Transaction> transactionDTOList2  = transactionService.sortTransactions2(transactions, sortBy, isAscending);
 //
 //        System.out.println("Start Date: " + startDate);
 //        System.out.println("End Date: " + endDate);
@@ -73,8 +80,10 @@ public class TransactionMvcController {
         model.addAttribute("startDate", startDate);
         model.addAttribute("endDate", endDate);
         model.addAttribute("recipient", recipient);
-        model.addAttribute("transactions", transactions);
+        model.addAttribute("transactions", transactionDTOList2);
         model.addAttribute("isIncoming", isIncoming);
+        model.addAttribute("sortBy", sortBy);
+        model.addAttribute("isAscending", isAscending);
 
         return "TransactionsView";
     }

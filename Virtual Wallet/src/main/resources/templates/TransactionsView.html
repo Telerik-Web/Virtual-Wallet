@@ -31,6 +31,12 @@
         <option value="false">No</option>
     </select>
 
+    <label for="sortBy">Sort By:</label>
+    <select id="sortBy" name="sortBy" th:value="*{sortBy}">
+        <option value="amount">Amount</option>
+        <option value="date">Date</option>
+    </select>
+
     <button class="btn btn-primary" type="submit">Filter</button>
 </form>
 

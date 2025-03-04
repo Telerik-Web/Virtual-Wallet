@@ -149,4 +149,24 @@ public class TransactionServiceImpl implements TransactionService {
                 .sorted(comparator)
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public List<Transaction> sortTransactions2(List<Transaction> transactions,
+                                                 String sortBy,
+                                                 boolean ascending) {
+        Comparator<Transaction> comparator = switch (sortBy.toLowerCase()) {
+            case "amount" -> Comparator.comparing(Transaction::getAmount);
+            case "date" -> Comparator.comparing(Transaction::getCreatedAt);
+            default -> throw new IllegalStateException("Unexpected value: " + sortBy);
+        };
+
+        if (!ascending) {
+            comparator = comparator.reversed();
+        }
+
+        return transactions
+                .stream()
+                .sorted(comparator)
+                .collect(Collectors.toList());
+    }
 }
