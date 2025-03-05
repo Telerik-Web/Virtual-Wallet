@@ -104,47 +104,59 @@ public class TransactionMvcController {
     @PostMapping("/new")
     public String createTransaction(@Valid @ModelAttribute ("transaction") TransactionDTOCreate transactionDTOCreate,
                                     BindingResult errors,
-                                    @RequestParam double amount,
+                                    @RequestParam String amount,
                                     HttpSession session,
                                     Model model) {
-
-        if (errors.hasErrors()) {
-            System.out.println(errors.getAllErrors());
-            return "CreateTransaction";
-        }
-
-        String type = transactionDTOCreate.getType();
-        String value = transactionDTOCreate.getValue();
-
-        model.addAttribute("type", transactionDTOCreate.getType());
-        model.addAttribute("value", transactionDTOCreate.getValue());
-        model.addAttribute("amount", amount);
-        User recipient;
-        switch (type) {
-            case "phone":
-                recipient = userService.getByPhoneNumber(value);
-                break;
-            case "email":
-                recipient = userService.getByEmail(value);
-                break;
-            case "username":
-                recipient = userService.getByUsername(value);
-                break;
-            default:
-                recipient = null;
-                break;
-        }
-
-        User user;
         try {
-            user = authenticationHelper.tryGetUser(session);
-        } catch (AuthenticationFailureException e) {
-            return "AccessDenied";
+
+            if (errors.hasErrors()) {
+                return "CreateTransaction";
+            }
+
+            String type = transactionDTOCreate.getType();
+            String value = transactionDTOCreate.getValue();
+
+            double amount2;
+            try {
+                amount2 = Double.parseDouble(amount);
+            } catch (NumberFormatException e) {
+                errors.rejectValue("amount", "error.amount");
+                return "CreateTransaction";
+            }
+
+            model.addAttribute("type", transactionDTOCreate.getType());
+            model.addAttribute("value", transactionDTOCreate.getValue());
+            model.addAttribute("amount", amount2);
+            User recipient;
+            switch (type) {
+                case "phone":
+                    recipient = userService.getByPhoneNumber(value);
+                    break;
+                case "email":
+                    recipient = userService.getByEmail(value);
+                    break;
+                case "username":
+                    recipient = userService.getByUsername(value);
+                    break;
+                default:
+                    recipient = null;
+                    break;
+            }
+
+            User user;
+            try {
+                user = authenticationHelper.tryGetUser(session);
+            } catch (AuthenticationFailureException e) {
+                return "AccessDenied";
+            } catch (EntityNotFoundException e) {
+                return "CreateTransaction";
+            }
+            transactionService.transferFunds(user, recipient, amount2);
+            return "redirect:/transactions/all";
         } catch (EntityNotFoundException e) {
+            errors.rejectValue("amount", "error.amount");
             return "CreateTransaction";
         }
-        transactionService.transferFunds(user, recipient, amount);
-        return "redirect:/transactions/all";
 
     }
 

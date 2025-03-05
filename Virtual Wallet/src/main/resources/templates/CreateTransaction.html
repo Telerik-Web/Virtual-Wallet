@@ -23,11 +23,10 @@
                 <br/>
                 <input class="input-group-text" type="text" th:field="*{value}"
                        placeholder="Recipient"/>
-                <label class="error" th:errors="*{value}">Value Error</label>
-<!--                <label class="error" th:if="${#fields.hasErrors()} and ${value == null or-->
-<!--                    value.isEmpty()}">-->
-<!--                    Recipient can't be empty-->
-<!--                </label>-->
+<!--                <label class="error" th:errors="*{value}">Value Error</label>-->
+                <label class="error" th:if="${#fields.hasErrors()}" th:text="'Please enter valid '">
+                    Please enter a valid
+                </label>
 
                 <label class="fieldName">Amount</label>
                 <br/>
