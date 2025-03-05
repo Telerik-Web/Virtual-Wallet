@@ -1,6 +1,7 @@
 package com.telerikacademy.web.virtual_wallet.controllers.mvc;
 
 import com.telerikacademy.web.virtual_wallet.exceptions.AuthenticationFailureException;
+import com.telerikacademy.web.virtual_wallet.exceptions.EntityNotFoundException;
 import com.telerikacademy.web.virtual_wallet.helpers.AuthenticationHelper;
 import com.telerikacademy.web.virtual_wallet.models.*;
 import com.telerikacademy.web.virtual_wallet.services.CardService;
@@ -101,11 +102,17 @@ public class TransactionMvcController {
     }
 
     @PostMapping("/new")
-    public String createTransaction(@ModelAttribute TransactionDTOCreate transactionDTOCreate,
-                                    @RequestParam double amount,
+    public String createTransaction(@Valid @ModelAttribute ("transaction") TransactionDTOCreate transactionDTOCreate,
                                     BindingResult errors,
+                                    @RequestParam double amount,
                                     HttpSession session,
                                     Model model) {
+
+        if (errors.hasErrors()) {
+            System.out.println(errors.getAllErrors());
+            return "CreateTransaction";
+        }
+
         String type = transactionDTOCreate.getType();
         String value = transactionDTOCreate.getValue();
 
@@ -128,23 +135,13 @@ public class TransactionMvcController {
                 break;
         }
 
-        System.out.println("Start Date: " + amount);
-        //System.out.println("End Date: " + recipient.getUsername());
-        System.out.println("Recipient: " + type);
-
-//        if (recipient == null) {
-//            return "AccessDenied";
-//        }
-
-        if (errors.hasErrors()) {
-            return "AccessDenied";
-        }
-
         User user;
         try {
             user = authenticationHelper.tryGetUser(session);
         } catch (AuthenticationFailureException e) {
             return "AccessDenied";
+        } catch (EntityNotFoundException e) {
+            return "CreateTransaction";
         }
         transactionService.transferFunds(user, recipient, amount);
         return "redirect:/transactions/all";

@@ -10,9 +10,6 @@
         <div class="container d-flex align-items-center flex-column">
 
             <form action="#" th:action="@{/transactions/new}" th:object="${transaction}" method="post">
-
-
-
                 <label class="text-gray-900 font-weight-bold" for="isIncoming">How would you like to send money today?</label>
                 <select id="isIncoming" name="isIncoming" th:field="*{type}">
                     <option value="phone">Phone</option>
@@ -26,17 +23,21 @@
                 <br/>
                 <input class="input-group-text" type="text" th:field="*{value}"
                        placeholder="Recipient"/>
-
-<!--                <label class="error" th:if="${#fields.hasErrors('recipient')} and ${post.title == null or-->
-<!--                post.title.isEmpty()}">-->
-<!--                    Recipient can't be empty!-->
+                <label class="error" th:errors="*{value}">Value Error</label>
+<!--                <label class="error" th:if="${#fields.hasErrors()} and ${value == null or-->
+<!--                    value.isEmpty()}">-->
+<!--                    Recipient can't be empty-->
 <!--                </label>-->
 
                 <label class="fieldName">Amount</label>
                 <br/>
                 <input class="input-group-text" type="text" th:field="*{amount}"
                        placeholder="Amount"/>
-
+                <label class="error" th:errors="*{amount}">Amount Error</label>
+<!--                <label class="error" th:if="${#fields.hasErrors()} and ${amount == null or-->
+<!--                    amount.isEmpty()}">-->
+<!--                    Amount can't be empty-->
+<!--                </label>-->
                 <input class="btn btn-primary" type="submit" value="Create"/>
             </form>
         </div>
