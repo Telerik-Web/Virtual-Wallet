@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="~{fragments/PageLayout.html :: head('Posts')}"></head>
+<body>
+
+<nav th:replace="~{fragments/PageLayout.html :: navbar}"></nav>
+
+<section class="container mt-5">
+    <div class="masthead vh-100 justify-content-center">
+        <div class="container d-flex align-items-center flex-column">
+
+            <form action="#" th:action="@{/transactions/new}" th:object="${transaction}" method="post">
+
+
+
+                <label class="text-gray-900 font-weight-bold" for="isIncoming">How would you like to send money today?</label>
+                <select id="isIncoming" name="isIncoming" th:field="*{type}">
+                    <option value="phone">Phone</option>
+                    <option value="email">Email</option>
+                    <option value="username">Username</option>
+                </select>
+
+                <h2 class="page-title">Create a Transaction</h2>
+
+                <label class="fieldName">Recipient</label>
+                <br/>
+                <input class="input-group-text" type="text" th:field="*{value}"
+                       placeholder="Recipient"/>
+
+<!--                <label class="error" th:if="${#fields.hasErrors('recipient')} and ${post.title == null or-->
+<!--                post.title.isEmpty()}">-->
+<!--                    Recipient can't be empty!-->
+<!--                </label>-->
+
+                <label class="fieldName">Amount</label>
+                <br/>
+                <input class="input-group-text" type="text" th:field="*{amount}"
+                       placeholder="Amount"/>
+
+                <input class="btn btn-primary" type="submit" value="Create"/>
+            </form>
+        </div>
+    </div>
+</section>
+
+
+<footer th:replace="~{fragments/PageLayout.html :: footer}"></footer>
+<div th:replace="~{/fragments/PageLayout.html :: scripts}"></div>
+
+</body>
+</html>

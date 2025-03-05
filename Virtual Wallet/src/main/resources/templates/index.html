@@ -430,7 +430,7 @@
                                        th:href="@{/transactions/all}">
                                         Transactions</a>
                                     <div>
-                                        <a class="btn btn-primary">New Transaction</a>
+                                        <a class="btn btn-primary" th:href="@{/transactions/new}">New Transaction</a>
                                     </div>
                                 </div>
                             </div>
@@ -470,7 +470,8 @@
                         <!-- Illustrations -->
                         <div class="card shadow mb-4">
                             <div class="card-header py-3">
-                                <h6 class="m-0 font-weight-bold text-primary">Latest News</h6>
+                                <a class="m-0 font-weight-bold text-primary" th:href="@{https://edition.cnn.com/business/index.html}"
+                                   target="_blank">Latest News</a>
                             </div>
                             <div class="card-body">
                                 <ul id="newsList">

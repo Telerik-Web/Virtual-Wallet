@@ -1,18 +1,19 @@
 package com.telerikacademy.web.virtual_wallet.controllers.mvc;
 
+import com.telerikacademy.web.virtual_wallet.exceptions.AuthenticationFailureException;
 import com.telerikacademy.web.virtual_wallet.helpers.AuthenticationHelper;
-import com.telerikacademy.web.virtual_wallet.models.Transaction;
-import com.telerikacademy.web.virtual_wallet.models.TransactionDTO;
-import com.telerikacademy.web.virtual_wallet.models.TransactionFilter;
-import com.telerikacademy.web.virtual_wallet.models.User;
+import com.telerikacademy.web.virtual_wallet.models.*;
 import com.telerikacademy.web.virtual_wallet.services.CardService;
 import com.telerikacademy.web.virtual_wallet.services.TransactionService;
 import com.telerikacademy.web.virtual_wallet.services.UserService;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
+import org.hibernate.query.internal.BindingTypeHelper;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -63,12 +64,12 @@ public class TransactionMvcController {
         if (recipient != null && recipient.isEmpty()) {
             recipient = null;
         }
-        if(sortBy == null) {
+        if (sortBy == null) {
             sortBy = "amount";
         }
         List<Transaction> transactions = transactionService.filterTransactions(startDate, endDate, recipient, isIncoming, user);
 
-        List<Transaction> transactionDTOList2  = transactionService.sortTransactions2(transactions, sortBy, isAscending);
+        List<Transaction> transactionDTOList2 = transactionService.sortTransactions2(transactions, sortBy, isAscending);
 //
 //        System.out.println("Start Date: " + startDate);
 //        System.out.println("End Date: " + endDate);
@@ -86,6 +87,68 @@ public class TransactionMvcController {
         model.addAttribute("isAscending", isAscending);
 
         return "TransactionsView";
+    }
+
+    @GetMapping("/new")
+    public String showTransactionForm(Model model, HttpSession session) {
+        try {
+            authenticationHelper.tryGetUser(session);
+        } catch (AuthenticationFailureException e) {
+            return "AccessDenied";
+        }
+        model.addAttribute("transaction", new TransactionDTOCreate());
+        return "CreateTransaction";
+    }
+
+    @PostMapping("/new")
+    public String createTransaction(@ModelAttribute TransactionDTOCreate transactionDTOCreate,
+                                    @RequestParam double amount,
+                                    BindingResult errors,
+                                    HttpSession session,
+                                    Model model) {
+        String type = transactionDTOCreate.getType();
+        String value = transactionDTOCreate.getValue();
+
+        model.addAttribute("type", transactionDTOCreate.getType());
+        model.addAttribute("value", transactionDTOCreate.getValue());
+        model.addAttribute("amount", amount);
+        User recipient;
+        switch (type) {
+            case "phone":
+                recipient = userService.getByPhoneNumber(value);
+                break;
+            case "email":
+                recipient = userService.getByEmail(value);
+                break;
+            case "username":
+                recipient = userService.getByUsername(value);
+                break;
+            default:
+                recipient = null;
+                break;
+        }
+
+        System.out.println("Start Date: " + amount);
+        //System.out.println("End Date: " + recipient.getUsername());
+        System.out.println("Recipient: " + type);
+
+//        if (recipient == null) {
+//            return "AccessDenied";
+//        }
+
+        if (errors.hasErrors()) {
+            return "AccessDenied";
+        }
+
+        User user;
+        try {
+            user = authenticationHelper.tryGetUser(session);
+        } catch (AuthenticationFailureException e) {
+            return "AccessDenied";
+        }
+        transactionService.transferFunds(user, recipient, amount);
+        return "redirect:/transactions/all";
+
     }
 
 //    @GetMapping("/all")
