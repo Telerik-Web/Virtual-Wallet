@@ -1,6 +1,7 @@
 package com.telerikacademy.web.virtual_wallet.helpers;
 
 import com.telerikacademy.web.virtual_wallet.exceptions.UnauthorizedOperationException;
+import com.telerikacademy.web.virtual_wallet.models.Card;
 import com.telerikacademy.web.virtual_wallet.models.User;
 
 public class PermissionHelper {
@@ -16,6 +17,12 @@ public class PermissionHelper {
 
     public static void checkIfCreatorOrAdminForUser(User user, User userToUpdate) {
         if (!(user.getId() == userToUpdate.getId() || user.getIsAdmin())) {
+            throw new UnauthorizedOperationException(AUTHORIZATION_PERMISSION_ERROR);
+        }
+    }
+
+    public static void checkIfCreatorOrAdminForCard(User user, Card card) {
+        if (!(user.getId() == card.getUser().getId() || user.getIsAdmin())) {
             throw new UnauthorizedOperationException(AUTHORIZATION_PERMISSION_ERROR);
         }
     }

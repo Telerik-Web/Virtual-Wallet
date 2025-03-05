@@ -15,9 +15,6 @@ public class CardDTO {
     @Pattern(regexp = "^\\d{16}$", message = "Card number must be exactly 16 digits.")
     private String cardNumber;
 
-    @NotNull(message = "Expiration date is required.")
-    private LocalDate expirationDate;
-
     @NotNull(message = "Check number is required.")
     @Pattern(regexp = "^\\d{3}$", message = "Check number must be exactly 3 digits.")
     @Column(name = "check_Number")

@@ -164,7 +164,7 @@ public class AuthenticationMvcController {
     public String deleteCard(@PathVariable int id,
                              HttpSession session) {
         User user = authenticationHelper.tryGetUser(session);
-        Card card = cardService.getById(id);
+        Card card = cardService.getById(id, user);
         cardService.delete(card, user);
         return "redirect:/auth/account/cards";
 

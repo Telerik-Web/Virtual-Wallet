@@ -3,15 +3,28 @@ package com.telerikacademy.web.virtual_wallet.mappers;
 
 import com.telerikacademy.web.virtual_wallet.models.Card;
 import com.telerikacademy.web.virtual_wallet.models.CardDTO;
+import com.telerikacademy.web.virtual_wallet.models.CardDTOOut;
+import com.telerikacademy.web.virtual_wallet.models.User;
+import com.telerikacademy.web.virtual_wallet.services.CardService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 public class CardMapper {
 
+    private final CardService cardService;
+
+    @Autowired
+    public CardMapper(CardService cardService) {
+        this.cardService = cardService;
+    }
+
     public CardDTO cardToDTO(Card card) {
         CardDTO cardDTO = new CardDTO();
         cardDTO.setCardNumber(String.valueOf(card.getCardNumber()));
-        cardDTO.setExpirationDate(card.getExpirationDate());
         cardDTO.setCheckNumber(String.valueOf(card.getCheckNumber()));
         return cardDTO;
     }
@@ -19,9 +32,43 @@ public class CardMapper {
     public Card fromDTO(CardDTO cardDTO) {
         Card card = new Card();
         card.setCardNumber(cardDTO.getCardNumber());
-        card.setExpirationDate(cardDTO.getExpirationDate());
         card.setCheckNumber(cardDTO.getCheckNumber());
 
         return card;
+    }
+
+    public Card fromDto(int id, CardDTO dto, User user) {
+        Card card = cardService.getById(id, user);
+        card.setCardNumber(dto.getCardNumber());
+        card.setCheckNumber(dto.getCheckNumber());
+
+        return card;
+    }
+
+    public CardDTOOut cardDTOToOut(Card card) {
+        CardDTOOut cardDTOOut = new CardDTOOut();
+        cardDTOOut.setId(card.getId());
+        cardDTOOut.setCardNumber(card.getCardNumber());
+        cardDTOOut.setCheckNumber(card.getCheckNumber());
+        cardDTOOut.setExpirationDate(card.getExpirationDate());
+        cardDTOOut.setCardHolder(card.getCardHolder());
+
+        return cardDTOOut;
+    }
+
+    public List<CardDTOOut> toDTOOut(List<Card> cardList){
+        List<CardDTOOut> cardDTOS = new ArrayList<>();
+        for (Card card : cardList){
+            CardDTOOut cardDTOOut = new CardDTOOut();
+            cardDTOOut.setId(card.getId());
+            cardDTOOut.setCardNumber(card.getCardNumber());
+            cardDTOOut.setCheckNumber(card.getCheckNumber());
+            cardDTOOut.setExpirationDate(card.getExpirationDate());
+            cardDTOOut.setCardHolder(card.getCardHolder());
+
+            cardDTOS.add(cardDTOOut);
+        }
+
+        return cardDTOS;
     }
 }

@@ -24,14 +24,11 @@ import static com.telerikacademy.web.virtual_wallet.helpers.PermissionHelper.*;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
-    private final CardMapper cardMapper;
-    private final CardRepository cardRepository;
+
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, CardMapper cardMapper, CardRepository cardRepository) {
+    public UserServiceImpl(UserRepository userRepository) {
         this.userRepository = userRepository;
-        this.cardMapper = cardMapper;
-        this.cardRepository = cardRepository;
     }
 
     @Override
@@ -130,24 +127,4 @@ public class UserServiceImpl implements UserService {
         userRepository.delete(id);
     }
 
-    @Override
-    @Transactional
-    public void addCardToUser(long userId, Card card) {
-        User user = userRepository.getById(userId);
-        card.setUser(user);
-        cardRepository.save(card);
-    }
-
-    @Override
-    @Transactional
-    public Set<CardDTO> getAllCardsForUser(long userId) {
-        User user = userRepository.getById(userId);
-        Hibernate.initialize(user.getCards());
-        Set<CardDTO> cards = new HashSet<>();
-        for (Card card : user.getCards()) {
-            CardDTO card2 = cardMapper.cardToDTO(card);
-            cards.add(card2);
-        }
-        return cards;
-    }
 }

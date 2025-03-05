@@ -1,8 +1,11 @@
 package com.telerikacademy.web.virtual_wallet.models;
 
-import lombok.Data;
 
-@Data
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class UserDtoOut {
 
     private long id;

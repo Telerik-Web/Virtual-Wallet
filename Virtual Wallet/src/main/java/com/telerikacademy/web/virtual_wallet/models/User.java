@@ -1,5 +1,6 @@
 package com.telerikacademy.web.virtual_wallet.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
@@ -52,7 +53,7 @@ public class User {
     private Boolean isBlocked;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.EAGER)
-    @JsonManagedReference
+    @JsonBackReference
     private List<Card> cards = new ArrayList<>();
 
     @Column(name = "balance")
