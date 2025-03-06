@@ -54,7 +54,7 @@ public class HomeMvcController {
             }
             return "index";
         } catch (AuthenticationFailureException e) {
-            return "AccessDenied";
+            return "redirect:/currency/convert";
         }
     }
 
