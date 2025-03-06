@@ -249,7 +249,9 @@
                                         </div>
                                     </div>
                                     <div class="col-auto">
-                                        <i class="fas fa-dollar-sign fa-2x text-primary-300"></i>
+                                        <a th:href="@{/transactions/all(isIncoming=true)}" style="text-decoration: none;">
+                                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                                        </a>
                                     </div>
                                 </div>
                             </div>
@@ -270,7 +272,9 @@
                                         </div>
                                     </div>
                                     <div class="col-auto">
-                                        <i class="fas fa-dollar-sign fa-2x text-danger-300"></i>
+                                        <a th:href="@{/transactions/all(isIncoming=false)}" style="text-decoration: none;">
+                                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                                        </a>
                                     </div>
                                 </div>
                             </div>
@@ -293,7 +297,7 @@
                                                 </div>
                                             </div>
                                             <div class="col-auto">
-                                                <i class="fas fa-dollar-sign fa-2x text-danger-300"></i>
+                                                <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
                                             </div>
                                         </div>
                                     </div>
