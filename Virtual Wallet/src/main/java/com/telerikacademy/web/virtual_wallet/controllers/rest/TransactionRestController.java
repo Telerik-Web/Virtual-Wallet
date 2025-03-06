@@ -1,5 +1,6 @@
 package com.telerikacademy.web.virtual_wallet.controllers.rest;
 
+import com.telerikacademy.web.virtual_wallet.exceptions.EntityNotFoundException;
 import com.telerikacademy.web.virtual_wallet.helpers.AuthenticationHelper;
 import com.telerikacademy.web.virtual_wallet.mappers.UserMapper;
 import com.telerikacademy.web.virtual_wallet.models.Transaction;
@@ -49,26 +50,26 @@ public class TransactionRestController {
                                  @RequestParam String type,
                                  @RequestParam String value,
                                  @RequestBody Transaction transaction) {
-        User recipient;
-        User sender;
-        switch (type) {
-            case "phone":
-                recipient = userService.getByPhoneNumber(value);
-                sender = authenticationHelper.tryGetUser(headers);
-                break;
-            case "email":
-                recipient = userService.getByEmail(value);
-                sender = authenticationHelper.tryGetUser(headers);
-                break;
-            case "username":
-                recipient = userService.getByUsername(value);
-                sender = authenticationHelper.tryGetUser(headers);
-                break;
-            default:
-                recipient = null;
-                sender = null;
-                break;
-        }
+            User recipient;
+            User sender;
+            switch (type) {
+                case "phone":
+                    recipient = userService.getByPhoneNumber(value);
+                    sender = authenticationHelper.tryGetUser(headers);
+                    break;
+                case "email":
+                    recipient = userService.getByEmail(value);
+                    sender = authenticationHelper.tryGetUser(headers);
+                    break;
+                case "username":
+                    recipient = userService.getByUsername(value);
+                    sender = authenticationHelper.tryGetUser(headers);
+                    break;
+                default:
+                    recipient = null;
+                    sender = null;
+                    break;
+            }
 
         return transactionService.transferFunds(sender, recipient, transaction.getAmount());
     }

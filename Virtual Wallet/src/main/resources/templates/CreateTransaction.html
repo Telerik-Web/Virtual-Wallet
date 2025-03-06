@@ -18,14 +18,15 @@
                         <label class="text-gray-900 font-weight-bold" for="isIncoming">How would you like to send money
                             today?</label>
                         <br/>
-                        <select class="form-control form-control-user" id="isIncoming" name="isIncoming" th:field="*{type}">
+                        <select class="form-control form-control-user" id="isIncoming" name="isIncoming"
+                                th:field="*{type}">
                             <option value="phone number">Phone Number</option>
                             <option value="email">Email</option>
                             <option value="username">Username</option>
                         </select>
                     </div>
-<!--                    class="input-group-text"-->
-<!--                    class="form-control form-control-user"-->
+                    <!--                    class="input-group-text"-->
+                    <!--                    class="form-control form-control-user"-->
 
                     <div class="form-group">
                         <label class="text-gray-900 font-weight-bold">Recipient</label>
@@ -46,7 +47,8 @@
                         <input class="form-control form-control-user" type="text" th:field="*{amount}"
                                placeholder="Enter Amount"/>
                     </div>
-                    <label class="error" th:errors="*{amount}">Amount Error</label>
+<!--                    <label class="error" th:errors="*{amount}">Amount Error</label>-->
+                    <span class="error" th:if="${#fields.hasErrors('amount')}" th:errors="*{amount}"></span>
                     <br/>
                     <input class="btn btn-primary" type="submit" value="Create"/>
                 </form>

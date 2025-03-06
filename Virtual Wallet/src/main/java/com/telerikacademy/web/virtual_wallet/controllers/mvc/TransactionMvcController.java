@@ -102,13 +102,12 @@ public class TransactionMvcController {
     }
 
     @PostMapping("/new")
-    public String createTransaction(@Valid @ModelAttribute ("transaction") TransactionDTOCreate transactionDTOCreate,
+    public String createTransaction(@Valid @ModelAttribute("transaction") TransactionDTOCreate transactionDTOCreate,
                                     BindingResult errors,
                                     @RequestParam String amount,
                                     HttpSession session,
                                     Model model) {
         try {
-
             if (errors.hasErrors()) {
                 return "CreateTransaction";
             }
@@ -130,13 +129,28 @@ public class TransactionMvcController {
             User recipient;
             switch (type) {
                 case "phone number":
-                    recipient = userService.getByPhoneNumber(value);
+                    try {
+                        recipient = userService.getByPhoneNumber(value);
+                    } catch (EntityNotFoundException e) {
+                        errors.rejectValue("value", "error.recipient");
+                        return "CreateTransaction";
+                    }
                     break;
                 case "email":
-                    recipient = userService.getByEmail(value);
+                    try {
+                        recipient = userService.getByEmail(value);
+                    } catch (EntityNotFoundException e) {
+                        errors.rejectValue("value", "error.recipient");
+                        return "CreateTransaction";
+                    }
                     break;
                 case "username":
-                    recipient = userService.getByUsername(value);
+                    try {
+                        recipient = userService.getByUsername(value);
+                    } catch (EntityNotFoundException e) {
+                        errors.rejectValue("value", "error.recipient");
+                        return "CreateTransaction";
+                    }
                     break;
                 default:
                     recipient = null;
