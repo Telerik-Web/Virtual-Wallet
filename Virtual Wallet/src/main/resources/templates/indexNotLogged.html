@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/PageLayout.html :: head('Login')}"></head>
+<body>
+
+<nav th:replace="~{fragments/PageLayout.html :: navbar}"></nav>
+<br/><br/><br/>
+<!-- Page Wrapper -->
+<section class="container-fluid d-flex align-items-center justify-content-center vh-100">
+    <div class="masthead vh-100 justify-content-center">
+        <!--        <div class="card o-hidden border-0 shadow-lg my-5">-->
+        <div class="card-body p-5">
+            <form action="#" th:action="@{/currency/convert}" th:object="${currency}" method="post">
+
+                <h2 class="text-center text-gray-900 font-weight-bold">Currency Converter</h2>
+
+                <div class="form-group">
+                    <label class="text-gray-900 font-weight-bold">From Currency</label>
+                    <input type="text" class="form-control form-control-user" placeholder="Enter Currency"
+                           th:field="*{from}">
+                </div>
+                <label class="error" th:errors="*{from}">From error</label>
+
+                <div class="form-group">
+                    <label class="text-gray-900 font-weight-bold">To Currency</label>
+                    <input type="text" class="form-control form-control-user" placeholder="Enter Currency"
+                           th:field="*{to}">
+                </div>
+                <label class="error" th:errors="*{to}">To error</label>
+
+                <div class="form-group">
+                    <label class="text-gray-900 font-weight-bold">Amount</label>
+                    <input type="text" class="form-control form-control-user" placeholder="Enter Amount"
+                           th:field="*{amount}">
+                </div>
+                <label class="error" th:errors="*{amount}">Amount error</label>
+                <br/><br/>
+
+                <button class="btn btn-primary btn-user btn-block" type="submit">Convert</button>
+            </form>
+
+            <h3 th:text="${convertedAmount}"></h3>
+        </div>
+    </div>
+</section>
+
+
+</body>
+</html>
