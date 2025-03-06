@@ -1,44 +1,56 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html" lang="en">
 <head th:replace="~{fragments/PageLayout.html :: head('Posts')}"></head>
 <body>
 
 <nav th:replace="~{fragments/PageLayout.html :: navbar}"></nav>
 
-<section class="container mt-5">
+<section class="container-fluid d-flex align-items-center justify-content-center vh-100">
     <div class="masthead vh-100 justify-content-center">
-        <div class="container d-flex align-items-center flex-column">
+        <div class="card o-hidden border-0 shadow-lg my-5">
+            <div class="card-body p-5">
 
-            <form action="#" th:action="@{/transactions/new}" th:object="${transaction}" method="post">
-                <label class="text-gray-900 font-weight-bold" for="isIncoming">How would you like to send money today?</label>
-                <select id="isIncoming" name="isIncoming" th:field="*{type}">
-                    <option value="phone">Phone</option>
-                    <option value="email">Email</option>
-                    <option value="username">Username</option>
-                </select>
+                <form action="#" th:action="@{/transactions/new}" th:object="${transaction}" method="post">
 
-                <h2 class="page-title">Create a Transaction</h2>
+                    <h2 class="page-title">Create a Transaction</h2>
 
-                <label class="fieldName">Recipient</label>
-                <br/>
-                <input class="input-group-text" type="text" th:field="*{value}"
-                       placeholder="Recipient"/>
-<!--                <label class="error" th:errors="*{value}">Value Error</label>-->
-                <label class="error" th:if="${#fields.hasErrors()}" th:text="'Please enter valid '">
-                    Please enter a valid
-                </label>
+                    <div class="form-group">
+                        <label class="text-gray-900 font-weight-bold" for="isIncoming">How would you like to send money
+                            today?</label>
+                        <br/>
+                        <select class="form-control form-control-user" id="isIncoming" name="isIncoming" th:field="*{type}">
+                            <option value="phone number">Phone Number</option>
+                            <option value="email">Email</option>
+                            <option value="username">Username</option>
+                        </select>
+                    </div>
+<!--                    class="input-group-text"-->
+<!--                    class="form-control form-control-user"-->
 
-                <label class="fieldName">Amount</label>
-                <br/>
-                <input class="input-group-text" type="text" th:field="*{amount}"
-                       placeholder="Amount"/>
-                <label class="error" th:errors="*{amount}">Amount Error</label>
-<!--                <label class="error" th:if="${#fields.hasErrors()} and ${amount == null or-->
-<!--                    amount.isEmpty()}">-->
-<!--                    Amount can't be empty-->
-<!--                </label>-->
-                <input class="btn btn-primary" type="submit" value="Create"/>
-            </form>
+                    <div class="form-group">
+                        <label class="text-gray-900 font-weight-bold">Recipient</label>
+                        <br/>
+                        <input class="form-control form-control-user" type="text" th:field="*{value}"
+                               th:placeholder="'Enter Recipient ' + *{type}"/>
+                    </div>
+                    <!--                <label class="error" th:errors="*{value}">Value Error</label>-->
+                    <label class="error" th:if="${#fields.hasErrors()}"
+                           th:text="'Please enter a valid ' + *{type.toString()} + '!'">
+                        Please enter a valid
+                    </label>
+
+
+                    <div class="form-group">
+                        <label class="text-gray-900 font-weight-bold">Amount</label>
+                        <br/>
+                        <input class="form-control form-control-user" type="text" th:field="*{amount}"
+                               placeholder="Enter Amount"/>
+                    </div>
+                    <label class="error" th:errors="*{amount}">Amount Error</label>
+                    <br/>
+                    <input class="btn btn-primary" type="submit" value="Create"/>
+                </form>
+            </div>
         </div>
     </div>
 </section>

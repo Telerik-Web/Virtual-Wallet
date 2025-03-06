@@ -1,8 +1,6 @@
 package com.telerikacademy.web.virtual_wallet.models;
 
-import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import lombok.Data;
 

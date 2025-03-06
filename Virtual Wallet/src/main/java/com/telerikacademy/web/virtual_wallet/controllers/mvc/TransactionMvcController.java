@@ -129,7 +129,7 @@ public class TransactionMvcController {
             model.addAttribute("amount", amount2);
             User recipient;
             switch (type) {
-                case "phone":
+                case "phone number":
                     recipient = userService.getByPhoneNumber(value);
                     break;
                 case "email":

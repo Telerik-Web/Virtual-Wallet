@@ -11336,3 +11336,7 @@ body.sidebar-toggled footer.sticky-footer {
   background-position: center center;
   background-size: cover;
 }
+
+input::placeholder {
+  text-align: center;
+}
