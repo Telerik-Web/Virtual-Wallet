@@ -169,4 +169,10 @@ public class AuthenticationMvcController {
         return "redirect:/auth/account/cards";
 
     }
+
+    @GetMapping("/logout")
+    public String showLogout(HttpSession session) {
+        session.invalidate();
+        return "redirect:/";
+    }
 }
