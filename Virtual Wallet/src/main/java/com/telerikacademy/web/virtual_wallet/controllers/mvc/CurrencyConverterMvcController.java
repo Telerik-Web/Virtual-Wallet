@@ -37,9 +37,16 @@ public class CurrencyConverterMvcController {
             return "indexNotLogged";
         }
 
-        double convertedAmount = exchangeRateFetcher.convertCurrency(Double.parseDouble(currencyDTO.getAmount()),
-                currencyDTO.getFrom(),
-                currencyDTO.getTo());
+        double convertedAmount;
+
+        try {
+            convertedAmount = exchangeRateFetcher.convertCurrency(Double.parseDouble(currencyDTO.getAmount()),
+                    currencyDTO.getFrom().toUpperCase(),
+                    currencyDTO.getTo().toUpperCase());
+        } catch (IllegalArgumentException e) {
+            errors.rejectValue("currencyDTO.getFrom()", "error.amount");
+            return "indexNotLogged";
+        }
 
         model.addAttribute("convertedAmount", convertedAmount);
         return "indexNotLogged";

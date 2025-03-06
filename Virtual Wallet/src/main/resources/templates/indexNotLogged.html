@@ -34,12 +34,13 @@
                            th:field="*{amount}">
                 </div>
                 <label class="error" th:errors="*{amount}">Amount error</label>
-                <br/><br/>
+                <br/>
+                <h3 th:text="${convertedAmount}"></h3>
+                <br/>
 
                 <button class="btn btn-primary btn-user btn-block" type="submit">Convert</button>
             </form>
 
-            <h3 th:text="${convertedAmount}"></h3>
         </div>
     </div>
 </section>

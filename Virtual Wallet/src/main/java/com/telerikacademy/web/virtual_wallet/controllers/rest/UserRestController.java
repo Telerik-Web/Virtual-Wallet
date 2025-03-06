@@ -109,7 +109,6 @@ public class UserRestController {
             User user = userMapper.fromUserDtoUpdateToUser(userDtoUpdate, userId);
             userService.update(user, userFromHeader, userId);
             return userMapper.toUserDtoOut(getById2(headers, userId));
-            //return userDto;
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (DuplicateEntityException e) {
