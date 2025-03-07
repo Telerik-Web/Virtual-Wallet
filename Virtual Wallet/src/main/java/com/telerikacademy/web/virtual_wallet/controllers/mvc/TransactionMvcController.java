@@ -10,13 +10,17 @@ import com.telerikacademy.web.virtual_wallet.services.UserService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Random;
 
 @Controller
 @RequestMapping("/transactions")
@@ -180,5 +184,84 @@ public class TransactionMvcController {
         }
     }
 
+    @GetMapping("/deposit")
+    public String showDepositForm(Model model,
+                                  HttpSession session) {
+        model.addAttribute("deposit", new CreateTransactionRequest());
+        try {
+            authenticationHelper.tryGetUser(session);
+        } catch (AuthenticationFailureException e) {
+            return "AccessDenied";
+        }
+        return "NewDeposit";
+    }
 
+    @PostMapping("/deposit")
+    public String createDeposit(@Valid @ModelAttribute("deposit") CreateTransactionRequest createDeposit,
+                                BindingResult errors,
+                                HttpSession session) {
+        if (errors.hasErrors()) {
+            return "NewDeposit";
+        }
+
+        User user;
+        try {
+            user = authenticationHelper.tryGetUser(session);
+        } catch (AuthenticationFailureException e) {
+            return "AccessDenied";
+        } catch (EntityNotFoundException e) {
+            return "NewDeposit";
+        }
+
+        int count = 0;
+        for (Card card : user.getCards()) {
+            if (card.getCardNumber().equals(createDeposit.getCardNumber())) {
+                count++;
+            }
+        }
+        if (user.getCards().isEmpty() || count == 0) {
+            return "NoCards";
+        }
+        Random random = new Random();
+        boolean isSuccess = random.nextBoolean();
+        if (!isSuccess) {
+            return "FailedDeposit";
+        }
+        user.setBalance(user.getBalance() + createDeposit.getAmount());
+        userService.update(user, user, user.getId());
+        return "redirect:/";
+    }
+
+//    @GetMapping("/deposits/all")
+//    public String showAllDeposits(
+//            HttpSession session,
+//            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDate,
+//            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDate,
+//            @RequestParam(required = false) String recipient,
+//            @RequestParam(required = false) Boolean isIncoming,
+//            @RequestParam(required = false) String sortBy,
+//            @RequestParam(required = false) boolean isAscending,
+//            Model model) {
+//        User user = authenticationHelper.tryGetUser(session);
+//        if (recipient != null && recipient.isEmpty()) {
+//            recipient = null;
+//        }
+//        if (sortBy == null) {
+//            sortBy = "amount";
+//        }
+//        List<Transaction> transactions = transactionService.filterTransactions(startDate, endDate, recipient,
+//                isIncoming, user);
+//
+//        List<Transaction> transactionDTOList2 = transactionService.sortTransactions2(transactions, sortBy, isAscending);
+//
+//        model.addAttribute("startDate", startDate);
+//        model.addAttribute("endDate", endDate);
+//        model.addAttribute("recipient", recipient);
+//        model.addAttribute("transactions", transactionDTOList2);
+//        model.addAttribute("isIncoming", isIncoming);
+//        model.addAttribute("sortBy", sortBy);
+//        model.addAttribute("isAscending", isAscending);
+//
+//        return "redirect:/";
+//    }
 }

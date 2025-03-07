@@ -34,3 +34,12 @@ CREATE TABLE transactions
     status       ENUM ('PENDING', 'COMPLETED', 'FAILED') NOT NULL DEFAULT 'PENDING',
     created_at   TIMESTAMP                                        DEFAULT CURRENT_TIMESTAMP
 );
+
+CREATE TABLE deposits
+(
+    id           BIGINT AUTO_INCREMENT PRIMARY KEY,
+    card_id    BIGINT                                  NOT NULL,
+    FOREIGN KEY (card_id) REFERENCES cards (id) ON DELETE CASCADE,
+    amount       DECIMAL(10, 2)                          NOT NULL,
+    created_at   TIMESTAMP                                        DEFAULT CURRENT_TIMESTAMP
+);

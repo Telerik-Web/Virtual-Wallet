@@ -1,8 +1,9 @@
 INSERT INTO users (first_name, last_name, username, password, email, phone, balance, photo, isAdmin, isBlocked)
-VALUES ('John', 'Doe', 'johndoe', 'pass1', 'john.doe@example.com', '1234567890', '1000',NULL, true, false),
+VALUES ('John', 'Doe', 'johndoe', 'pass1', 'john.doe@example.com', '1234567890', '1000', NULL, true, false),
        ('Alice', 'Smith', 'alicesmith', 'pass2', 'alice.smith@example.com', '2345678901', '1000', NULL, false, false),
        ('Bob', 'Johnson', 'bobjohnson', 'pass3', 'bob.johnson@example.com', '3456789012', '1000', NULL, false, false),
-       ('Emma', 'Brown', 'emmabrownN@!2', 'emmabrownN@!2', 'emma.brown@example.com', '4567890123', '1000', NULL, false, true);
+       ('Emma', 'Brown', 'emmabrownN@!2', 'emmabrownN@!2', 'emma.brown@example.com', '4567890123', '1000', NULL, false,
+        true);
 
 
 INSERT INTO cards (card_number, expiration_date, check_number, user_id)
@@ -18,3 +19,9 @@ VALUES (1, 2, 100, 'PENDING', CURRENT_TIMESTAMP),
        (2, 3, 200, 'PENDING', CURRENT_TIMESTAMP),
        (3, 2, 400, 'COMPLETED', CURRENT_TIMESTAMP),
        (1, 2, 10.10, 'FAILED', CURRENT_TIMESTAMP);
+
+INSERT INTO deposits (card_id, amount, created_at)
+VALUES (2, 20, CURRENT_TIMESTAMP),
+       (2, 30, CURRENT_TIMESTAMP),
+       (4, 200, CURRENT_TIMESTAMP),
+       (5, 2000, CURRENT_TIMESTAMP);
