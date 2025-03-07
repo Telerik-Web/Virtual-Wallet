@@ -320,9 +320,11 @@
                                         </div>
                                     </div>
                                     <div class="col-auto" th:if="${not #lists.isEmpty(session.cards)}">
+
                                         <a th:href="@{/auth/account/cards}" style="text-decoration: none;">
                                             <i class="fas fa-credit-card fa-2x text-gray-300"></i>
                                         </a>
+
                                     </div>
                                     <div class="col-auto" th:unless="${not #lists.isEmpty(session.cards)}">
                                         <i class="fas fa-credit-card fa-2x text-gray-300"></i>
@@ -407,7 +409,6 @@
                                     </p>
                                     <p><strong>Balance:</strong> $<span th:text="${currentUser.balance}">1000</span>
                                     </p>
-                                    <p><strong>Admin:</strong> <span th:text="${currentUser.isAdmin}">User</span>
                                     </p>
                                 </div>
                             </div>
@@ -434,7 +435,6 @@
                                 <table class="table">
                                     <thead>
                                     <tr>
-                                        <th>Transaction Id</th>
                                         <th>Sender</th>
                                         <th>Recipient</th>
                                         <th>Email</th>
@@ -444,11 +444,10 @@
                                     </thead>
                                     <tbody>
                                     <tr th:each="transaction : ${allTransactions}">
-                                        <td th:text="${transaction.id}"></td>
                                         <td th:text="${transaction.sender.username}"></td>
                                         <td th:text="${transaction.recipient.username}"></td>
                                         <td th:text="${transaction.recipient.email}"></td>
-                                        <td th:text="${transaction.sender.id == currentUser.id} ? ${transaction.amount} : '0'"></td>
+                                        <td th:text="${transaction.sender.id == currentUser.id} ? ${#numbers.formatDecimal(transaction.amount, 1, 2)} : '0'"></td>
                                         <td th:text="${transaction.recipient.id == currentUser.id} ? ${transaction.amount} : '0'"></td>
                                     </tr>
                                     </tbody>

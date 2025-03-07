@@ -14,58 +14,95 @@
 
 <h1 class="text-center">Filter Transactions</h1>
 
-<form class="text-center" th:action="@{/transactions/all}" method="get">
-    <label class="text-gray-900 font-weight-bold" for="recipient">Recipient Username:</label>
-    <input type="text" id="recipient" name="recipient" th:value="*{recipient}" placeholder="Enter username"/>
+<form class="container my-3 p-3 bg-light rounded shadow-sm" th:action="@{/transactions/all}" method="get">
+    <div class="row g-2 align-items-center">
+        <div class="col-md-2">
+            <label class="form-label fw-bold text-gray-900" for="recipient">Recipient</label>
+            <input type="text" id="recipient" name="recipient" class="form-control" th:value="*{recipient}" placeholder="Username">
+        </div>
 
-    <label class="text-gray-900 font-weight-bold" for="minDate">Start Date:</label>
-    <input type="datetime-local" id="minDate" name="startDate" th:value="*{startDate}"/>
+        <div class="col-md-2">
+            <label class="form-label fw-bold text-gray-900" for="minDate">Start Date</label>
+            <input type="datetime-local" id="minDate" name="startDate" class="form-control" th:value="*{startDate}">
+        </div>
 
-    <label class="text-gray-900 font-weight-bold" for="maxDate">End Date:</label>
-    <input type="datetime-local" id="maxDate" name="endDate" th:value="*{endDate}"/>
+        <div class="col-md-2">
+            <label class="form-label fw-bold text-gray-900" for="maxDate">End Date</label>
+            <input type="datetime-local" id="maxDate" name="endDate" class="form-control" th:value="*{endDate}">
+        </div>
 
-    <label class="text-gray-900 font-weight-bold" for="isIncoming">Is Incoming:</label>
-    <select id="isIncoming" name="isIncoming" th:value="*{isIncoming}">
-        <option value="" th:selected="${isIncoming == null}">Any</option>
-        <option value="true" th:selected="${isIncoming == true}">Yes</option>
-        <option value="false" th:selected="${isIncoming == false}">No</option>
-    </select>
+        <!-- Use d-flex to align Is Incoming, Sort By, and Order properly -->
+        <div class="col-md-2 d-flex flex-column">
+            <label class="form-label fw-bold text-gray-900" for="isIncoming">Is Incoming</label>
+            <select id="isIncoming" name="isIncoming" class="form-select">
+                <option value="" th:selected="${isIncoming == null}">Any</option>
+                <option value="true" th:selected="${isIncoming == true}">Yes</option>
+                <option value="false" th:selected="${isIncoming == false}">No</option>
+            </select>
+        </div>
 
-    <label class="text-gray-900 font-weight-bold" for="sortBy">Sort By:</label>
-    <select id="sortBy" name="sortBy" th:value="*{sortBy}">
-        <option value="amount" th:selected="${sortBy == 'amount'}">Amount</option>
-        <option value="date" th:selected="${sortBy == 'date'}">Date</option>
-    </select>
+        <div class="col-md-2 d-flex flex-column">
+            <label class="form-label fw-bold text-gray-900" for="sortBy">Sort By</label>
+            <select id="sortBy" name="sortBy" class="form-select">
+                <option value="amount" th:selected="${sortBy == 'amount'}">Amount</option>
+                <option value="date" th:selected="${sortBy == 'date'}">Date</option>
+            </select>
+        </div>
 
-    <label class="text-gray-900 font-weight-bold" for="isAscending">Sort Order:</label>
-    <select id="isAscending" name="isAscending" th:value="*{isAscending}">
-        <option value="true" th:selected="${isAscending == true}">Ascending</option>
-        <option value="false" th:selected="${isAscending == false}">Descending</option>
-    </select>
+        <div class="col-md-2 d-flex flex-column">
+            <label class="form-label fw-bold text-gray-900" for="isAscending">Order</label>
+            <select id="isAscending" name="isAscending" class="form-select">
+                <option value="true" th:selected="${isAscending == true}">Ascending</option>
+                <option value="false" th:selected="${isAscending == false}">Descending</option>
+            </select>
+        </div>
 
-    <button class="btn btn-primary" type="submit">Filter</button>
+        <!-- Centered Filter Button -->
+        <div class="col-md-12 text-center mt-2">
+            <button class="btn btn-primary px-4" type="submit">Filter</button>
+        </div>
+    </div>
 </form>
+
+
 
 <h2 class="text-center">Transaction Results</h2>
 
-<div class="container mt-5">
-    <div class="row justify-content-center">
-        <div th:each="transaction : ${transactions}" class="col-lg-4 col-md-6 col-sm-12 mb-4">
-            <div class="card shadow border-0">
-                <div class="card-body text-center">
-                    <h5 class="card-title">Transaction ID: <span th:text="${transaction.getId()}"></span></h5>
-                    <p class="card-text"><strong>Sender username:</strong> <span
-                            th:text="${transaction.sender.username}"></span></p>
-                    <p class="card-text"><strong>Recipient username:</strong> <span
-                            th:text="${transaction.recipient.username}"></span></p>
-                    <p class="card-text"><strong>Amount:</strong> <span th:text="${transaction.amount}"></span></p>
-                    <p class="card-text"><strong>Date:</strong> <span th:text="${transaction.createdAt}"></span></p>
-                    <p class="card-text"><strong>Status:</strong> <span th:text="${transaction.status}"></span></p>
-                </div>
+<div class="container mt-4">
+    <div class="list-group">
+        <div th:each="transaction : ${transactions}"
+             class="list-group-item d-flex justify-content-between align-items-center border-bottom py-3">
+
+            <!-- Sender & Recipient -->
+            <div class="d-flex flex-column">
+                <span class="fw-bold">
+                    <span th:text="${transaction.sender.username}"></span>
+                    →
+                    <span th:text="${transaction.recipient.username}"></span>
+                </span>
+                <small class="text-muted" th:text="${transaction.createdAt}"></small>
             </div>
+
+            <!-- Amount with color based on positive/negative -->
+            <span class="fw-bold px-2 py-1 rounded font-monospace"
+                  th:text="${#numbers.formatDecimal(transaction.amount, 1, 2)}"
+                  th:classappend="${transaction.status.name() == 'COMPLETED'} ? 'text-success' :
+                               (${transaction.status.name() == 'PENDING'} ? 'text-warning' :
+                               'text-danger')">
+            </span>
+
+            <!-- Status with color based on enum value -->
+            <span class="badge"
+                  th:text="${transaction.status}"
+                  th:classappend="${transaction.status.name() == 'COMPLETED'} ? 'text-success' :
+                               (${transaction.status.name() == 'PENDING'} ? 'text-warning' :
+                               'text-danger')">
+            </span>
         </div>
     </div>
 </div>
+
+
 <footer th:replace="~{fragments/PageLayout.html :: footer}"></footer>
 <div th:replace="~{/fragments/PageLayout.html :: scripts}"></div>
 
