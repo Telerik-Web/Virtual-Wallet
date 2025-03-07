@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/PageLayout.html :: head('FAQ')}"></head>
+<body>
+
+<nav th:replace="~{fragments/PageLayout.html :: navbar}"></nav>
+<br/>
+
+<div class="container mt-5">
+    <header>
+        <h1 class="faq-title">Frequently Asked Questions</h1>
+        <p class="faq-subtitle">Find answers to the most common questions about FlowPay.</p>
+    </header>
+
+    <div class="faq-container">
+        <div class="faq-item">
+            <div class="faq-question">How do I create an account?</div>
+            <div class="faq-answer">You can create an account by clicking the Register button and filling out your
+                details.
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question">What currencies does FlowPay support?</div>
+            <div class="faq-answer">FlowPay supports multiple currencies, including USD, EUR, GBP, and more.</div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question">Is FlowPay secure for online transactions?</div>
+            <div class="faq-answer">Yes, we use encryption and secure payment gateways to protect your transactions.
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question">How long do transactions take?</div>
+            <div class="faq-answer">Most transactions are processed instantly, but some may take up to 24 hours
+                depending on your bank.
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question">How can I contact FlowPay support?</div>
+            <div class="faq-answer">You can contact our support team via email at support@flowpay.com or through our
+                Contact page.
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer th:replace="~{fragments/PageLayout.html :: footer}"></footer>
+<div th:replace="~{/fragments/PageLayout.html :: scripts}"></div>
+</body>
+</html>

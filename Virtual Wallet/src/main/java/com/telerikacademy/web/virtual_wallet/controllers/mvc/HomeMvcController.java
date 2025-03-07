@@ -58,11 +58,24 @@ public class HomeMvcController {
         }
     }
 
-
-
     @GetMapping("/about")
     public String showAboutPage() {
-        return "About";
+        return "AboutUs";
+    }
+
+    @GetMapping("/terms")
+    public String showTermsPage() {
+        return "Terms";
+    }
+
+    @GetMapping("/contact")
+    public String showContactPage() {
+        return "ContactUs";
+    }
+
+    @GetMapping("/FAQ")
+    public String showFAQPage() {
+        return "FAQ";
     }
 
 }

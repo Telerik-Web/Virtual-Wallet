@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/PageLayout.html :: head('About Us')}"></head>
+<body>
+
+<nav th:replace="~{fragments/PageLayout.html :: navbar}"></nav>
+
+<!-- Main Section -->
+<section class="container mt-5">
+  <div class="text-center">
+    <h1 class="text-primary font-weight-bold">About FlowPay</h1>
+    <p class="text-muted">Seamless, Secure, and Smart Digital Payments</p>
+  </div>
+
+  <div class="row mt-5">
+    <div class="col-md-6 d-flex align-items-center">
+      <img src="/static/images/about-us.png" alt="FlowPay Digital Payments" class="img-fluid rounded shadow">
+    </div>
+
+    <div class="col-md-6">
+      <h3 class="text-dark font-weight-bold">Our Mission</h3>
+      <p>
+        At <strong>FlowPay</strong>, we are committed to making financial transactions <strong>faster, safer, and more accessible.</strong>
+        Whether you're sending money, converting currencies, or tracking expenses, our platform ensures a seamless experience.
+      </p>
+
+      <h3 class="text-dark font-weight-bold mt-4">Why Choose FlowPay?</h3>
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item"><i class="fas fa-bolt text-primary"></i> <strong>Instant Transactions</strong> – Send and receive money instantly.</li>
+        <li class="list-group-item"><i class="fas fa-lock text-primary"></i> <strong>Secure & Encrypted</strong> – Industry-standard encryption ensures your funds and data are protected.</li>
+        <li class="list-group-item"><i class="fas fa-chart-line text-primary"></i> <strong>Smart Financial Insights</strong> – Get real-time analytics to manage your spending.</li>
+        <li class="list-group-item"><i class="fas fa-globe text-primary"></i> <strong>Multi-Currency Support</strong> – Exchange currencies at the best rates.</li>
+        <li class="list-group-item"><i class="fas fa-thumbs-up text-primary"></i> <strong>User-Friendly</strong> – Simple, modern interface designed for ease of use.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- Meet the Team -->
+<section class="container mt-5 text-center">
+  <h2 class="text-primary font-weight-bold">Meet Our Team</h2>
+  <p class="text-muted"><strong>The people behind FlowPay’s innovation and success.</strong></p>
+  <div class="row justify-content-center"> <!-- Centers the content -->
+    <div class="col-md-4">
+      <img src="/static/images/team1.jpg" class="rounded-circle shadow" width="150" height="150" alt="Team Member">
+      <h5 class="mt-3">Ivan Georgiev</h5>
+      <p class="text-muted">CEO & Co-Founder</p>
+    </div>
+    <div class="col-md-4">
+      <img src="/static/images/team2.jpg" class="rounded-circle shadow" width="150" height="150" alt="Team Member">
+      <h5 class="mt-3">Lachezar Lazarov</h5>
+      <p class="text-muted">CTO & Co-Founder</p>
+    </div>
+  </div>
+</section>
+
+<section class="container text-center mt-5">
+  <h2 class="text-dark font-weight-bold">Join FlowPay Today</h2>
+  <p class="text-muted"><strong>Start making hassle-free digital payments in seconds.</strong></p>
+  <a href="/register" class="btn btn-primary btn-lg" th:href="@{/auth/register}">Get Started</a>
+</section>
+
+<footer th:replace="~{fragments/PageLayout.html :: footer}"></footer>
+<div th:replace="~{/fragments/PageLayout.html :: scripts}"></div>
+</body>
+</html>

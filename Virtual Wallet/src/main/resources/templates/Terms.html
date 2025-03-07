@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/PageLayout.html :: head('Login')}"></head>
+<body>
+
+<nav th:replace="~{fragments/PageLayout.html :: navbar}"></nav>
+<br/><br/><br/>
+<main class="container">
+    <section>
+        <h2>Welcome to FlowPay. By accessing or using our services, you agree to comply with these Terms and Conditions.
+            Please read them carefully before using FlowPay.</h2>
+    </section>
+
+    <section>
+        <h2>2. Account Registration</h2>
+        <ul>
+            <li>You must be at least 18 years old to create an account.</li>
+            <li>All information provided must be accurate and up to date.</li>
+            <li>You are responsible for maintaining the confidentiality of your account credentials.</li>
+        </ul>
+    </section>
+
+    <section>
+        <h2>3. Transactions & Payments</h2>
+        <ul>
+            <li>Transactions made via FlowPay are processed in accordance with current exchange rates.</li>
+            <li>FlowPay is not responsible for delays caused by third-party payment processors.</li>
+            <li>Unauthorized transactions must be reported immediately to avoid liability.</li>
+        </ul>
+    </section>
+
+    <section>
+        <h2>4. Security & Privacy</h2>
+        <ul>
+            <li>We implement advanced security measures to protect your data and transactions.</li>
+            <li>Your personal data is stored securely and processed as per our <a href="/privacy-policy">Privacy Policy</a>.</li>
+        </ul>
+    </section>
+
+    <section>
+        <h2>5. Prohibited Activities</h2>
+        <p>Users are prohibited from engaging in fraudulent activities, money laundering, or any illegal transactions using FlowPay.</p>
+    </section>
+
+    <section>
+        <h2>6. Limitation of Liability</h2>
+        <p>FlowPay shall not be liable for any losses, damages, or unauthorized transactions unless proven to be caused by our negligence.</p>
+    </section>
+
+    <section>
+        <h2>7. Changes to Terms</h2>
+        <p>We reserve the right to modify these terms at any time. Continued use of FlowPay after changes implies acceptance of the new terms.</p>
+    </section>
+
+    <section>
+        <h2>8. Contact Us</h2>
+        <p>If you have any questions regarding these Terms and Conditions, please contact us at <a href="mailto:support@flowpay.com">support@flowpay.com</a>.</p>
+    </section>
+</main>
+</body>
+
+
+<footer th:replace="~{fragments/PageLayout.html :: footer}"></footer>
+<div th:replace="~{/fragments/PageLayout.html :: scripts}"></div>
+</html>

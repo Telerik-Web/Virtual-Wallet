@@ -11340,3 +11340,47 @@ body.sidebar-toggled footer.sticky-footer {
 input::placeholder {
   text-align: center;
 }
+
+.faq-title {
+  font-size: 32px;
+  color: #333;
+}
+
+.faq-subtitle {
+  font-size: 18px;
+  color: #666;
+}
+
+/*.faq-container {*/
+/*  max-width: 700px;*/
+/*  margin: 40px auto;*/
+/*  text-align: left;*/
+/*}*/
+
+.faq-item {
+  background: white;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  margin-bottom: 10px;
+}
+
+.faq-question {
+  background: #007bff;
+  color: white;
+  padding: 15px;
+  cursor: pointer;
+  font-weight: bold;
+  border-radius: 5px;
+  transition: 0.3s;
+}
+
+.faq-question:hover {
+  background: #0056b3;
+}
+
+.faq-answer {
+  padding: 15px;
+  background: #fff;
+  color: #333;
+  border-top: 1px solid #ddd;
+}

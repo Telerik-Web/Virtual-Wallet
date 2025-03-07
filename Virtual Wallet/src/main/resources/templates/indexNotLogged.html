@@ -6,45 +6,64 @@
 <nav th:replace="~{fragments/PageLayout.html :: navbar}"></nav>
 <br/><br/><br/>
 <!-- Page Wrapper -->
-<section class="container-fluid d-flex align-items-center justify-content-center vh-100">
-    <div class="masthead vh-100 justify-content-center">
-        <!--        <div class="card o-hidden border-0 shadow-lg my-5">-->
-        <div class="card-body p-5">
-            <form action="#" th:action="@{/currency/convert}" th:object="${currency}" method="post">
+<section class="container vh-10 d-flex align-items-center">
+    <div class="row justify-content-center w-100">
 
-                <h2 class="text-center text-gray-900 font-weight-bold">Currency Converter</h2>
+        <!-- Currency Converter Form -->
+        <div class="col-md-6">
+            <div class="card-body p-5">
+                <form action="#" th:action="@{/currency/convert}" th:object="${currency}" method="post">
+                    <h2 class="text-center text-gray-900 font-weight-bold">Currency Converter</h2>
 
-                <div class="form-group">
-                    <label class="text-gray-900 font-weight-bold">From Currency</label>
-                    <input type="text" class="form-control form-control-user" placeholder="Enter Currency"
-                           th:field="*{from}">
-                </div>
-                <label class="error" th:errors="*{from}">From error</label>
+                    <div class="form-group">
+                        <label class="text-gray-900 font-weight-bold">From Currency</label>
+                        <input type="text" class="form-control form-control-user" placeholder="Enter Currency"
+                               th:field="*{from}">
+                    </div>
+                    <label class="error" th:errors="*{from}">From error</label>
 
-                <div class="form-group">
-                    <label class="text-gray-900 font-weight-bold">To Currency</label>
-                    <input type="text" class="form-control form-control-user" placeholder="Enter Currency"
-                           th:field="*{to}">
-                </div>
-                <label class="error" th:errors="*{to}">To error</label>
+                    <div class="form-group">
+                        <label class="text-gray-900 font-weight-bold">To Currency</label>
+                        <input type="text" class="form-control form-control-user" placeholder="Enter Currency"
+                               th:field="*{to}">
+                    </div>
+                    <label class="error" th:errors="*{to}">To error</label>
 
-                <div class="form-group">
-                    <label class="text-gray-900 font-weight-bold">Amount</label>
-                    <input type="text" class="form-control form-control-user" placeholder="Enter Amount"
-                           th:field="*{amount}">
-                </div>
-                <label class="error" th:errors="*{amount}">Amount error</label>
-                <br/>
-                <h3 th:text="${convertedAmount}"></h3>
-                <br/>
+                    <div class="form-group">
+                        <label class="text-gray-900 font-weight-bold">Amount</label>
+                        <input type="text" class="form-control form-control-user" placeholder="Enter Amount"
+                               th:field="*{amount}">
+                    </div>
+                    <label class="error" th:errors="*{amount}">Amount error</label>
+                    <h3 th:text="${convertedAmount}"></h3>
+                    <br/>
 
-                <button class="btn btn-primary btn-user btn-block" type="submit">Convert</button>
-            </form>
-
+                    <button class="btn btn-primary btn-user btn-block" type="submit">Convert</button>
+                </form>
+            </div>
         </div>
+
+        <!-- Motivational Text -->
+        <div class="col-md-6 d-flex align-items-center">
+            <div>
+                <h2 class="text-primary font-weight-bold">Why Join FlowPay?</h2>
+                <p class="lead">Take control of your finances with FlowPay! Our platform makes it easy to send money,
+                    convert currencies, and track transactions securely.</p>
+                <ul class="list-unstyled">
+                    <li>💳 Instant Transactions – Send and receive money with ease.</li>
+                    <li>💰 Real-Time Exchange Rates – Get the best rates for currency conversion.</li>
+                    <li>📊 Smart Financial Insights – Stay on top of your spending.</li>
+                    <li>🔒 Secure & Reliable – Your data and funds are always safe.</li>
+                    <li>🚀 Fast & User-Friendly – A seamless experience for all your needs.</li>
+                </ul>
+                <a href="/register" class="btn btn-success btn-lg mt-3" th:href="@{/auth/register}">Join FlowPay Now</a>
+            </div>
+        </div>
+
     </div>
 </section>
-
-
 </body>
+
+<footer th:replace="~{fragments/PageLayout.html :: footer}"></footer>
+<div th:replace="~{/fragments/PageLayout.html :: scripts}"></div>
 </html>

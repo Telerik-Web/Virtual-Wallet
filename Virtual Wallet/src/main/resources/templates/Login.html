@@ -13,10 +13,6 @@
 
                     <h2 class="text-center text-gray-900 font-weight-bold">My Account</h2>
 
-<!--                    <div class="text-danger small text-center">-->
-<!--                        <p th:if="${#fields.hasErrors()}" th:text="${#fields.errors('login.*')}"></p>-->
-<!--                    </div>-->
-
                     <div th:if="${#fields.hasErrors() and login.username!='' and login.password!=''}">
                         <p class="error">Wrong username or password!</p>
                     </div>

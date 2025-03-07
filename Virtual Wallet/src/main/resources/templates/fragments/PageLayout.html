@@ -28,7 +28,7 @@
     <div class="collapse navbar-collapse" id="navbarResponsive">
       <ul class="navbar-nav ml-auto">
         <li class="nav-item">
-          <a class="nav-link text-dark font-weight-bold" th:href="@{/about}">About</a>
+          <a class="nav-link text-primary font-weight-bold" th:href="@{/about}">About</a>
         </li>
         <li class="nav-item" th:if="${isAuthenticated}">
           <a class="nav-link text-dark font-weight-bold" th:href="@{/auth/account}">Account</a>
@@ -58,11 +58,38 @@
   </div>
 </nav>
 
-<footer th:fragment="footer" class="mt-5 footer py-4 bg-light shadow">
-  <div class="container text-center">
-        <span class="text-gray-700 small" th:text="'© Copyright ' + ${#dates.year(#dates.createNow())} + ' RevNation'">
-        </span>
-  </div>
+<footer th:fragment="footer" class="bg-light text-center text-lg-start mt-5 p-4">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-4">
+          <h5 class="text-primary font-weight-bold">Quick Links</h5>
+          <ul class="list-unstyled">
+            <li><a href="/about" class="text-dark">About Us</a></li>
+            <li><a href="/faq" class="text-dark" th:href="@{/FAQ}">FAQs</a></li>
+            <li><a href="/contact" class="text-dark" th:href="@{/contact}">Contact Support</a></li>
+            <li><a href="/terms" class="text-dark" th:href="@{/terms}">Terms & Conditions</a></li>
+          </ul>
+        </div>
+
+        <div class="col-md-4">
+          <h5 class="text-primary font-weight-bold">Security & Trust</h5>
+          <p>We use advanced encryption and security measures to protect your transactions and data.</p>
+          <img src="/static/images/secure-payments.png" alt="Secure Payments" width="150">
+        </div>
+
+        <div class="col-md-4">
+          <h5 class="text-primary font-weight-bold">Follow Us</h5>
+          <a href="https://facebook.com" class="text-dark mr-2"><i class="fab fa-facebook fa-2x"></i></a>
+          <a href="https://twitter.com" class="text-dark mr-2"><i class="fab fa-twitter fa-2x"></i></a>
+          <a href="https://linkedin.com" class="text-dark mr-2"><i class="fab fa-linkedin fa-2x"></i></a>
+          <a href="https://instagram.com" class="text-dark"><i class="fab fa-instagram fa-2x"></i></a>
+        </div>
+      </div>
+      <hr>
+      <div class="text-center text-muted">
+        &copy; 2025 FlowPay. All Rights Reserved.
+      </div>
+    </div>
 </footer>
 
 <div th:fragment="scripts">
