@@ -14,30 +14,34 @@
 
 <h1 class="text-center">Filter Transactions</h1>
 
-<form class="text-center" action="/transactions/all" method="get">
+<form class="text-center" th:action="@{/transactions/all}" method="get">
     <label class="text-gray-900 font-weight-bold" for="recipient">Recipient Username:</label>
     <input type="text" id="recipient" name="recipient" th:value="*{recipient}" placeholder="Enter username"/>
 
     <label class="text-gray-900 font-weight-bold" for="minDate">Start Date:</label>
-    <input type="datetime-local" id="minDate" name="startDate" th:value="*{startDate}" />
+    <input type="datetime-local" id="minDate" name="startDate" th:value="*{startDate}"/>
 
     <label class="text-gray-900 font-weight-bold" for="maxDate">End Date:</label>
-    <input type="datetime-local" id="maxDate" name="endDate" th:value="*{endDate}" />
+    <input type="datetime-local" id="maxDate" name="endDate" th:value="*{endDate}"/>
 
     <label class="text-gray-900 font-weight-bold" for="isIncoming">Is Incoming:</label>
     <select id="isIncoming" name="isIncoming" th:value="*{isIncoming}">
-        <option value="">Any</option>
-        <option value="true">Yes</option>
-        <option value="false">No</option>
+        <option value="" th:selected="${isIncoming == null}">Any</option>
+        <option value="true" th:selected="${isIncoming == true}">Yes</option>
+        <option value="false" th:selected="${isIncoming == false}">No</option>
     </select>
 
     <label class="text-gray-900 font-weight-bold" for="sortBy">Sort By:</label>
     <select id="sortBy" name="sortBy" th:value="*{sortBy}">
-        <option value="amount">Amount</option>
-        <option value="date">Date</option>
+        <option value="amount" th:selected="${sortBy == 'amount'}">Amount</option>
+        <option value="date" th:selected="${sortBy == 'date'}">Date</option>
     </select>
 
-    //асцендинг/десцендинг
+    <label class="text-gray-900 font-weight-bold" for="isAscending">Sort Order:</label>
+    <select id="isAscending" name="isAscending" th:value="*{isAscending}">
+        <option value="true" th:selected="${isAscending == true}">Ascending</option>
+        <option value="false" th:selected="${isAscending == false}">Descending</option>
+    </select>
 
     <button class="btn btn-primary" type="submit">Filter</button>
 </form>
@@ -50,8 +54,10 @@
             <div class="card shadow border-0">
                 <div class="card-body text-center">
                     <h5 class="card-title">Transaction ID: <span th:text="${transaction.getId()}"></span></h5>
-                    <p class="card-text"><strong>Sender username:</strong> <span th:text="${transaction.sender.username}"></span></p>
-                    <p class="card-text"><strong>Recipient username:</strong> <span th:text="${transaction.recipient.username}"></span></p>
+                    <p class="card-text"><strong>Sender username:</strong> <span
+                            th:text="${transaction.sender.username}"></span></p>
+                    <p class="card-text"><strong>Recipient username:</strong> <span
+                            th:text="${transaction.recipient.username}"></span></p>
                     <p class="card-text"><strong>Amount:</strong> <span th:text="${transaction.amount}"></span></p>
                     <p class="card-text"><strong>Date:</strong> <span th:text="${transaction.createdAt}"></span></p>
                     <p class="card-text"><strong>Status:</strong> <span th:text="${transaction.status}"></span></p>

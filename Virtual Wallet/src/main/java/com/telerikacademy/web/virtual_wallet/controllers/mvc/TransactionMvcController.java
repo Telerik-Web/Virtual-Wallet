@@ -14,7 +14,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -61,7 +60,8 @@ public class TransactionMvcController {
         if (sortBy == null) {
             sortBy = "amount";
         }
-        List<Transaction> transactions = transactionService.filterTransactions(startDate, endDate, recipient, isIncoming, user);
+        List<Transaction> transactions = transactionService.filterTransactions(startDate, endDate, recipient,
+                isIncoming, user);
 
         List<Transaction> transactionDTOList2 = transactionService.sortTransactions2(transactions, sortBy, isAscending);
 
@@ -145,7 +145,6 @@ public class TransactionMvcController {
             session.setAttribute("transaction", transactionDTOCreate);
             session.setAttribute("amount", transactionDTOCreate.getAmount());
             session.setAttribute("recipient", recipient);
-            System.out.println(session.getAttribute("amount"));
             return "redirect:/transactions/new/confirm";
         } catch (EntityNotFoundException e) {
             errors.rejectValue("amount", "error.amount");
@@ -162,7 +161,6 @@ public class TransactionMvcController {
         User recipient = (User) session.getAttribute("recipient");
         TransactionDTOCreate transaction = (TransactionDTOCreate) session.getAttribute("transaction");
         model.addAttribute("amount", amount);
-        System.out.println(amount);
         model.addAttribute("recipient", recipient);
         model.addAttribute("transaction", transaction);
         return "TransactionConfirm";
