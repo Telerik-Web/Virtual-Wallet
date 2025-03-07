@@ -14,12 +14,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Controller
 @RequestMapping("/transactions")
+//@SessionAttributes({"transaction", "amount", "recipient"})
 public class TransactionMvcController {
 
     private final TransactionService transactionService;
@@ -88,7 +90,6 @@ public class TransactionMvcController {
     @PostMapping("/new")
     public String createTransaction(@Valid @ModelAttribute("transaction") TransactionDTOCreate transactionDTOCreate,
                                     BindingResult errors,
-                                    @RequestParam String amount,
                                     HttpSession session,
                                     Model model) {
         try {
@@ -99,17 +100,8 @@ public class TransactionMvcController {
             String type = transactionDTOCreate.getType();
             String value = transactionDTOCreate.getValue();
 
-            double amount2;
-            try {
-                amount2 = Double.parseDouble(amount);
-            } catch (NumberFormatException e) {
-                errors.rejectValue("amount", "error.amount");
-                return "CreateTransaction";
-            }
-
             model.addAttribute("type", transactionDTOCreate.getType());
             model.addAttribute("value", transactionDTOCreate.getValue());
-            model.addAttribute("amount", amount2);
             User recipient;
             switch (type) {
                 case "phone number":
@@ -149,12 +141,46 @@ public class TransactionMvcController {
             } catch (EntityNotFoundException e) {
                 return "CreateTransaction";
             }
-            transactionService.transferFunds(user, recipient, amount2);
-            return "redirect:/transactions/all";
+
+            session.setAttribute("transaction", transactionDTOCreate);
+            session.setAttribute("amount", transactionDTOCreate.getAmount());
+            session.setAttribute("recipient", recipient);
+            System.out.println(session.getAttribute("amount"));
+            return "redirect:/transactions/new/confirm";
         } catch (EntityNotFoundException e) {
             errors.rejectValue("amount", "error.amount");
             return "CreateTransaction";
         }
 
     }
+
+    @GetMapping("/new/confirm")
+    public String confirmTransaction(Model model,
+                                     HttpSession session) {
+        User user = authenticationHelper.tryGetUser(session);
+        double amount = Double.parseDouble(session.getAttribute("amount").toString());
+        User recipient = (User) session.getAttribute("recipient");
+        TransactionDTOCreate transaction = (TransactionDTOCreate) session.getAttribute("transaction");
+        model.addAttribute("amount", amount);
+        System.out.println(amount);
+        model.addAttribute("recipient", recipient);
+        model.addAttribute("transaction", transaction);
+        return "TransactionConfirm";
+    }
+
+    @PostMapping("/new/confirm")
+    public String completeTransaction(HttpSession session) {
+        try {
+            User sender = authenticationHelper.tryGetUser(session);
+            User recipient = (User) session.getAttribute("recipient");
+            double amount = Double.parseDouble(session.getAttribute("amount").toString());
+            transactionService.transferFunds(sender, recipient, amount);
+
+            return "redirect:/transactions/all";
+        } catch (Exception e) {
+            return "redirect:/transactions/new";
+        }
+    }
+
+
 }

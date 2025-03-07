@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Controller
 @RequestMapping("/auth")
@@ -197,6 +198,9 @@ public class AuthenticationMvcController {
             User user = authenticationHelper.tryGetUser(session);
             Card card = cardMapper.fromDTO2(cardDto);
             cardService.create(card, user);
+
+            List<Card> updatedCards = cardService.getCardsByUserId(user.getId(), user);
+            session.setAttribute("cards", updatedCards);
             return "redirect:/auth/account/cards";
         } catch (AuthenticationFailureException e) {
             return "AccessDenied";
@@ -209,6 +213,9 @@ public class AuthenticationMvcController {
         User user = authenticationHelper.tryGetUser(session);
         Card card = cardService.getById(id, user);
         cardService.delete(card, user);
+        if(cardService.getCardsByUserId(user.getId(), user).isEmpty()) {
+            session.removeAttribute("cards");
+        }
         return "redirect:/auth/account/cards";
 
     }

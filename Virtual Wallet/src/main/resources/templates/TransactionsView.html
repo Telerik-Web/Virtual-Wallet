@@ -50,18 +50,11 @@
             <div class="card shadow border-0">
                 <div class="card-body text-center">
                     <h5 class="card-title">Transaction ID: <span th:text="${transaction.getId()}"></span></h5>
-                    <p class="card-text"><strong>Sender full name:</strong> <span th:text="${transaction.sender.username}"></span></p>
-                    <p class="card-text"><strong>Recipient full name:</strong> <span th:text="${transaction.recipient.username}"></span></p>
+                    <p class="card-text"><strong>Sender username:</strong> <span th:text="${transaction.sender.username}"></span></p>
+                    <p class="card-text"><strong>Recipient username:</strong> <span th:text="${transaction.recipient.username}"></span></p>
                     <p class="card-text"><strong>Amount:</strong> <span th:text="${transaction.amount}"></span></p>
                     <p class="card-text"><strong>Date:</strong> <span th:text="${transaction.createdAt}"></span></p>
                     <p class="card-text"><strong>Status:</strong> <span th:text="${transaction.status}"></span></p>
-
-<!--                    <div class="d-flex justify-content-center gap-2">-->
-<!--                        <form>-->
-<!--                            <a th:href="@{/auth/delete/{id}(id=${card.getId()})}"-->
-<!--                               type="submit" class="btn btn-danger btn-danger:hover">Delete Card</a>-->
-<!--                        </form>-->
-<!--                    </div>-->
                 </div>
             </div>
         </div>
