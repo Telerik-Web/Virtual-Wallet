@@ -1,22 +1,25 @@
 package com.telerikacademy.web.virtual_wallet.controllers.rest;
 
+import com.telerikacademy.web.virtual_wallet.exceptions.AuthenticationFailureException;
 import com.telerikacademy.web.virtual_wallet.exceptions.EntityNotFoundException;
 import com.telerikacademy.web.virtual_wallet.helpers.AuthenticationHelper;
 import com.telerikacademy.web.virtual_wallet.mappers.UserMapper;
-import com.telerikacademy.web.virtual_wallet.models.Transaction;
-import com.telerikacademy.web.virtual_wallet.models.TransactionDTO;
-import com.telerikacademy.web.virtual_wallet.models.User;
+import com.telerikacademy.web.virtual_wallet.models.*;
 import com.telerikacademy.web.virtual_wallet.services.TransactionService;
 import com.telerikacademy.web.virtual_wallet.services.UserService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 @RestController
 @RequestMapping("/api/transactions")
@@ -50,26 +53,26 @@ public class TransactionRestController {
                                  @RequestParam String type,
                                  @RequestParam String value,
                                  @RequestBody Transaction transaction) {
-            User recipient;
-            User sender;
-            switch (type) {
-                case "phone":
-                    recipient = userService.getByPhoneNumber(value);
-                    sender = authenticationHelper.tryGetUser(headers);
-                    break;
-                case "email":
-                    recipient = userService.getByEmail(value);
-                    sender = authenticationHelper.tryGetUser(headers);
-                    break;
-                case "username":
-                    recipient = userService.getByUsername(value);
-                    sender = authenticationHelper.tryGetUser(headers);
-                    break;
-                default:
-                    recipient = null;
-                    sender = null;
-                    break;
-            }
+        User recipient;
+        User sender;
+        switch (type) {
+            case "phone":
+                recipient = userService.getByPhoneNumber(value);
+                sender = authenticationHelper.tryGetUser(headers);
+                break;
+            case "email":
+                recipient = userService.getByEmail(value);
+                sender = authenticationHelper.tryGetUser(headers);
+                break;
+            case "username":
+                recipient = userService.getByUsername(value);
+                sender = authenticationHelper.tryGetUser(headers);
+                break;
+            default:
+                recipient = null;
+                sender = null;
+                break;
+        }
 
         return transactionService.transferFunds(sender, recipient, transaction.getAmount());
     }
@@ -102,21 +105,34 @@ public class TransactionRestController {
 
         return transactionService.sortTransactions(TransactionDTOList, sortBy, ascending);
     }
-//    public List<TransactionDTO> getUserTransactions(@RequestHeader HttpHeaders headers) {
-//        User user;
-//        try {
-//            user = authenticationHelper.tryGetUser(headers);
-//        } catch (EntityNotFoundException e) {
-//            user = null;
-//        }
-//        List<Transaction> transactions = transactionService.getAllTransactionsForUser(user.getId());
-//
-//        return transactions.stream().map(transaction -> new TransactionDTO(
-//                transaction.getSender().getId(),
-//                transaction.getRecipient().getId(),
-//                transaction.getAmount(),
-//                transaction.getStatus(),
-//                transaction.getCreatedAt()
-//        )).collect(Collectors.toList());
-//    }
+
+    @PostMapping("/deposit")
+    public ResponseEntity<String> withdrawMoney(@RequestBody CreateTransactionRequest transaction,
+                                                @RequestHeader HttpHeaders headers) {
+        User user;
+        try {
+            user = authenticationHelper.tryGetUser(headers);
+        } catch (AuthenticationFailureException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+        }
+        Random random = new Random();
+        boolean isSuccess = random.nextBoolean();
+        int count = 0;
+        for (Card card : user.getCards()) {
+            if (card.getCardNumber().equals(transaction.getCardNumber())) {
+                count++;
+            }
+        }
+        if (user.getCards().isEmpty() || count == 0) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Transaction failed, invalid card number.");
+        }
+        if (isSuccess) {
+            user.setBalance(user.getBalance() + transaction.getAmount());
+            userService.update(user, user, user.getId());
+            return ResponseEntity.ok("Transaction successful: " +
+                    transaction.getAmount() + " withdrawn from card.");
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Transaction failed, please try again.");
+        }
+    }
 }
