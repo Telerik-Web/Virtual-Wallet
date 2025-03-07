@@ -1,10 +1,7 @@
 package com.telerikacademy.web.virtual_wallet.mappers;
 
 
-import com.telerikacademy.web.virtual_wallet.models.Card;
-import com.telerikacademy.web.virtual_wallet.models.CardDTO;
-import com.telerikacademy.web.virtual_wallet.models.CardDTOOut;
-import com.telerikacademy.web.virtual_wallet.models.User;
+import com.telerikacademy.web.virtual_wallet.models.*;
 import com.telerikacademy.web.virtual_wallet.services.CardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -33,6 +30,15 @@ public class CardMapper {
         Card card = new Card();
         card.setCardNumber(cardDTO.getCardNumber());
         card.setCheckNumber(cardDTO.getCheckNumber());
+
+        return card;
+    }
+
+    public Card fromDTO2(CardDTO2 cardDTO) {
+        Card card = new Card();
+        card.setCardNumber(cardDTO.getCardNumber());
+        card.setCheckNumber(cardDTO.getCheckNumber());
+        card.setExpirationDate(cardDTO.getExpirationDate());
 
         return card;
     }

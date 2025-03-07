@@ -5,11 +5,9 @@ import com.telerikacademy.web.virtual_wallet.exceptions.AuthenticationFailureExc
 import com.telerikacademy.web.virtual_wallet.exceptions.DuplicateEntityException;
 import com.telerikacademy.web.virtual_wallet.exceptions.EntityNotFoundException;
 import com.telerikacademy.web.virtual_wallet.helpers.AuthenticationHelper;
+import com.telerikacademy.web.virtual_wallet.mappers.CardMapper;
 import com.telerikacademy.web.virtual_wallet.mappers.UserMapper;
-import com.telerikacademy.web.virtual_wallet.models.Card;
-import com.telerikacademy.web.virtual_wallet.models.LogInDto;
-import com.telerikacademy.web.virtual_wallet.models.User;
-import com.telerikacademy.web.virtual_wallet.models.UserDTO;
+import com.telerikacademy.web.virtual_wallet.models.*;
 import com.telerikacademy.web.virtual_wallet.services.CardService;
 import com.telerikacademy.web.virtual_wallet.services.UserService;
 import jakarta.servlet.http.HttpSession;
@@ -20,6 +18,9 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 @Controller
 @RequestMapping("/auth")
 public class AuthenticationMvcController {
@@ -28,15 +29,17 @@ public class AuthenticationMvcController {
     private final UserService userService;
     private final UserMapper userMapper;
     private final CardService cardService;
+    private final CardMapper cardMapper;
 
     @Autowired
     public AuthenticationMvcController(AuthenticationHelper authenticationHelper,
                                        UserService userService,
-                                       UserMapper userMapper, CardService cardService) {
+                                       UserMapper userMapper, CardService cardService, CardMapper cardMapper) {
         this.authenticationHelper = authenticationHelper;
         this.userService = userService;
         this.userMapper = userMapper;
         this.cardService = cardService;
+        this.cardMapper = cardMapper;
     }
 
     @ModelAttribute("isAuthenticated")
@@ -155,6 +158,46 @@ public class AuthenticationMvcController {
             model.addAttribute("user", userDto);
             model.addAttribute("cards", user.getCards());
             return "UserCards";
+        } catch (AuthenticationFailureException e) {
+            return "AccessDenied";
+        }
+    }
+
+    @GetMapping("/account/cards/new")
+    public String showCardForm(Model model,
+                               HttpSession session) {
+        try {
+            User user = authenticationHelper.tryGetUser(session);
+            UserDTO userDto = userMapper.fromUsertoUserDto(user);
+            model.addAttribute("user", userDto);
+            model.addAttribute("card", new CardDTO2());
+            return "AddCard";
+        } catch (AuthenticationFailureException e) {
+            return "AccessDenied";
+        }
+    }
+
+    @PostMapping("/account/cards/new")
+    public String addCard(@Valid @ModelAttribute("card") CardDTO2 cardDto,
+                          BindingResult errors,
+                          Model model,
+                          HttpSession session) {
+
+        if (errors.hasErrors()) {
+            try {
+                User user = authenticationHelper.tryGetUser(session);
+                model.addAttribute("user", userMapper.fromUsertoUserDto(user));
+            } catch (AuthenticationFailureException e) {
+                return "AccessDenied";
+            }
+            return "AddCard";
+        }
+
+        try {
+            User user = authenticationHelper.tryGetUser(session);
+            Card card = cardMapper.fromDTO2(cardDto);
+            cardService.create(card, user);
+            return "redirect:/auth/account/cards";
         } catch (AuthenticationFailureException e) {
             return "AccessDenied";
         }

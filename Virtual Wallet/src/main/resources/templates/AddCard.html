@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/PageLayout.html :: head('Add Card')}"></head>
+<body>
+
+<nav th:replace="~{fragments/PageLayout.html :: navbar}"></nav>
+
+<section class="container-fluid d-flex align-items-center justify-content-center vh-100">
+  <div class="masthead vh-100 justify-content-center">
+    <div class="card o-hidden border-0 shadow-lg my-5">
+      <div class="card-body p-5">
+
+        <form action="#" th:action="@{/auth/account/cards/new}" th:object="${card}" method="post">
+
+          <h2 class="text-center text-gray-900 font-weight-bold">Add Card</h2>
+
+          <div class="form-group">
+            <label class="text-gray-900 font-weight-bold">Card Number</label>
+            <input type="text" class="form-control form-control-user"
+                   th:field="*{cardNumber}" placeholder="Enter CardNumber">
+          </div>
+          <label class="error" th:errors="*{cardNumber}">Card Number error</label>
+
+          <div class="form-group">
+            <label class="text-gray-900 font-weight-bold">CVV</label>
+            <input type="text" class="form-control form-control-user"
+                   th:field="*{checkNumber}" placeholder="Enter CVV">
+          </div>
+          <label class="error" th:errors="*{checkNumber}">CVV error</label>
+
+
+          <div class="form-group">
+            <label class="text-gray-900 font-weight-bold">Expiration Date</label>
+            <input type="date" class="form-control form-control-user"
+                   th:field="*{expirationDate}" placeholder="Enter Expiration Date">
+          </div>
+          <label class="error" th:errors="*{expirationDate}">Date error</label>
+          <br/><br/>
+
+          <button class="btn btn-primary btn-user btn-block" type="submit">Submit</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!--<button onclick="toggleDarkMode()">Toggle Dark Mode</button>-->
+
+<footer th:replace="~{fragments/PageLayout.html :: footer}"></footer>
+<div th:replace="~{/fragments/PageLayout.html :: scripts}"></div>
+
+</body>
+</html>

@@ -36,7 +36,7 @@
 
         <li class="nav-item" th:if="${isAuthenticated}">
           <a class="nav-link text-dark font-weight-bold"
-             th:href="${#lists.isEmpty(session.cards)} ? @{/auth/account/add-card} : @{/auth/account/cards}">
+             th:href="${#lists.isEmpty(session.cards)} ? @{/auth/account/cards/new} : @{/auth/account/cards}">
             <span th:text="${#lists.isEmpty(session.cards)} ? 'Add Card' : 'Manage Cards'"></span>
           </a>
         </li>
