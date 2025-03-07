@@ -5,6 +5,9 @@ import com.telerikacademy.web.virtual_wallet.exceptions.EntityNotFoundException;
 import com.telerikacademy.web.virtual_wallet.models.Card;
 import com.telerikacademy.web.virtual_wallet.models.FilterUserOptions;
 import com.telerikacademy.web.virtual_wallet.models.User;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.TypedQuery;
 import jakarta.transaction.Transactional;
 import org.hibernate.Hibernate;
 import org.hibernate.Session;
@@ -19,6 +22,9 @@ import java.util.*;
 public class UserRepositoryImpl implements UserRepository {
 
     private final SessionFactory sessionFactory;
+
+    @PersistenceContext
+    private EntityManager entityManager;
 
     @Autowired
     public UserRepositoryImpl(SessionFactory sessionFactory) {
@@ -192,4 +198,13 @@ public class UserRepositoryImpl implements UserRepository {
 
         return orderBy;
     }
+
+//    @Override
+//    public User findByVerificationToken(String token) {
+//        TypedQuery<User> query = entityManager.createQuery(
+//                "SELECT u FROM User u WHERE u.verificationToken = :token", User.class);
+//        query.setParameter("token", token);
+//
+//        return query.getResultStream().findFirst().orElse(null);
+//    }
 }

@@ -154,4 +154,14 @@ public class UserRestController {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         }
     }
+
+//    @GetMapping("/verify")
+//    public ResponseEntity<String> verifyEmail(@RequestParam String token) {
+//        boolean isVerified = userService.verifyEmail(token);
+//
+//        if(isVerified) {
+//            return ResponseEntity.ok("Verified");
+//        }
+//        return ResponseEntity.badRequest().body("Invalid or expired token.");
+//    }
 }

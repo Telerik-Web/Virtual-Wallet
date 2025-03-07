@@ -24,11 +24,13 @@ import static com.telerikacademy.web.virtual_wallet.helpers.PermissionHelper.*;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final EmailService emailService;
 
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository) {
+    public UserServiceImpl(UserRepository userRepository, EmailService emailService) {
         this.userRepository = userRepository;
+        this.emailService = emailService;
     }
 
     @Override
@@ -94,9 +96,22 @@ public class UserServiceImpl implements UserService {
         if (exists) {
             throw new DuplicateEntityException("User", "username", user.getUsername());
         }
-
+        //user.generateVerificationToken();
         userRepository.create(user);
+        //emailService.sendVerificationEmail(user.getEmail(), user.getVerificationToken());
     }
+
+//    @Override
+//    public boolean verifyEmail(String token) {
+//        User user = userRepository.findByVerificationToken(token);
+//        if (user != null) {
+//            user.setEmailVerified(true);
+//            user.setVerificationToken(null);
+//            userRepository.update(user, user.getId());
+//            return true;
+//        }
+//        return false;
+//    }
 
     @Override
     public void update(User user, User userFromHeader, long id) {

@@ -7,10 +7,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.Data;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Data
@@ -59,6 +56,10 @@ public class User {
     @Column(name = "balance")
     private double balance;
 
+//    private boolean emailVerified;
+//
+//    private String verificationToken;
+
     public User() {
     }
 
@@ -67,6 +68,10 @@ public class User {
         int length = (firstName + " " + lastName).trim().length();
         return length >= 2 && length <= 32;
     }
+
+//    public void generateVerificationToken() {
+//        this.verificationToken = UUID.randomUUID().toString();
+//    }
 
     @Transient
     public String getFullName() {

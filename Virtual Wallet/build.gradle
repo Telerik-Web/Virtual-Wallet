@@ -29,25 +29,12 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
+    implementation 'org.springframework.boot:spring-boot-starter-mail'
+
     implementation 'org.mariadb.jdbc:mariadb-java-client'
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.5'
-//    implementation 'com.fasterxml.jackson.core:jackson-databind:2.15.2'
-//    implementation 'com.fasterxml.jackson.core:jackson-annotations:2.15.2'
-//    implementation 'com.fasterxml.jackson.core:jackson-core:2.15.2'
-//    implementation 'org.apache.httpcomponents.client5:httpclient5:5.1.3'
-//    implementation 'com.fasterxml.jackson.core:jackson-databind:2.15.2'
-//    implementation 'org.apache.httpcomponents.client5:httpclient5:5.3'
-//    implementation 'org.apache.httpcomponents.core5:httpcore5:5.3'
     implementation 'com.googlecode.json-simple:json-simple:1.1.1'
-    //implementation 'org.apache.httpcomponents.client5:httpclient5:5.1.3'
-    //implementation 'org.apache.httpcomponents.client5:httpclient5:5.3-beta2'
-//    repositories {
-//        mavenCentral() // Ensure Maven Central is included
-//        maven { url "https://repository.apache.org/snapshots" } // Add Apache Snapshots
-//    }
-    implementation 'org.json:json:20210307' // Add this line
-
-
+    implementation 'org.json:json:20210307'
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
 

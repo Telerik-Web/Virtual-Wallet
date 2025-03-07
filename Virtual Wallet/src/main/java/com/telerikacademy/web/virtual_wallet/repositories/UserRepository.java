@@ -6,6 +6,7 @@ import com.telerikacademy.web.virtual_wallet.models.User;
 import jakarta.validation.Valid;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface UserRepository {
 
@@ -30,4 +31,6 @@ public interface UserRepository {
     void update(@Valid User user, long id);
 
     void delete(long id);
+
+    //User findByVerificationToken(String token);
 }
