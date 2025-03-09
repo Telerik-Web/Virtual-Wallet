@@ -78,7 +78,7 @@ public class TransactionMvcController {
         List<Transaction> transactions = transactionService.filterTransactions(startDate, endDate, recipient,
                 isIncoming, user);
 
-        List<Transaction> transactionDTOList2 = transactionService.sortTransactions2(transactions, sortBy, isAscending, page, size);
+        List<Transaction> transactionDTOList2 = transactionService.sortTransactionsWithPagination(transactions, sortBy, isAscending, page, size);
 
         Page<Transaction> productPage = transactionService.getPaginatedTransactions(page, size);
 

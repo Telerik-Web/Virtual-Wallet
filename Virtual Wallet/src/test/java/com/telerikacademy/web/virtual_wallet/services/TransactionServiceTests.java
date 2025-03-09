@@ -119,7 +119,8 @@ public class TransactionServiceTests {
         transactions.add(createMockTransaction());
         transactions.add(createMockTransaction2());
 
-        List<Transaction> sorted = transactionService.sortTransactions2(transactions, "amount", true);
+        List<Transaction> sorted = transactionService.
+                sortTransactionsWithPagination(transactions, "amount", true, 0, transactions.size());
 
         Assertions.assertEquals(100, sorted.get(0).getAmount());
         Assertions.assertEquals(200, sorted.get(1).getAmount());
@@ -131,7 +132,8 @@ public class TransactionServiceTests {
         transactions.add(createMockTransaction());
         transactions.add(createMockTransaction2());
 
-        List<Transaction> sorted = transactionService.sortTransactions2(transactions, "amount", false);
+        List<Transaction> sorted = transactionService.
+                sortTransactionsWithPagination(transactions, "amount", false, 0, transactions.size());
 
         Assertions.assertEquals(200, sorted.get(0).getAmount());
         Assertions.assertEquals(100, sorted.get(1).getAmount());
@@ -143,7 +145,8 @@ public class TransactionServiceTests {
         transactions.add(createMockTransaction());
         transactions.add(createMockTransaction2());
 
-        List<Transaction> sorted = transactionService.sortTransactions2(transactions, "date", true);
+        List<Transaction> sorted = transactionService.
+                sortTransactionsWithPagination(transactions, "date", true,0,transactions.size());
 
         Assertions.assertEquals(LocalDateTime.of(2025, 3, 9, 17, 26), sorted.get(0).getCreatedAt());
         Assertions.assertEquals(LocalDateTime.of(2025, 4, 9, 17, 26), sorted.get(1).getCreatedAt());
