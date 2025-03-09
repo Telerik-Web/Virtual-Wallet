@@ -146,6 +146,11 @@ public class TransactionMvcController {
                 return "CreateTransaction";
             }
 
+            if (user.getBalance() < Double.parseDouble(transactionDTOCreate.getAmount())) {
+                errors.rejectValue("amount", "error.amount.over");
+                return "CreateTransaction";
+            }
+
             session.setAttribute("transaction", transactionDTOCreate);
             session.setAttribute("amount", transactionDTOCreate.getAmount());
             session.setAttribute("recipient", recipient);

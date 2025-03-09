@@ -34,7 +34,7 @@
                         <input class="form-control form-control-user" type="text" th:field="*{value}"
                                th:placeholder="'Enter Recipient ' + *{type}"/>
                     </div>
-                    <label class="error" th:if="${#fields.hasErrors()}"
+                    <label class="error" th:if="${#fields.hasErrors('value')}"
                            th:text="'Please enter a valid ' + *{type.toString()} + '!'">
                         Please enter a valid
                     </label>
