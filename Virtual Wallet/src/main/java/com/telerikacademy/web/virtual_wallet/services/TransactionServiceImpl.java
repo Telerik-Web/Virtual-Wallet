@@ -29,50 +29,50 @@ public class TransactionServiceImpl implements TransactionService {
         this.userRepository = userRepository;
     }
 
-    @Override
-    public List<Transaction> findBySender(User sender) {
-        return transactionRepository.findBySender(sender);
-    }
-
-    @Override
-    public List<Transaction> findByRecipient(User recipient) {
-        return transactionRepository.findByRecipient(recipient);
-    }
-
-    @Override
-    public List<Transaction> findBySenderAndRecipient(User sender, User recipient) {
-        return transactionRepository.findBySenderAndRecipient(sender, recipient);
-    }
-
-    @Override
-    public List<Transaction> findByCreatedAtBetween(LocalDateTime startDate, LocalDateTime endDate) {
-        return transactionRepository.findByCreatedAtBetween(startDate, endDate);
-    }
-
-    @Override
-    public List<Transaction> findByStatus(Status status) {
-        return transactionRepository.findByStatus(status);
-    }
-
-    @Override
-    public List<Transaction> findByAmountGreaterThan(BigDecimal amount) {
-        return transactionRepository.findByAmountGreaterThan(amount);
-    }
-
-    @Override
-    public List<Transaction> findByAmountLessThan(BigDecimal amount) {
-        return transactionRepository.findByAmountLessThan(amount);
-    }
-
-    @Override
-    public List<Transaction> findBySenderAndStatus(User sender, Status status) {
-        return transactionRepository.findBySenderAndStatus(sender, status);
-    }
-
-    @Override
-    public List<Transaction> findByRecipientAndStatus(User recipient, Status status) {
-        return transactionRepository.findByRecipientAndStatus(recipient, status);
-    }
+//    @Override
+//    public List<Transaction> findBySender(User sender) {
+//        return transactionRepository.findBySender(sender);
+//    }
+//
+//    @Override
+//    public List<Transaction> findByRecipient(User recipient) {
+//        return transactionRepository.findByRecipient(recipient);
+//    }
+//
+//    @Override
+//    public List<Transaction> findBySenderAndRecipient(User sender, User recipient) {
+//        return transactionRepository.findBySenderAndRecipient(sender, recipient);
+//    }
+//
+//    @Override
+//    public List<Transaction> findByCreatedAtBetween(LocalDateTime startDate, LocalDateTime endDate) {
+//        return transactionRepository.findByCreatedAtBetween(startDate, endDate);
+//    }
+//
+//    @Override
+//    public List<Transaction> findByStatus(Status status) {
+//        return transactionRepository.findByStatus(status);
+//    }
+//
+//    @Override
+//    public List<Transaction> findByAmountGreaterThan(BigDecimal amount) {
+//        return transactionRepository.findByAmountGreaterThan(amount);
+//    }
+//
+//    @Override
+//    public List<Transaction> findByAmountLessThan(BigDecimal amount) {
+//        return transactionRepository.findByAmountLessThan(amount);
+//    }
+//
+//    @Override
+//    public List<Transaction> findBySenderAndStatus(User sender, Status status) {
+//        return transactionRepository.findBySenderAndStatus(sender, status);
+//    }
+//
+//    @Override
+//    public List<Transaction> findByRecipientAndStatus(User recipient, Status status) {
+//        return transactionRepository.findByRecipientAndStatus(recipient, status);
+//    }
 
     @Override
     @Transactional

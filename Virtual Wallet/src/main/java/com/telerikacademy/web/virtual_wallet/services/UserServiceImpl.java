@@ -73,7 +73,7 @@ public class UserServiceImpl implements UserService {
     public void alterAdminPermissions(long id, User user, boolean isAdmin) {
         checkIfAdmin(user);
 
-        User userToUpdate = getById(user, id);
+        User userToUpdate = getById(id);
 
         if (isAdmin) {
             userToUpdate.setIsAdmin(true);
