@@ -69,17 +69,6 @@ public class UserServiceTests {
         user4.setIsAdmin(false);
         user4.setIsBlocked(true);
         user4.setBalance(50.0);
-
-//        user5 = new User();
-//        user5.setId(3L);
-//        user5.setUsername("jan_smith");
-//        user5.setFirstName("Jae");
-//        user5.setLastName("Smih");
-//        user5.setEmail("jane.smth@example.com");
-//        user5.setPhoneNumber("0967654321");
-//        user5.setIsAdmin(false);
-//        user5.setIsBlocked(true);
-//        user5.setBalance(50.0);
     }
 
     @Test

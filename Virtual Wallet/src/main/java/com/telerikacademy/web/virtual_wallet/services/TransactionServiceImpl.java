@@ -124,7 +124,7 @@ public class TransactionServiceImpl implements TransactionService {
 //                .filter(t -> user.getUsername() == null || t.getSender().getUsername().equalsIgnoreCase(user.getUsername()))
                 .filter(t -> {
                     if (isIncoming == null) return true;
-                    boolean transactionIsIncoming = t.getRecipient().getId() == (user.getId());
+                    boolean transactionIsIncoming = t.getRecipient().getId() == ((user.getId()));
                     return isIncoming == transactionIsIncoming;
                 })
                 .collect(Collectors.toList());
