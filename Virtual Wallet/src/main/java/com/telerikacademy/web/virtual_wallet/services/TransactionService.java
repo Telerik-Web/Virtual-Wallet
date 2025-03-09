@@ -4,6 +4,7 @@ import com.telerikacademy.web.virtual_wallet.enums.Status;
 import com.telerikacademy.web.virtual_wallet.models.Transaction;
 import com.telerikacademy.web.virtual_wallet.models.TransactionDTO;
 import com.telerikacademy.web.virtual_wallet.models.User;
+import org.springframework.data.domain.Page;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -30,6 +31,8 @@ public interface TransactionService {
 
     Transaction transferFunds(User sender, User recipient, Double amount);
 
+    Page<Transaction> getPaginatedTransactions(int page, int size);
+
     List<Transaction> getAllTransactionsForUser(long userId);
 
     List<Transaction> filterTransactions(LocalDateTime startDate,
@@ -42,7 +45,9 @@ public interface TransactionService {
                                        String sortBy,
                                        boolean ascending);
 
-    List<Transaction> sortTransactions2(List<Transaction> transactions,
+    List<Transaction> sortTransactionsWithPagination(List<Transaction> transactions,
                                         String sortBy,
-                                        boolean ascending);
+                                        boolean ascending,
+                                        int page,
+                                        int size);
 }

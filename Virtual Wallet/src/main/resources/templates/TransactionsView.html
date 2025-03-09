@@ -100,6 +100,21 @@
             </span>
         </div>
     </div>
+
+    <nav th:if="${showPagination}">
+        <ul class="pagination justify-content-center">
+            <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
+                <a class="page-link" th:href="@{/transactions/all(page=${currentPage - 1}, size=5, sortBy=${sortBy}, isAscending=${isAscending}, startDate=${startDate}, endDate=${endDate}, recipient=${recipient}, isIncoming=${isIncoming})}">Previous</a>
+            </li>
+            <li class="page-item" th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
+                th:classappend="${i == currentPage} ? 'active'">
+                <a class="page-link" th:href="@{/transactions/all(page=${i}, size=5, sortBy=${sortBy}, isAscending=${isAscending}, startDate=${startDate}, endDate=${endDate}, recipient=${recipient}, isIncoming=${isIncoming})}" th:text="${i + 1}">1</a>
+            </li>
+            <li class="page-item" th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
+                <a class="page-link" th:href="@{/transactions/all(page=${currentPage + 1}, size=5, sortBy=${sortBy}, isAscending=${isAscending}, startDate=${startDate}, endDate=${endDate}, recipient=${recipient}, isIncoming=${isIncoming})}">Next</a>
+            </li>
+        </ul>
+    </nav>
 </div>
 
 

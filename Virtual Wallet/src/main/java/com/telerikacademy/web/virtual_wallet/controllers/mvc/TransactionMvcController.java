@@ -4,19 +4,16 @@ import com.telerikacademy.web.virtual_wallet.exceptions.AuthenticationFailureExc
 import com.telerikacademy.web.virtual_wallet.exceptions.EntityNotFoundException;
 import com.telerikacademy.web.virtual_wallet.helpers.AuthenticationHelper;
 import com.telerikacademy.web.virtual_wallet.models.*;
-import com.telerikacademy.web.virtual_wallet.services.CardService;
 import com.telerikacademy.web.virtual_wallet.services.TransactionService;
 import com.telerikacademy.web.virtual_wallet.services.UserService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -24,22 +21,18 @@ import java.util.Random;
 
 @Controller
 @RequestMapping("/transactions")
-//@SessionAttributes({"transaction", "amount", "recipient"})
 public class TransactionMvcController {
 
     private final TransactionService transactionService;
     private final UserService userService;
     private final AuthenticationHelper authenticationHelper;
-    private final CardService cardService;
 
     public TransactionMvcController(TransactionService transactionService,
                                     UserService userService,
-                                    AuthenticationHelper authenticationHelper,
-                                    CardService cardService) {
+                                    AuthenticationHelper authenticationHelper) {
         this.transactionService = transactionService;
         this.userService = userService;
         this.authenticationHelper = authenticationHelper;
-        this.cardService = cardService;
     }
 
     @ModelAttribute("isAuthenticated")
@@ -47,9 +40,24 @@ public class TransactionMvcController {
         return session.getAttribute("currentUser") != null;
     }
 
+//    @GetMapping
+//    public String showPaginatedTransactions(Model model,
+//                                            @RequestParam(defaultValue = "0") int page,
+//                                            @RequestParam(defaultValue = "5") int size) {
+//        Page<Transaction> productPage = transactionService.getPaginatedTransactions(page, size);
+//
+//        model.addAttribute("products", productPage.getContent());
+//        model.addAttribute("currentPage", page);
+//        model.addAttribute("totalPages", productPage.getTotalPages());
+//
+//
+//    }
+
     @GetMapping("/all")
     public String showAllTransactions(
             HttpSession session,
+            @RequestParam(required = false, defaultValue = "0") int page,
+            @RequestParam(required = false, defaultValue = "5") int size,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDate,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDate,
             @RequestParam(required = false) String recipient,
@@ -64,10 +72,16 @@ public class TransactionMvcController {
         if (sortBy == null) {
             sortBy = "amount";
         }
+
+        boolean showPagination = (startDate == null && endDate == null && recipient == null && isIncoming == null);
+
         List<Transaction> transactions = transactionService.filterTransactions(startDate, endDate, recipient,
                 isIncoming, user);
 
-        List<Transaction> transactionDTOList2 = transactionService.sortTransactions2(transactions, sortBy, isAscending);
+        List<Transaction> transactionDTOList2 = transactionService.sortTransactions2(transactions, sortBy, isAscending, page, size);
+
+        Page<Transaction> productPage = transactionService.getPaginatedTransactions(page, size);
+
 
         model.addAttribute("startDate", startDate);
         model.addAttribute("endDate", endDate);
@@ -76,6 +90,9 @@ public class TransactionMvcController {
         model.addAttribute("isIncoming", isIncoming);
         model.addAttribute("sortBy", sortBy);
         model.addAttribute("isAscending", isAscending);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", productPage.getTotalPages());
+        model.addAttribute("showPagination", showPagination);
 
         return "TransactionsView";
     }

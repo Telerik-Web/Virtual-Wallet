@@ -8,6 +8,8 @@ import com.telerikacademy.web.virtual_wallet.repositories.TransactionRepository;
 import com.telerikacademy.web.virtual_wallet.repositories.UserRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -106,6 +108,11 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
+    public Page<Transaction> getPaginatedTransactions(int page, int size) {
+        return transactionRepository.findAll(PageRequest.of(page, size));
+    }
+
+    @Override
     public List<Transaction> getAllTransactionsForUser(long userId) {
         return transactionRepository.findAllByUserId(userId);
     }
@@ -151,9 +158,11 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
-    public List<Transaction> sortTransactions2(List<Transaction> transactions,
-                                                 String sortBy,
-                                                 boolean ascending) {
+    public List<Transaction> sortTransactionsWithPagination(List<Transaction> transactions,
+                                                String sortBy,
+                                                boolean ascending,
+                                                int page,
+                                                int size) {
         Comparator<Transaction> comparator = switch (sortBy.toLowerCase()) {
             case "amount" -> Comparator.comparing(Transaction::getAmount);
             case "date" -> Comparator.comparing(Transaction::getCreatedAt);
@@ -164,9 +173,16 @@ public class TransactionServiceImpl implements TransactionService {
             comparator = comparator.reversed();
         }
 
-        return transactions
-                .stream()
+
+        List<Transaction> sortedTransactions = transactions.stream()
                 .sorted(comparator)
                 .collect(Collectors.toList());
+
+
+        int start = page * size;
+        int end = Math.min(start + size, sortedTransactions.size());
+
+
+        return sortedTransactions.subList(start, end);
     }
 }
