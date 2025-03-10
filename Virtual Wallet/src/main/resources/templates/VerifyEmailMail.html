@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verify Your Email</title>
+    <link href="../static/css/styles.css" th:href="@{/css/styles.css}" rel="stylesheet"/>
+    <style>
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background: var(--light);
+            border-radius: 8px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .header {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        .message {
+            font-size: 18px;
+            color: var(--gray-dark);
+            margin: 20px 0;
+        }
+
+    </style>
+</head>
+<body>
+<div class="container">
+    <div style="color: #007bff;" class="header">Verify Your Email - Virtual Wallet</div>
+    <p style="color: black;" class="message">Click the button below to verify your email:</p>
+    <a style="display: inline-block; padding: 10px 20px; background-color: #007bff; color: white; text-decoration: none; font-size: 16px; border-radius: 5px;"
+    href="http://localhost:3308/auth/verify?token={YOUR-TOKEN}">Verify Email</a>
+</div>
+</body>
+</html>

@@ -68,8 +68,7 @@ public class AuthenticationMvcController {
         try {
             user = authenticationHelper.verifyAuthentication(login.getUsername(), login.getPassword());
             if (!user.isAccountVerified()) {
-                errors.rejectValue("username", "invalid.username");
-                return "Login";
+                return "VerifyEmail";
             }
             session.setAttribute("currentUser", user.getUsername());
             session.setAttribute("isAdmin", user.getIsAdmin());

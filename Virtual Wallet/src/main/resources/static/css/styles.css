@@ -11384,3 +11384,17 @@ input::placeholder {
   color: #333;
   border-top: 1px solid #ddd;
 }
+
+.verify-link {
+  display: inline-block;
+  padding: 10px 20px;
+  font-size: 16px;
+  color: #fff;
+  background-color: var(--success);
+  text-decoration: none;
+  border-radius: 5px;
+  transition: 0.3s;
+}
+.verify-link:hover {
+  background-color: var(--green);
+}
