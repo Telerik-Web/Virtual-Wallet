@@ -1,10 +1,13 @@
 package com.telerikacademy.web.virtual_wallet.models;
 
+import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
+
+import java.util.Set;
 
 @Data
 public class UserDTO {
@@ -44,6 +47,5 @@ public class UserDTO {
     @NotEmpty(message = "Phone number can't be empty.")
     @Pattern(regexp = "^[0-9]{10}$", message = "Phone number must be exactly 10 digits")
     private String phone;
-
 
 }

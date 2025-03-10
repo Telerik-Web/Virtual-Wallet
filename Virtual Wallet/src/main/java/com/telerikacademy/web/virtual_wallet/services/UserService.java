@@ -34,5 +34,5 @@ public interface UserService {
 
     void delete(long id, User userFromHeader);
 
-    //boolean verifyEmail(String token);
+    boolean verifyUser(String token);
 }

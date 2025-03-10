@@ -199,12 +199,12 @@ public class UserRepositoryImpl implements UserRepository {
         return orderBy;
     }
 
-//    @Override
-//    public User findByVerificationToken(String token) {
-//        TypedQuery<User> query = entityManager.createQuery(
-//                "SELECT u FROM User u WHERE u.verificationToken = :token", User.class);
-//        query.setParameter("token", token);
-//
-//        return query.getResultStream().findFirst().orElse(null);
-//    }
+    @Override
+    public User findByVerificationToken(String token) {
+        TypedQuery<User> query = entityManager.createQuery(
+                "SELECT u FROM User u WHERE u.verificationToken = :token", User.class);
+        query.setParameter("token", token);
+
+        return query.getResultStream().findFirst().orElse(null);
+    }
 }

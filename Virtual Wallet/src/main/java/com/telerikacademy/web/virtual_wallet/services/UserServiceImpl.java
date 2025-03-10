@@ -2,6 +2,7 @@ package com.telerikacademy.web.virtual_wallet.services;
 
 import com.telerikacademy.web.virtual_wallet.exceptions.DuplicateEntityException;
 import com.telerikacademy.web.virtual_wallet.exceptions.EntityNotFoundException;
+import com.telerikacademy.web.virtual_wallet.helpers.TokenGenerator;
 import com.telerikacademy.web.virtual_wallet.mappers.CardMapper;
 import com.telerikacademy.web.virtual_wallet.models.Card;
 import com.telerikacademy.web.virtual_wallet.models.CardDTO;
@@ -96,22 +97,24 @@ public class UserServiceImpl implements UserService {
         if (exists) {
             throw new DuplicateEntityException("User", "username", user.getUsername());
         }
-        //user.generateVerificationToken();
+        String token = TokenGenerator.generateToken();
+        user.setVerificationToken(token);
+        user.setAccountVerified(false);
         userRepository.create(user);
-        //emailService.sendVerificationEmail(user.getEmail(), user.getVerificationToken());
+        emailService.sendVerificationEmail(user.getEmail(), user.getVerificationToken());
     }
 
-//    @Override
-//    public boolean verifyEmail(String token) {
-//        User user = userRepository.findByVerificationToken(token);
-//        if (user != null) {
-//            user.setEmailVerified(true);
-//            user.setVerificationToken(null);
-//            userRepository.update(user, user.getId());
-//            return true;
-//        }
-//        return false;
-//    }
+    @Override
+    public boolean verifyUser(String token) {
+        User user = userRepository.findByVerificationToken(token);
+        if (user != null) {
+            user.setAccountVerified(true);
+            user.setVerificationToken(null);
+            userRepository.update(user, user.getId());
+            return true;
+        }
+        return false;
+    }
 
     @Override
     public void update(User user, User userFromHeader, long id) {

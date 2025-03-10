@@ -32,5 +32,5 @@ public interface UserRepository {
 
     void delete(long id);
 
-    //User findByVerificationToken(String token);
+    User findByVerificationToken(String token);
 }

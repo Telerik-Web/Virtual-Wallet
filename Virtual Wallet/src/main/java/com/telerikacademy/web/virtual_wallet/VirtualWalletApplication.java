@@ -12,6 +12,3 @@ public class VirtualWalletApplication {
     }
 
 }
-
-
-//fix the money send above the balance

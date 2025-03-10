@@ -13,6 +13,8 @@ import com.telerikacademy.web.virtual_wallet.services.UserService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -62,8 +64,13 @@ public class AuthenticationMvcController {
             return "Login";
         }
 
+        User user;
         try {
-            User user = authenticationHelper.verifyAuthentication(login.getUsername(), login.getPassword());
+            user = authenticationHelper.verifyAuthentication(login.getUsername(), login.getPassword());
+            if (!user.isAccountVerified()) {
+                errors.rejectValue("username", "invalid.username");
+                return "Login";
+            }
             session.setAttribute("currentUser", user.getUsername());
             session.setAttribute("isAdmin", user.getIsAdmin());
             session.setAttribute("cards", user.getCards());
@@ -97,7 +104,7 @@ public class AuthenticationMvcController {
         try {
             User user = userMapper.fromUserDto(registerDto);
             userService.create(user);
-            return "redirect:/auth/login";
+            return "VerifyEmail";
         } catch (DuplicateEntityException e) {
             errors.rejectValue("username", "duplicate.username",
                     "Username is already taken!");
@@ -224,5 +231,15 @@ public class AuthenticationMvcController {
     public String showLogout(HttpSession session) {
         session.invalidate();
         return "redirect:/";
+    }
+
+    @GetMapping("/verify")
+    public String verifyEmail(@RequestParam String token) {
+        boolean isVerified = userService.verifyUser(token);
+        if(isVerified) {
+            return "VerifiedEmail";
+        } else {
+            return "TokenFail";
+        }
     }
 }

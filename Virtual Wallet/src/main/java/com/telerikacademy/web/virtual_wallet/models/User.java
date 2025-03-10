@@ -56,6 +56,13 @@ public class User {
     @Column(name = "balance")
     private double balance;
 
+    @Column(name = "verification_token", unique = true)
+    private String verificationToken;
+
+    @Column(name = "account_verified", nullable = false)
+    private boolean accountVerified = false;
+
+
 //    private boolean emailVerified;
 //
 //    private String verificationToken;

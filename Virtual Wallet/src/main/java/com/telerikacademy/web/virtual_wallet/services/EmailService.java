@@ -16,12 +16,13 @@ public class EmailService {
     }
 
     public void sendVerificationEmail(String email, String token) {
+
         String subject = "Verify Your Email - Virtual Wallet";
-        String verificationLink = "http://localhost:8080/auth/verify?token=" + token;
+        String verificationLink = "http://localhost:3308/auth/verify?token=" + token;
         String message = "Click the link below to verify your email: \n" + verificationLink;
 
         SimpleMailMessage mailMessage = new SimpleMailMessage();
-        mailMessage.setFrom(email);
+        mailMessage.setFrom("ivan29654@gmail.com");
         mailMessage.setTo(email);
         mailMessage.setSubject(subject);
         mailMessage.setText(message);

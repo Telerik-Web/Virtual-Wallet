@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/PageLayout.html :: head('Verify Email')}"></head>
+<body>
+
+<nav th:replace="~{fragments/PageLayout.html :: navbar}"></nav>
+
+<div class="access-denied-container">
+    <h1 class="access-denied-title">Verify your email</h1>
+    <p class="fieldName">Please verify your email and log in!</p>
+    <a class="btn btn-primary" href="/" th:href="@{/}">Go Back Home</a>
+</div>
+<footer th:replace="~{fragments/PageLayout.html :: footer}"></footer>
+<div th:replace="~{/fragments/PageLayout.html :: scripts}"></div>
+</body>
+</html>
