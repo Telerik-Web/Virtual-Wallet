@@ -11,5 +11,4 @@ public class VirtualWalletApplication {
         SpringApplication.run(VirtualWalletApplication.class, args);
     }
     //deposits in transactions
-    //login button on token expired
 }

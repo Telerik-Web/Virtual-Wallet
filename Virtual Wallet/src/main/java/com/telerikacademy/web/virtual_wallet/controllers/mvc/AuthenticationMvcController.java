@@ -5,10 +5,12 @@ import com.telerikacademy.web.virtual_wallet.exceptions.AuthenticationFailureExc
 import com.telerikacademy.web.virtual_wallet.exceptions.DuplicateEntityException;
 import com.telerikacademy.web.virtual_wallet.exceptions.EntityNotFoundException;
 import com.telerikacademy.web.virtual_wallet.helpers.AuthenticationHelper;
+import com.telerikacademy.web.virtual_wallet.helpers.TokenGenerator;
 import com.telerikacademy.web.virtual_wallet.mappers.CardMapper;
 import com.telerikacademy.web.virtual_wallet.mappers.UserMapper;
 import com.telerikacademy.web.virtual_wallet.models.*;
 import com.telerikacademy.web.virtual_wallet.services.CardService;
+import com.telerikacademy.web.virtual_wallet.services.EmailService;
 import com.telerikacademy.web.virtual_wallet.services.UserService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -33,16 +35,18 @@ public class AuthenticationMvcController {
     private final UserMapper userMapper;
     private final CardService cardService;
     private final CardMapper cardMapper;
+    private final EmailService emailService;
 
     @Autowired
     public AuthenticationMvcController(AuthenticationHelper authenticationHelper,
                                        UserService userService,
-                                       UserMapper userMapper, CardService cardService, CardMapper cardMapper) {
+                                       UserMapper userMapper, CardService cardService, CardMapper cardMapper, EmailService emailService) {
         this.authenticationHelper = authenticationHelper;
         this.userService = userService;
         this.userMapper = userMapper;
         this.cardService = cardService;
         this.cardMapper = cardMapper;
+        this.emailService = emailService;
     }
 
     @ModelAttribute("isAuthenticated")
@@ -68,6 +72,8 @@ public class AuthenticationMvcController {
         try {
             user = authenticationHelper.verifyAuthentication(login.getUsername(), login.getPassword());
             if (!user.isAccountVerified()) {
+                String token = TokenGenerator.renewToken(user.getVerificationToken());
+                emailService.sendVerificationEmail(user.getEmail(), token);
                 return "VerifyEmail";
             }
             session.setAttribute("currentUser", user.getUsername());
@@ -234,6 +240,9 @@ public class AuthenticationMvcController {
 
     @GetMapping("/verify")
     public String verifyEmail(@RequestParam String token) {
+        if(!TokenGenerator.isTokenExpired(token)){
+            return "TokenFail";
+        }
         boolean isVerified = userService.verifyUser(token);
         if(isVerified) {
             return "VerifiedEmail";

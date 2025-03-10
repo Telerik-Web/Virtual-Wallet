@@ -6,15 +6,9 @@
 <nav th:replace="~{fragments/PageLayout.html :: navbar}"></nav>
 
 <div class="access-denied-container">
-  <h1 class="access-denied-title">Expired Token</h1>
-  <p class="fieldName">Oops! Your token has expired, please enter your email, and we'll send you a new one!</p>
-
-  <div th:if="${isAuthenticated}">
-    <a class="btn btn-primary" href="/" th:href="@{/}">Go Back Home</a>
-  </div>
-  <div th:unless="${isAuthenticated}">
+    <h1 class="access-denied-title">Expired Token</h1>
+    <p class="fieldName">Oops! Your token has expired, please fill the login form, and we'll send you a new one!</p>
     <a class="btn btn-primary" href="/auth/login" th:href="@{/auth/login}">LogIn</a>
-  </div>
 </div>
 <footer th:replace="~{fragments/PageLayout.html :: footer}"></footer>
 <div th:replace="~{/fragments/PageLayout.html :: scripts}"></div>
