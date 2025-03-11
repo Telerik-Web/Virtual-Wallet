@@ -9,7 +9,9 @@ import com.telerikacademy.web.virtual_wallet.repositories.UserRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -157,7 +159,7 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
-    public List<Transaction> sortTransactionsWithPagination(List<Transaction> transactions,
+    public Page<Transaction> sortTransactionsWithPagination(List<Transaction> transactions,
                                                 String sortBy,
                                                 boolean ascending,
                                                 int page,
@@ -178,10 +180,16 @@ public class TransactionServiceImpl implements TransactionService {
                 .collect(Collectors.toList());
 
 
-        int start = page * size;
-        int end = Math.min(start + size, sortedTransactions.size());
+        Pageable pageable = PageRequest.of(page, size);
 
+        // Get the start and end indexes for pagination
+        int start = (int) pageable.getOffset();
+        int end = Math.min((start + pageable.getPageSize()), sortedTransactions.size());
 
-        return sortedTransactions.subList(start, end);
+        // Slice the sorted list to return only the requested page
+        List<Transaction> paginatedTransactions = sortedTransactions.subList(start, end);
+
+        // Return the results wrapped in a PageImpl object
+        return new PageImpl<>(paginatedTransactions, pageable, sortedTransactions.size());
     }
 }
