@@ -6,6 +6,7 @@ import com.telerikacademy.web.virtual_wallet.exceptions.UnauthorizedOperationExc
 import com.telerikacademy.web.virtual_wallet.models.FilterUserOptions;
 import com.telerikacademy.web.virtual_wallet.models.User;
 import com.telerikacademy.web.virtual_wallet.repositories.UserRepository;
+import com.telerikacademy.web.virtual_wallet.services.email_verification.EmailServiceImpl;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -26,6 +27,9 @@ public class UserServiceTests {
 
     @Mock
     UserRepository userRepository;
+
+    @Mock
+    EmailServiceImpl emailService;
 
     @InjectMocks
     UserServiceImpl userService;
