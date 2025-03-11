@@ -45,7 +45,7 @@ public interface TransactionService {
                                        String sortBy,
                                        boolean ascending);
 
-    List<Transaction> sortTransactionsWithPagination(List<Transaction> transactions,
+    Page<Transaction> sortTransactionsWithPagination(List<Transaction> transactions,
                                         String sortBy,
                                         boolean ascending,
                                         int page,

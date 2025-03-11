@@ -12,6 +12,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
 import org.springframework.test.context.TestPropertySource;
 
 import java.time.LocalDateTime;
@@ -119,11 +120,11 @@ public class TransactionServiceTests {
         transactions.add(createMockTransaction());
         transactions.add(createMockTransaction2());
 
-        List<Transaction> sorted = transactionService.
+        Page<Transaction> sorted = transactionService.
                 sortTransactionsWithPagination(transactions, "amount", true, 0, transactions.size());
 
-        Assertions.assertEquals(100, sorted.get(0).getAmount());
-        Assertions.assertEquals(200, sorted.get(1).getAmount());
+        Assertions.assertEquals(100, sorted.getContent().get(0).getAmount());
+        Assertions.assertEquals(200, sorted.getContent().get(1).getAmount());
     }
 
     @Test
@@ -132,11 +133,11 @@ public class TransactionServiceTests {
         transactions.add(createMockTransaction());
         transactions.add(createMockTransaction2());
 
-        List<Transaction> sorted = transactionService.
+        Page<Transaction> sorted = transactionService.
                 sortTransactionsWithPagination(transactions, "amount", false, 0, transactions.size());
 
-        Assertions.assertEquals(200, sorted.get(0).getAmount());
-        Assertions.assertEquals(100, sorted.get(1).getAmount());
+        Assertions.assertEquals(200, sorted.getContent().get(0).getAmount());
+        Assertions.assertEquals(100, sorted.getContent().get(1).getAmount());
     }
 
     @Test
@@ -145,10 +146,10 @@ public class TransactionServiceTests {
         transactions.add(createMockTransaction());
         transactions.add(createMockTransaction2());
 
-        List<Transaction> sorted = transactionService.
+        Page<Transaction> sorted = transactionService.
                 sortTransactionsWithPagination(transactions, "date", true,0,transactions.size());
 
-        Assertions.assertEquals(LocalDateTime.of(2025, 3, 9, 17, 26), sorted.get(0).getCreatedAt());
-        Assertions.assertEquals(LocalDateTime.of(2025, 4, 9, 17, 26), sorted.get(1).getCreatedAt());
+        Assertions.assertEquals(LocalDateTime.of(2025, 3, 9, 17, 26), sorted.getContent().get(0).getCreatedAt());
+        Assertions.assertEquals(LocalDateTime.of(2025, 4, 9, 17, 26), sorted.getContent().get(1).getCreatedAt());
     }
 }

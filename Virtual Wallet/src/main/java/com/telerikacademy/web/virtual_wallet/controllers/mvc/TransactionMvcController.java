@@ -73,26 +73,23 @@ public class TransactionMvcController {
             sortBy = "amount";
         }
 
-        boolean showPagination = (startDate == null && endDate == null && recipient == null && isIncoming == null);
-
         List<Transaction> transactions = transactionService.filterTransactions(startDate, endDate, recipient,
                 isIncoming, user);
 
-        List<Transaction> transactionDTOList2 = transactionService.sortTransactionsWithPagination(transactions, sortBy, isAscending, page, size);
+        Page<Transaction> paginatedTransactions = transactionService.sortTransactionsWithPagination(transactions, sortBy, isAscending, page, size);
 
-        Page<Transaction> productPage = transactionService.getPaginatedTransactions(page, size);
 
 
         model.addAttribute("startDate", startDate);
         model.addAttribute("endDate", endDate);
         model.addAttribute("recipient", recipient);
-        model.addAttribute("transactions", transactionDTOList2);
+        model.addAttribute("transactions", paginatedTransactions);
         model.addAttribute("isIncoming", isIncoming);
         model.addAttribute("sortBy", sortBy);
         model.addAttribute("isAscending", isAscending);
         model.addAttribute("currentPage", page);
-        model.addAttribute("totalPages", productPage.getTotalPages());
-        model.addAttribute("showPagination", showPagination);
+        model.addAttribute("totalPages", paginatedTransactions.getTotalPages());
+        model.addAttribute("size", size);
 
         return "TransactionsView";
     }

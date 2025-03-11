@@ -3,21 +3,14 @@ package com.telerikacademy.web.virtual_wallet.services;
 import com.telerikacademy.web.virtual_wallet.exceptions.DuplicateEntityException;
 import com.telerikacademy.web.virtual_wallet.exceptions.EntityNotFoundException;
 import com.telerikacademy.web.virtual_wallet.helpers.TokenGenerator;
-import com.telerikacademy.web.virtual_wallet.mappers.CardMapper;
-import com.telerikacademy.web.virtual_wallet.models.Card;
-import com.telerikacademy.web.virtual_wallet.models.CardDTO;
 import com.telerikacademy.web.virtual_wallet.models.FilterUserOptions;
 import com.telerikacademy.web.virtual_wallet.models.User;
-import com.telerikacademy.web.virtual_wallet.repositories.CardRepository;
 import com.telerikacademy.web.virtual_wallet.repositories.UserRepository;
-import jakarta.transaction.Transactional;
-import org.hibernate.Hibernate;
+import com.telerikacademy.web.virtual_wallet.services.email_verification.EmailServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import static com.telerikacademy.web.virtual_wallet.helpers.PermissionHelper.*;
 
@@ -25,11 +18,11 @@ import static com.telerikacademy.web.virtual_wallet.helpers.PermissionHelper.*;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
-    private final EmailService emailService;
+    private final EmailServiceImpl emailService;
 
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, EmailService emailService) {
+    public UserServiceImpl(UserRepository userRepository, EmailServiceImpl emailService) {
         this.userRepository = userRepository;
         this.emailService = emailService;
     }

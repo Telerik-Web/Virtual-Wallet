@@ -10,20 +10,16 @@ import com.telerikacademy.web.virtual_wallet.mappers.CardMapper;
 import com.telerikacademy.web.virtual_wallet.mappers.UserMapper;
 import com.telerikacademy.web.virtual_wallet.models.*;
 import com.telerikacademy.web.virtual_wallet.services.CardService;
-import com.telerikacademy.web.virtual_wallet.services.EmailService;
+import com.telerikacademy.web.virtual_wallet.services.email_verification.EmailServiceImpl;
 import com.telerikacademy.web.virtual_wallet.services.UserService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Controller
@@ -35,12 +31,12 @@ public class AuthenticationMvcController {
     private final UserMapper userMapper;
     private final CardService cardService;
     private final CardMapper cardMapper;
-    private final EmailService emailService;
+    private final EmailServiceImpl emailService;
 
     @Autowired
     public AuthenticationMvcController(AuthenticationHelper authenticationHelper,
                                        UserService userService,
-                                       UserMapper userMapper, CardService cardService, CardMapper cardMapper, EmailService emailService) {
+                                       UserMapper userMapper, CardService cardService, CardMapper cardMapper, EmailServiceImpl emailService) {
         this.authenticationHelper = authenticationHelper;
         this.userService = userService;
         this.userMapper = userMapper;
