@@ -11,4 +11,6 @@ public class VirtualWalletApplication {
         SpringApplication.run(VirtualWalletApplication.class, args);
     }
     //deposits in transactions
+    //акт и компания в тестовете
+    //add the proper message for a duplicate card - try to add a card with already existing number
 }

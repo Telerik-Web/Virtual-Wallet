@@ -1,9 +1,6 @@
 package com.telerikacademy.web.virtual_wallet.helpers;
 
-import org.springframework.context.annotation.Bean;
-
 import java.time.Instant;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;

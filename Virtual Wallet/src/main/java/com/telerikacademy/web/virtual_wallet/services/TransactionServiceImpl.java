@@ -1,11 +1,14 @@
 package com.telerikacademy.web.virtual_wallet.services;
 
 import com.telerikacademy.web.virtual_wallet.enums.Status;
+import com.telerikacademy.web.virtual_wallet.helpers.TokenGenerator;
 import com.telerikacademy.web.virtual_wallet.models.Transaction;
 import com.telerikacademy.web.virtual_wallet.models.TransactionDTO;
 import com.telerikacademy.web.virtual_wallet.models.User;
 import com.telerikacademy.web.virtual_wallet.repositories.TransactionRepository;
 import com.telerikacademy.web.virtual_wallet.repositories.UserRepository;
+import com.telerikacademy.web.virtual_wallet.services.email_verification.EmailServiceImpl;
+import com.telerikacademy.web.virtual_wallet.services.email_verification.LargeTransactionService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -24,12 +27,16 @@ public class TransactionServiceImpl implements TransactionService {
 
     private final TransactionRepository transactionRepository;
     private final UserRepository userRepository;
+    private final EmailServiceImpl emailServiceImpl;
+    private final LargeTransactionService largeTransactionService;
 
     @Autowired
     public TransactionServiceImpl(TransactionRepository transactionRepository,
-                                  UserRepository userRepository) {
+                                  UserRepository userRepository, EmailServiceImpl emailServiceImpl, LargeTransactionService largeTransactionService) {
         this.transactionRepository = transactionRepository;
         this.userRepository = userRepository;
+        this.emailServiceImpl = emailServiceImpl;
+        this.largeTransactionService = largeTransactionService;
     }
 
 //    @Override
@@ -92,18 +99,27 @@ public class TransactionServiceImpl implements TransactionService {
             throw new IllegalArgumentException("Sender balance must be greater than zero.");
         }
 
-        sender.setBalance(sender.getBalance() - amount);
-        recipient.setBalance(recipient.getBalance() + amount);
-
-        userRepository.update(sender, sender.getId());
-        userRepository.update(recipient, recipient.getId());
-
         Transaction transaction = new Transaction();
         transaction.setAmount(amount);
         transaction.setStatus(Status.COMPLETED);
         transaction.setSender(sender);
         transaction.setRecipient(recipient);
         transaction.setCreatedAt(LocalDateTime.now());
+
+        if (amount > 10000) {
+            String token = TokenGenerator.generateToken();
+            sender.setVerificationToken(token);
+            largeTransactionService.sendVerificationEmail(sender.getEmail(), sender.getVerificationToken());
+
+            transaction.setStatus(Status.PENDING);
+            return transactionRepository.save(transaction);
+        }
+
+        sender.setBalance(sender.getBalance() - amount);
+        recipient.setBalance(recipient.getBalance() + amount);
+
+        userRepository.update(sender, sender.getId());
+        userRepository.update(recipient, recipient.getId());
 
         return transactionRepository.save(transaction);
     }
@@ -160,10 +176,10 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Override
     public Page<Transaction> sortTransactionsWithPagination(List<Transaction> transactions,
-                                                String sortBy,
-                                                boolean ascending,
-                                                int page,
-                                                int size) {
+                                                            String sortBy,
+                                                            boolean ascending,
+                                                            int page,
+                                                            int size) {
         Comparator<Transaction> comparator = switch (sortBy.toLowerCase()) {
             case "amount" -> Comparator.comparing(Transaction::getAmount);
             case "date" -> Comparator.comparing(Transaction::getCreatedAt);

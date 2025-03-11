@@ -3,9 +3,11 @@ package com.telerikacademy.web.virtual_wallet.controllers.mvc;
 import com.telerikacademy.web.virtual_wallet.exceptions.AuthenticationFailureException;
 import com.telerikacademy.web.virtual_wallet.exceptions.EntityNotFoundException;
 import com.telerikacademy.web.virtual_wallet.helpers.AuthenticationHelper;
+import com.telerikacademy.web.virtual_wallet.helpers.TokenGenerator;
 import com.telerikacademy.web.virtual_wallet.models.*;
 import com.telerikacademy.web.virtual_wallet.services.TransactionService;
 import com.telerikacademy.web.virtual_wallet.services.UserService;
+import com.telerikacademy.web.virtual_wallet.services.email_verification.LargeTransactionService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
@@ -26,13 +28,15 @@ public class TransactionMvcController {
     private final TransactionService transactionService;
     private final UserService userService;
     private final AuthenticationHelper authenticationHelper;
+    private final LargeTransactionService largeTransactionService;
 
     public TransactionMvcController(TransactionService transactionService,
                                     UserService userService,
-                                    AuthenticationHelper authenticationHelper) {
+                                    AuthenticationHelper authenticationHelper, LargeTransactionService largeTransactionService) {
         this.transactionService = transactionService;
         this.userService = userService;
         this.authenticationHelper = authenticationHelper;
+        this.largeTransactionService = largeTransactionService;
     }
 
     @ModelAttribute("isAuthenticated")
@@ -77,7 +81,6 @@ public class TransactionMvcController {
                 isIncoming, user);
 
         Page<Transaction> paginatedTransactions = transactionService.sortTransactionsWithPagination(transactions, sortBy, isAscending, page, size);
-
 
 
         model.addAttribute("startDate", startDate);
@@ -195,8 +198,20 @@ public class TransactionMvcController {
             User sender = authenticationHelper.tryGetUser(session);
             User recipient = (User) session.getAttribute("recipient");
             double amount = Double.parseDouble(session.getAttribute("amount").toString());
-            transactionService.transferFunds(sender, recipient, amount);
 
+            if (amount >= 10000) {
+                String token = TokenGenerator.generateToken();
+                sender.setVerificationToken(token);
+                userService.update(sender, sender, sender.getId());
+                largeTransactionService.sendVerificationEmail(sender.getEmail(), token);
+
+
+                largeTransactionService.sendVerificationEmail(sender.getEmail(), token);
+                session.setAttribute("pendingTransaction", new PendingTransaction(sender, recipient, amount));
+                return "ConfirmTransaction";
+            }
+
+            transactionService.transferFunds(sender, recipient, amount);
             return "redirect:/transactions/all";
         } catch (Exception e) {
             return "redirect:/transactions/new";
@@ -250,6 +265,40 @@ public class TransactionMvcController {
         userService.update(user, user, user.getId());
         return "redirect:/";
     }
+
+    @GetMapping("/verify/transaction")
+    public String confirmTransaction(@RequestParam String token, HttpSession session) {
+        try {
+            if (TokenGenerator.isTokenExpired(token)) {
+                return "TokenFail";
+            }
+
+            User sender = authenticationHelper.tryGetUser(session);
+
+            if (!sender.getVerificationToken().equals(token)) {
+                return "TokenFail";
+            }
+
+            PendingTransaction pendingTransaction = (PendingTransaction) session.getAttribute("pendingTransaction");
+            if (pendingTransaction == null) {
+                return "TransactionNotFound";
+            }
+
+            transactionService.transferFunds(pendingTransaction.getSender(),
+                    pendingTransaction.getRecipient(),
+                    pendingTransaction.getAmount());
+
+            sender.setVerificationToken(null);
+            userService.update(sender, sender, sender.getId());
+            session.removeAttribute("pendingTransaction");
+
+            return "redirect:/transactions/all";
+
+        } catch (Exception e) {
+            return "redirect:/transactions/create";
+        }
+    }
+
 
 //    @GetMapping("/deposits/all")
 //    public String showAllDeposits(
