@@ -73,7 +73,13 @@ public class AuthenticationMvcController {
             user = authenticationHelper.verifyAuthentication(login.getUsername(), login.getPassword());
             if (!user.isAccountVerified()) {
                 String token = TokenGenerator.renewToken(user.getVerificationToken());
+//                System.out.println(user.getVerificationToken() + " 1");
+//                user.setVerificationToken(null);
+                user.setVerificationToken(token);
+                userService.update(user, user, user.getId());
+                //System.out.println(user.getVerificationToken() + " 2");
                 emailService.sendVerificationEmail(user.getEmail(), token);
+                //System.out.println(token + " 3");
                 return "VerifyEmail";
             }
             session.setAttribute("currentUser", user.getUsername());
@@ -225,7 +231,7 @@ public class AuthenticationMvcController {
         User user = authenticationHelper.tryGetUser(session);
         Card card = cardService.getById(id, user);
         cardService.delete(card, user);
-        if(cardService.getCardsByUserId(user.getId(), user).isEmpty()) {
+        if (cardService.getCardsByUserId(user.getId(), user).isEmpty()) {
             session.removeAttribute("cards");
         }
         return "redirect:/auth/account/cards";
@@ -240,11 +246,12 @@ public class AuthenticationMvcController {
 
     @GetMapping("/verify")
     public String verifyEmail(@RequestParam String token) {
-        if(!TokenGenerator.isTokenExpired(token)){
+        System.out.println(token.toString());
+        if (TokenGenerator.isTokenExpired(token)) {
             return "TokenFail";
         }
         boolean isVerified = userService.verifyUser(token);
-        if(isVerified) {
+        if (isVerified) {
             return "VerifiedEmail";
         } else {
             return "TokenFail";

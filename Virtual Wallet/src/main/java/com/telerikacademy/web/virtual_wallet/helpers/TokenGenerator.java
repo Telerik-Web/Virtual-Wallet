@@ -19,13 +19,13 @@ public class TokenGenerator {
 
         tokenExpiryMap.put(token, expiration);
 
-        return UUID.randomUUID().toString();
+        return token;
     }
 
     public static boolean isTokenExpired(String token) {
         Instant expiration = tokenExpiryMap.get(token);
-        if (expiration == null || Instant.now().isAfter(expiration)) return false;
-        return true;
+        if (expiration == null || Instant.now().isAfter(expiration)) return true;
+        return false;
     }
 
     public static String renewToken(String token) {
