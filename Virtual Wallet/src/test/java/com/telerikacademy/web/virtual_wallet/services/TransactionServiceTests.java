@@ -3,7 +3,6 @@ package com.telerikacademy.web.virtual_wallet.services;
 import com.telerikacademy.web.virtual_wallet.models.Transaction;
 import com.telerikacademy.web.virtual_wallet.models.User;
 import com.telerikacademy.web.virtual_wallet.repositories.TransactionRepository;
-import com.telerikacademy.web.virtual_wallet.repositories.UserRepository;
 import com.telerikacademy.web.virtual_wallet.repositories.UserRepositoryImpl;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -13,7 +12,6 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
-import org.springframework.test.context.TestPropertySource;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -36,33 +34,33 @@ public class TransactionServiceTests {
     @Test
     void transferFunds_Should_Throw_WhenSenderIsNull() {
         Assertions.assertThrows(IllegalArgumentException.class,
-                () -> transactionService.transferFunds(null, createMockUser(), 1.1));
+                () -> transactionService.transferFunds(null, createMockAdminUser(), 1.1));
     }
 
     @Test
     void transferFunds_Should_Throw_WhenRecipientIsNull() {
         Assertions.assertThrows(IllegalArgumentException.class,
-                () -> transactionService.transferFunds(createMockUser(), null, 1.1));
+                () -> transactionService.transferFunds(createMockAdminUser(), null, 1.1));
     }
 
     @Test
     void transferFunds_Should_Throw_WhenAmountIsZero() {
         Assertions.assertThrows(IllegalArgumentException.class,
-                () -> transactionService.transferFunds(createMockUser(), createMockUser2(), 0.0));
+                () -> transactionService.transferFunds(createMockAdminUser(), createMockBlockedUser(), 0.0));
     }
 
     @Test
     void transferFunds_Should_Throw_WhenInsufficientFunds() {
-        User user = createMockUser();
+        User user = createMockAdminUser();
         user.setBalance(0);
         Assertions.assertThrows(IllegalArgumentException.class,
-                () -> transactionService.transferFunds(user, createMockUser2(), 10.0));
+                () -> transactionService.transferFunds(user, createMockBlockedUser(), 10.0));
     }
 
     @Test
     void transferFunds_Should_UpdateTransfer_When_Valid() {
-        User user = createMockUser();
-        User user2 = createMockUser2();
+        User user = createMockAdminUser();
+        User user2 = createMockBlockedUser();
         transactionService.transferFunds(user, user2, 1.0);
 
         Assertions.assertEquals(99, user.getBalance());
@@ -76,14 +74,14 @@ public class TransactionServiceTests {
 
     @Test
     void getAllTransactionsForUser_Should_Return_All_Transactions() {
-        User user = createMockUser();
+        User user = createMockAdminUser();
         Assertions.assertDoesNotThrow(() -> transactionService.getAllTransactionsForUser(user.getId()));
         Mockito.verify(transactionRepository, Mockito.times(1)).findAllByUserId(user.getId());
     }
 
     @Test
     void filterTransactions_Should_Return_All_Transactions() {
-        User user = createMockUser();
+        User user = createMockAdminUser();
         List<Transaction> transactions = new ArrayList<>();
         Assertions.assertDoesNotThrow(() ->
                 transactionService.filterTransactions(null, null, null, null, user));
@@ -92,7 +90,7 @@ public class TransactionServiceTests {
 
     @Test
     void filterTransactions_Should_Return_All_IncomingTransactions() {
-        User user = createMockUser();
+        User user = createMockAdminUser();
         List<Transaction> transactions = new ArrayList<>();
         Transaction incoming = new Transaction();
         incoming.setRecipient(user);
@@ -104,7 +102,7 @@ public class TransactionServiceTests {
 
     @Test
     void filterTransactions_Should_Return_All_OutgoingTransactions() {
-        User user = createMockUser();
+        User user = createMockAdminUser();
         List<Transaction> transactions = new ArrayList<>();
         Transaction outgoing = new Transaction();
         outgoing.setSender(user);

@@ -1,46 +1,64 @@
 package com.telerikacademy.web.virtual_wallet;
 
+import com.telerikacademy.web.virtual_wallet.models.Card;
 import com.telerikacademy.web.virtual_wallet.models.Transaction;
 import com.telerikacademy.web.virtual_wallet.models.User;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Helpers {
 
-    public static User createMockUser() {
-        User user1 = new User();
-        user1.setId(1L);
-        user1.setUsername("john_doe");
-        user1.setFirstName("John");
-        user1.setLastName("Doe");
-        user1.setEmail("john.doe@example.com");
-        user1.setPhoneNumber("1234567890");
-        user1.setIsAdmin(true);
-        user1.setIsBlocked(false);
-        user1.setBalance(100.0);
-        return user1;
+    public static User createMockAdminUser() {
+        User user = new User();
+        user.setId(1L);
+        user.setUsername("john_doe");
+        user.setFirstName("John");
+        user.setLastName("Doe");
+        user.setEmail("john.doe@example.com");
+        user.setPhoneNumber("1234567890");
+        user.setIsAdmin(true);
+        user.setIsBlocked(false);
+        user.setBalance(100.0);
+        return user;
     }
 
-    public static User createMockUser2() {
-        User user2 = new User();
-        user2.setId(2L);
-        user2.setUsername("jane_smith");
-        user2.setFirstName("Jane");
-        user2.setLastName("Smith");
-        user2.setEmail("jane.smith@example.com");
-        user2.setPhoneNumber("0987654321");
-        user2.setIsAdmin(false);
-        user2.setIsBlocked(true);
-        user2.setBalance(50.0);
-        return user2;
+    public static User createMockBlockedUser() {
+        User user = new User();
+        user.setId(2L);
+        user.setUsername("jane_smith");
+        user.setFirstName("Jane");
+        user.setLastName("Smith");
+        user.setEmail("jane.smith@example.com");
+        user.setPhoneNumber("0987654321");
+        user.setIsAdmin(false);
+        user.setIsBlocked(true);
+        user.setBalance(50.0);
+        return user;
+    }
+
+    public static User createMockUser() {
+        User user = new User();
+        user.setId(3L);
+        user.setUsername("mike_smith");
+        user.setFirstName("Mike");
+        user.setLastName("Smith");
+        user.setEmail("mike.smith@example.com");
+        user.setPhoneNumber("0927654321");
+        user.setIsAdmin(false);
+        user.setIsBlocked(false);
+        user.setBalance(50.0);
+        return user;
     }
 
     public static Transaction createMockTransaction() {
         Transaction transaction = new Transaction();
         transaction.setId(1L);
         transaction.setAmount(100.0);
-        transaction.setSender(createMockUser());
-        transaction.setRecipient(createMockUser2());
+        transaction.setSender(createMockAdminUser());
+        transaction.setRecipient(createMockBlockedUser());
         transaction.setCreatedAt(LocalDateTime.of(2025, 3, 9, 17, 26));
         return transaction;
     }
@@ -49,9 +67,25 @@ public class Helpers {
         Transaction transaction = new Transaction();
         transaction.setId(2L);
         transaction.setAmount(200.0);
-        transaction.setSender(createMockUser());
-        transaction.setRecipient(createMockUser2());
+        transaction.setSender(createMockAdminUser());
+        transaction.setRecipient(createMockBlockedUser());
         transaction.setCreatedAt(LocalDateTime.of(2025, 4, 9, 17, 26));
         return transaction;
+    }
+
+    public static Card createMockCard() {
+        Card card = new Card();
+        card.setId(1L);
+        card.setCardNumber("2211222233334444");
+        card.setExpirationDate(LocalDate.ofEpochDay(2030- 3 -11));
+        card.setUser(createMockAdminUser());
+        card.setCheckNumber("111");
+        return card;
+    }
+
+    public static List<Card> createMockCardsList() {
+        List<Card> cardsList = new ArrayList<>();
+        cardsList.add(createMockCard());
+        return cardsList;
     }
 }
