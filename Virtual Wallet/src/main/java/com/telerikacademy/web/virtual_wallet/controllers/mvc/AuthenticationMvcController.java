@@ -5,6 +5,7 @@ import com.telerikacademy.web.virtual_wallet.exceptions.AuthenticationFailureExc
 import com.telerikacademy.web.virtual_wallet.exceptions.DuplicateEntityException;
 import com.telerikacademy.web.virtual_wallet.exceptions.EntityNotFoundException;
 import com.telerikacademy.web.virtual_wallet.helpers.AuthenticationHelper;
+import com.telerikacademy.web.virtual_wallet.helpers.JwtUtil;
 import com.telerikacademy.web.virtual_wallet.helpers.TokenGenerator;
 import com.telerikacademy.web.virtual_wallet.mappers.CardMapper;
 import com.telerikacademy.web.virtual_wallet.mappers.UserMapper;
@@ -13,6 +14,8 @@ import com.telerikacademy.web.virtual_wallet.services.CardService;
 import com.telerikacademy.web.virtual_wallet.services.TransactionService;
 import com.telerikacademy.web.virtual_wallet.services.email_verification.EmailServiceImpl;
 import com.telerikacademy.web.virtual_wallet.services.UserService;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,12 +37,13 @@ public class AuthenticationMvcController {
     private final CardMapper cardMapper;
     private final EmailServiceImpl emailService;
     private final TransactionService transactionService;
+    private final JwtUtil jwtUtil;
 
     @Autowired
     public AuthenticationMvcController(AuthenticationHelper authenticationHelper,
                                        UserService userService,
                                        UserMapper userMapper, CardService cardService, CardMapper cardMapper,
-                                       EmailServiceImpl emailService, TransactionService transactionService) {
+                                       EmailServiceImpl emailService, TransactionService transactionService, JwtUtil jwtUtil) {
         this.authenticationHelper = authenticationHelper;
         this.userService = userService;
         this.userMapper = userMapper;
@@ -47,6 +51,7 @@ public class AuthenticationMvcController {
         this.cardMapper = cardMapper;
         this.emailService = emailService;
         this.transactionService = transactionService;
+        this.jwtUtil = jwtUtil;
     }
 
     @ModelAttribute("isAuthenticated")
@@ -63,7 +68,8 @@ public class AuthenticationMvcController {
     @PostMapping("/login")
     public String processLogin(@Valid @ModelAttribute("login") LogInDto login,
                                BindingResult errors,
-                               HttpSession session) {
+                               HttpSession session,
+                               HttpServletResponse response) {
         if (errors.hasErrors()) {
             return "Login";
         }
@@ -71,6 +77,14 @@ public class AuthenticationMvcController {
         User user;
         try {
             user = authenticationHelper.verifyAuthentication(login.getUsername(), login.getPassword());
+            String jwtToken = jwtUtil.generateToken(user, 0L, 0.0);
+
+            Cookie cookie = new Cookie("jwt", jwtToken);
+            cookie.setHttpOnly(true);
+            cookie.setPath("/");
+            cookie.setMaxAge(24 * 60 * 60);
+            response.addCookie(cookie);
+
             if (!user.isAccountVerified()) {
                 String token = TokenGenerator.renewToken(user.getVerificationToken());
                 user.setVerificationToken(token);

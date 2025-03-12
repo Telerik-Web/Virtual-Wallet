@@ -24,6 +24,10 @@ public class LargeTransactionService {
         String verificationLink = "http://localhost:3308/auth/verify/transaction?token=" + token;
 
         String htmlMessage = loadEmailTemplate();
+        if (htmlMessage.isEmpty()) {
+            System.err.println("Error: Email template could not be loaded. Email will not be sent.");
+            return;
+        }
         htmlMessage = htmlMessage.replace("{verificationLink}", verificationLink);
         htmlMessage = htmlMessage.replace("{YOUR-TOKEN}", token);
 
@@ -46,7 +50,7 @@ public class LargeTransactionService {
             return new String(Files.readAllBytes(Paths.get(filePath)));
         } catch (IOException e) {
             e.printStackTrace();
-            return "";
+            return "<p>Error: Unable to load the email template. Please try again later.</p>";
         }
     }
 }

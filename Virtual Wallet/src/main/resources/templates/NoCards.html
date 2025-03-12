@@ -6,7 +6,7 @@
 <nav th:replace="~{fragments/PageLayout.html :: navbar}"></nav>
 
 <div class="access-denied-container">
-  <h1 class="access-denied-title">Access Denied</h1>
+  <h1 class="access-denied-title">Card Missing!</h1>
   <p class="fieldName">Oops! The card number you're inputting doesn't match a card associated with your account!</p>
 
   <div th:if="${isAuthenticated}">
