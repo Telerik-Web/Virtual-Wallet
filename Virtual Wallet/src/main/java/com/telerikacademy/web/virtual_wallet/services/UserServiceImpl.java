@@ -78,6 +78,21 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public void alterBlockPermissions(int id, User user, boolean isBlocked) {
+        checkIfAdmin(user);
+
+        User userToUpdate = userRepository.getById(id);
+
+        if (isBlocked) {
+            userToUpdate.setIsBlocked(true);
+        }
+        if (!isBlocked) {
+            userToUpdate.setIsBlocked(false);
+        }
+        userRepository.alterBlockPermissions(userToUpdate);
+    }
+
+    @Override
     public void create(User user) {
         boolean exists = true;
 

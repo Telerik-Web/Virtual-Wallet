@@ -24,7 +24,7 @@ public interface UserRepository {
 
     void alterAdminPermissions(User user);
 
-    void alterBlock(User user);
+    void alterBlockPermissions(User user);
 
     void create(@Valid User user);
 

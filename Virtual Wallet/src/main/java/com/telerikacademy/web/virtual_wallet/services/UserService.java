@@ -28,6 +28,8 @@ public interface UserService {
 
     void alterAdminPermissions(long id, User user, boolean isAdmin);
 
+    void alterBlockPermissions(int id, User user, boolean isBlocked);
+
     void create(User user);
 
     void update(User user, User userFromHeader, long id);

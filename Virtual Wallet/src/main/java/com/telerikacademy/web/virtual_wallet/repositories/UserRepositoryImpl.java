@@ -131,7 +131,7 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public void alterBlock(User user) {
+    public void alterBlockPermissions(User user) {
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
             session.merge(user);
@@ -157,22 +157,11 @@ public class UserRepositoryImpl implements UserRepository {
         }
     }
 
-    @Transactional
+
     @Override
     public void delete(long id) {
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
-
-            User user = getById(id);
-            if (user.getCards() != null) {
-                Iterator<Card> cards;
-                Hibernate.initialize(cards = user.getCards().iterator());
-                while (cards.hasNext()) {
-                    cards.next();
-                    cards.remove();
-                }
-            }
-
             session.remove(getById(id));
             session.getTransaction().commit();
         }
