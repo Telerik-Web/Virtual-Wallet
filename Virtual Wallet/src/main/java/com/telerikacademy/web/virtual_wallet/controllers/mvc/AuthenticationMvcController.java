@@ -224,7 +224,12 @@ public class AuthenticationMvcController {
     @GetMapping("/delete/{id}")
     public String deleteCard(@PathVariable int id,
                              HttpSession session) {
-        User user = authenticationHelper.tryGetUser(session);
+        User user = null;
+        try {
+            user = authenticationHelper.tryGetUser(session);
+        } catch (AuthenticationFailureException e) {
+            return "AccessDenied";
+        }
         Card card = cardService.getById(id, user);
         cardService.delete(card, user);
         if (cardService.getCardsByUserId(user.getId(), user).isEmpty()) {
