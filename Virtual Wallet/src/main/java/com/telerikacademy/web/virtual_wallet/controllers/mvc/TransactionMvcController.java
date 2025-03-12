@@ -73,18 +73,23 @@ public class TransactionMvcController {
             @RequestParam(required = false) String sortBy,
             @RequestParam(required = false) boolean isAscending,
             Model model) {
-        User user = authenticationHelper.tryGetUser(session);
-        if (recipient != null && recipient.isEmpty()) {
-            recipient = null;
-        }
-        if (sortBy == null) {
-            sortBy = "amount";
-        }
+        Page<Transaction> paginatedTransactions;
+        try {
+            User user = authenticationHelper.tryGetUser(session);
+            if (recipient != null && recipient.isEmpty()) {
+                recipient = null;
+            }
+            if (sortBy == null) {
+                sortBy = "amount";
+            }
 
-        List<Transaction> transactions = transactionService.filterTransactions(startDate, endDate, recipient,
-                isIncoming, user);
+            List<Transaction> transactions = transactionService.filterTransactions(startDate, endDate, recipient,
+                    isIncoming, user);
 
-        Page<Transaction> paginatedTransactions = transactionService.sortTransactionsWithPagination(transactions, sortBy, isAscending, page, size);
+            paginatedTransactions = transactionService.sortTransactionsWithPagination(transactions, sortBy, isAscending, page, size);
+        } catch (AuthenticationFailureException e) {
+            return "AccessDenied";
+        }
 
 
         model.addAttribute("startDate", startDate);
@@ -186,7 +191,11 @@ public class TransactionMvcController {
     @GetMapping("/new/confirm")
     public String confirmTransaction(Model model,
                                      HttpSession session) {
-        User user = authenticationHelper.tryGetUser(session);
+        try {
+            User user = authenticationHelper.tryGetUser(session);
+        } catch (AuthenticationFailureException e) {
+            return "AccessDenied";
+        }
         double amount = Double.parseDouble(session.getAttribute("amount").toString());
         User recipient = (User) session.getAttribute("recipient");
         TransactionDTOCreate transaction = (TransactionDTOCreate) session.getAttribute("transaction");
