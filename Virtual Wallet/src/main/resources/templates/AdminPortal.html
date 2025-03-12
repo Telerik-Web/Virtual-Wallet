@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/PageLayout :: head('Admin Portal')}"></head>
+<body>
+<nav th:replace="~{fragments/PageLayout :: navbar}"></nav>
+
+<br/><br/><br/><br/><br/>
+<div class="container d-flex justify-content-center align-items-center mb-5 mt-5">
+    <form class="filter-form p-4 border rounded bg-light shadow"
+          action="#" th:action="@{/users/admin}" method="get" th:object="${filterUserOptions}">
+
+        <h4 class="text-center" th:text="#{users.list}">User Search</h4>
+        <br/>
+
+        <div class="mb-3">
+            <input type="text" class="form-control" placeholder="Username" th:field="*{username}"/>
+        </div>
+
+        <div class="mb-3">
+            <input type="text" class="form-control" placeholder="Email" th:field="*{email}"/>
+        </div>
+
+        <div class="mb-3">
+            <input type="text" class="form-control" placeholder="Phone" th:field="*{phoneNumber}"/>
+        </div>
+
+        <div class="d-grid">
+            <input type="submit" class="btn btn-primary" value="Search"/>
+        </div>
+    </form>
+</div>
+
+<br/><br/><br/>
+
+<table class="table table-bordered mb-5">
+    <thead class="table-dark text-center">
+    <tr>
+        <th>Username</th>
+        <th>Email</th>
+        <th>Phone</th>
+        <th>Action</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="user : ${users}" class="align-middle">
+        <td th:text="${user.username}" class="text-center"></td>
+        <td th:text="${user.email}" class="text-center"></td>
+        <td th:text="${user.phoneNumber}" class="text-center"></td>
+        <td th:if="${currentUser.username != user.username}" class="d-flex gap-2 justify-content-center align-items-center">
+            <form th:action="@{/users/{id}/promote(id=${user.id})}" method="post">
+                <button type="submit" class="btn pr-5 px-3 py-2 justify-content-center">
+                    <i class="fas fa-user fa-2x" th:classappend="${user.getIsAdmin() == true ? 'text-danger' : 'text-primary'}"></i>
+                </button>
+            </form>
+            <form th:action="@{/users/{id}/block(id=${user.id})}" method="post">
+                <button type="submit" class="btn pl-5 px-3 py-2">
+                    <i class="fas fa-ban fa-2x" th:classappend="${user.getIsBlocked() == true ? 'text-dark' : 'text-danger'}"></i>
+                </button>
+            </form>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<br/><br/><br/>
+
+<div th:replace="~{/fragments/PageLayout.html :: scripts}"></div>
+<div th:replace="~{fragments/PageLayout :: footer}"></div>
+</body>
+</html>
