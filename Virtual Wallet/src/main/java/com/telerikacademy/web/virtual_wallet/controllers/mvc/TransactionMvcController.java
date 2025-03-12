@@ -72,10 +72,18 @@ public class TransactionMvcController {
             @RequestParam(required = false) Boolean isIncoming,
             @RequestParam(required = false) String sortBy,
             @RequestParam(required = false) boolean isAscending,
+            @RequestParam(required = false) String token,
             Model model) {
+
+        User user;
+        try {
+            String username = jwtUtil.getUserUsernameFromToken(token);
+            user = userService.getByUsername(username);
+        } catch (Exception e) {
+            user = authenticationHelper.tryGetUser(session);
+        }
         Page<Transaction> paginatedTransactions;
         try {
-            User user = authenticationHelper.tryGetUser(session);
             if (recipient != null && recipient.isEmpty()) {
                 recipient = null;
             }
@@ -91,6 +99,7 @@ public class TransactionMvcController {
             return "AccessDenied";
         }
 
+        session.setAttribute("currentUser", user.getUsername());
 
         model.addAttribute("startDate", startDate);
         model.addAttribute("endDate", endDate);
@@ -245,10 +254,12 @@ public class TransactionMvcController {
 //                return "AccessDenied";
 //            }
 
-        User sender = authenticationHelper.tryGetUser(session);
+        String senderUsername = jwtUtil.getUserUsernameFromToken(token);
+        User sender = userService.getByUsername(senderUsername);
+        System.out.println(sender.getUsername());
 
         String userToken = sender.getVerificationToken();
-        if(!userToken.equals(token)) {
+        if (!userToken.equals(token)) {
             return "TokenFail";
         }
 
@@ -275,9 +286,9 @@ public class TransactionMvcController {
 
         sender.setVerificationToken(null);
         userService.update(sender, sender, sender.getId());
-        session.removeAttribute("pendingTransaction");
+        //session.removeAttribute("pendingTransaction");
 
-        return "redirect:/transactions/all";
+        return "redirect:/transactions/all?token=" + token;
 //        } catch (Exception e) {
 //            return "redirect:/transactions/new";
 //        }

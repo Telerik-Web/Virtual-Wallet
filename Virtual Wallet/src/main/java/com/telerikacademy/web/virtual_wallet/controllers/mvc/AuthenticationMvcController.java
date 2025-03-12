@@ -77,13 +77,13 @@ public class AuthenticationMvcController {
         User user;
         try {
             user = authenticationHelper.verifyAuthentication(login.getUsername(), login.getPassword());
-            String jwtToken = jwtUtil.generateToken(user, 0L, 0.0);
-
-            Cookie cookie = new Cookie("jwt", jwtToken);
-            cookie.setHttpOnly(true);
-            cookie.setPath("/");
-            cookie.setMaxAge(24 * 60 * 60);
-            response.addCookie(cookie);
+//            String jwtToken = jwtUtil.generateToken(user, 0L, 0.0);
+//
+//            Cookie cookie = new Cookie("jwt", jwtToken);
+//            cookie.setHttpOnly(true);
+//            cookie.setPath("/");
+//            cookie.setMaxAge(24 * 60 * 60);
+//            response.addCookie(cookie);
 
             if (!user.isAccountVerified()) {
                 String token = TokenGenerator.renewToken(user.getVerificationToken());
