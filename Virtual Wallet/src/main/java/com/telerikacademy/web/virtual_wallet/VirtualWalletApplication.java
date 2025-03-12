@@ -14,4 +14,5 @@ public class VirtualWalletApplication {
     //акт и компания в тестовете
     //add the proper message for a duplicate card - try to add a card with already existing number
     //userRepository - JPA
+    //why transactions do go to pending
 }

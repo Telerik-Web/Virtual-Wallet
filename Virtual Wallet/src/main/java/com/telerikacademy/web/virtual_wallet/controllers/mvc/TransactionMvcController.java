@@ -35,7 +35,9 @@ public class TransactionMvcController {
 
     public TransactionMvcController(TransactionService transactionService,
                                     UserService userService,
-                                    AuthenticationHelper authenticationHelper, LargeTransactionService largeTransactionService, JwtUtil jwtUtil) {
+                                    AuthenticationHelper authenticationHelper,
+                                    LargeTransactionService largeTransactionService,
+                                    JwtUtil jwtUtil) {
         this.transactionService = transactionService;
         this.userService = userService;
         this.authenticationHelper = authenticationHelper;
@@ -257,7 +259,6 @@ public class TransactionMvcController {
 
         String senderUsername = jwtUtil.getUserUsernameFromToken(token);
         User sender = userService.getByUsername(senderUsername);
-        System.out.println(sender.getUsername());
 
         String userToken = sender.getVerificationToken();
         if (!userToken.equals(token)) {
