@@ -65,8 +65,8 @@
 </form>
 
 
-
-<h2 class="text-center">Transaction Results</h2>
+<h2 class="text-center mt-5" th:if="${transactions.isEmpty()}">No Results Found</h2>
+<h2 class="text-center" th:unless="${transactions.isEmpty()}">Transaction Results</h2>
 
 <div class="container mt-4">
     <div class="list-group">
@@ -101,7 +101,7 @@
         </div>
     </div>
 
-    <nav>
+    <nav th:unless="${transactions.isEmpty()}">
         <ul class="pagination justify-content-center">
             <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
                 <a class="page-link" th:href="@{/transactions/all(page=${currentPage - 1}, size=${size}, sortBy=${sortBy}, isAscending=${isAscending}, startDate=${startDate}, endDate=${endDate}, recipient=${recipient}, isIncoming=${isIncoming})}">Previous</a>
@@ -117,6 +117,7 @@
     </nav>
 </div>
 
+<br/><br/><br/><br/>
 
 <footer th:replace="~{fragments/PageLayout.html :: footer}"></footer>
 <div th:replace="~{/fragments/PageLayout.html :: scripts}"></div>
