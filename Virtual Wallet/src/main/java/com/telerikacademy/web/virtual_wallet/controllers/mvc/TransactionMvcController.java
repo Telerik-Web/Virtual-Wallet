@@ -82,6 +82,7 @@ public class TransactionMvcController {
         } catch (Exception e) {
             user = authenticationHelper.tryGetUser(session);
         }
+
         Page<Transaction> paginatedTransactions;
         try {
             if (recipient != null && recipient.isEmpty()) {
