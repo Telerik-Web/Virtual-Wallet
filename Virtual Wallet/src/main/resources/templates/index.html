@@ -20,8 +20,8 @@
                 <div class="d-sm-flex align-items-center justify-content-between mb-4">
                     <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
                     <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"
-                    th:href="@{/auth/account/cards/new}"><i
-                        class="fas fa-credit-card fa-sm text-white-50"></i> Add Card</a>
+                       th:href="@{/auth/account/cards/new}"><i
+                            class="fas fa-credit-card fa-sm text-white-50"></i> Add Card</a>
                 </div>
 
                 <!-- Content Row -->
@@ -41,7 +41,8 @@
                                         </div>
                                     </div>
                                     <div class="col-auto">
-                                        <a th:href="@{/transactions/all(isIncoming=true)}" style="text-decoration: none;">
+                                        <a th:href="@{/transactions/all(isIncoming=true)}"
+                                           style="text-decoration: none;">
                                             <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
                                         </a>
                                     </div>
@@ -64,7 +65,8 @@
                                         </div>
                                     </div>
                                     <div class="col-auto">
-                                        <a th:href="@{/transactions/all(isIncoming=false)}" style="text-decoration: none;">
+                                        <a th:href="@{/transactions/all(isIncoming=false)}"
+                                           style="text-decoration: none;">
                                             <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
                                         </a>
                                     </div>
@@ -73,7 +75,6 @@
                         </div>
                     </div>
 
-                    <!-- Earnings (Monthly) Card Example -->
                     <div class="col-xl-3 col-md-6 mb-4">
                         <div class="card border-left-info shadow h-100 py-2">
                             <div class="card-body">
@@ -82,16 +83,12 @@
                                         <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
                                             Current Balance
                                         </div>
-                                        <div class="row no-gutters align-items-center">
-                                            <div class="col mr-2">
-                                                <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800"
-                                                     th:text="${currentUser.balance}">50%
-                                                </div>
-                                            </div>
-                                            <div class="col-auto">
-                                                <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
-                                            </div>
+                                        <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800"
+                                             th:text="${currentUser.balance}">
                                         </div>
+                                    </div>
+                                    <div class="col-auto">
+                                        <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
                                     </div>
                                 </div>
                             </div>
@@ -111,14 +108,13 @@
                                              th:text="${currentUser.cards.size()}">18
                                         </div>
                                     </div>
-                                    <div class="col-auto" th:if="${not #lists.isEmpty(session.cards)}">
-
+                                    <div class="col-auto"
+                                         th:if="${currentUser.cards!=null and not #lists.isEmpty(currentUser.cards)}">
                                         <a th:href="@{/auth/account/cards}" style="text-decoration: none;">
                                             <i class="fas fa-credit-card fa-2x text-gray-300"></i>
                                         </a>
-
                                     </div>
-                                    <div class="col-auto" th:unless="${not #lists.isEmpty(session.cards)}">
+                                    <div class="col-auto" th:unless="${not #lists.isEmpty(currentUser.cards)}">
                                         <i class="fas fa-credit-card fa-2x text-gray-300"></i>
                                     </div>
                                 </div>
@@ -251,7 +247,8 @@
                         <!-- Illustrations -->
                         <div class="card shadow mb-4">
                             <div class="card-header py-3">
-                                <a class="m-0 font-weight-bold text-primary" th:href="@{https://edition.cnn.com/business/index.html}"
+                                <a class="m-0 font-weight-bold text-primary"
+                                   th:href="@{https://edition.cnn.com/business/index.html}"
                                    target="_blank">Latest News</a>
                             </div>
                             <div class="card-body">

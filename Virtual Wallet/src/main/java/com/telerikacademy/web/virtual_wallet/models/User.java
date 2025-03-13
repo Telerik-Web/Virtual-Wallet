@@ -49,7 +49,7 @@ public class User {
     @Column(name = "isBlocked")
     private Boolean isBlocked;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.EAGER)
     @JsonBackReference
     private List<Card> cards = new ArrayList<>();
 

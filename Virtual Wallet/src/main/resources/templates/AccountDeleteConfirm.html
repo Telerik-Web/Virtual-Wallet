@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html" lang="en">
+<head th:replace="~{fragments/PageLayout.html :: head('Confirm Account Delete')}"></head>
+<body>
+
+<nav th:replace="~{fragments/PageLayout.html :: navbar}"></nav>
+
+<section class="container-fluid d-flex align-items-center justify-content-center vh-100">
+  <div class="masthead vh-100 justify-content-center">
+    <div class="card o-hidden border-0 shadow-lg my-5">
+      <div class="card-body p-5">
+        <form action="#" th:action="@{/auth/account/delete/confirm}" th:object="${user}" method="post">
+
+          <h2 class="page-title">Confirm User Deletion</h2>
+
+          <div class="form-group">
+            <label class="text-gray-900 font-weight-bold" th:text="'Hello, ' + *{username} + ' please confirm acount deletion!'">
+              Hell</label>
+            <br/>
+          </div>
+          <button class="btn btn-danger" type="submit" value="Confirm">Delete</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+</body>
+</html>

@@ -168,14 +168,44 @@ public class AuthenticationMvcController {
 
         try {
             user.setId(authenticationHelper.tryGetUser(session).getId());
+            user.setUsername(authenticationHelper.tryGetUser(session).getUsername());
             user.setIsAdmin(authenticationHelper.tryGetUser(session).getIsAdmin());
             user.setIsBlocked(authenticationHelper.tryGetUser(session).getIsBlocked());
+            user.setBalance(authenticationHelper.tryGetUser(session).getBalance());
+            user.setAccountVerified(authenticationHelper.tryGetUser(session).isAccountVerified());
+            user.setCards(authenticationHelper.tryGetUser(session).getCards());
             userService.update(user, user, authenticationHelper.tryGetUser(session).getId());
             return "redirect:/auth/account";
         } catch (DuplicateEntityException e) {
             errors.rejectValue("password", "password_error", e.getMessage());
             return "UpdateUser";
         }
+    }
+
+    @GetMapping("/account/delete")
+    public String deleteAccount(HttpSession session) {
+        User user = authenticationHelper.tryGetUser(session);
+        System.out.println(user.getId() + " 0");
+        //userService.delete(user.getId(), user);
+        //session.invalidate();
+        return "redirect:/auth/account/delete/confirm";
+    }
+
+    @GetMapping("/account/delete/confirm")
+    public String showDeleteAccountConfirm(Model model, HttpSession session) {
+        User user = authenticationHelper.tryGetUser(session);
+        System.out.println(user.getUsername() + " 1");
+        session.setAttribute("user", user);
+        model.addAttribute("user", user);
+        return "AccountDeleteConfirm";
+    }
+
+    @PostMapping("/account/delete/confirm")
+    public String deleteAccountConfirm(HttpSession session) {
+        User user = (User) session.getAttribute("user");
+        userService.delete(user.getId(), user);
+        session.invalidate();
+        return "redirect:/";
     }
 
     @GetMapping("/account/cards")
@@ -232,10 +262,13 @@ public class AuthenticationMvcController {
             return "redirect:/auth/account/cards";
         } catch (AuthenticationFailureException e) {
             return "AccessDenied";
+        } catch (DuplicateEntityException e) {
+            errors.rejectValue("cardNumber", "duplicate.cardNumber");
+            return "AddCard";
         }
     }
 
-    @GetMapping("/delete/{id}")
+    @GetMapping("/delete/card/{id}")
     public String deleteCard(@PathVariable int id,
                              HttpSession session) {
         User user = null;
@@ -250,7 +283,6 @@ public class AuthenticationMvcController {
             session.removeAttribute("cards");
         }
         return "redirect:/auth/account/cards";
-
     }
 
     @GetMapping("/logout")

@@ -148,7 +148,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void delete(long id, User userFromHeader) {
-        User user = getById(userFromHeader, id);
+        User user = getById(id);
         checkIfCreatorOrAdminForUser(userFromHeader, user);
         userRepository.delete(id);
     }
