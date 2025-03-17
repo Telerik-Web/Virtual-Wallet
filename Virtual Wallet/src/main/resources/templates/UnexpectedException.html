@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/PageLayout.html :: head('Unexpected Error')}"></head>
+<body>
+
+<nav th:replace="~{fragments/PageLayout.html :: navbar}"></nav>
+
+<div class="access-denied-container">
+  <h1 class="access-denied-title" th:text="#{error} + ' ' + ${status}">Error</h1>
+  <p class="access-denied-title">Oops! An unexpected error occurred!</p>
+  <p class="access-denied-message" th:text="${error}">Error message</p>
+
+  <div>
+    <a class="btn btn-primary" href="/" th:href="@{/}">Go Back Home</a>
+  </div>
+
+</div>
+<footer th:replace="~{fragments/PageLayout.html :: footer}"></footer>
+<div th:replace="~{/fragments/PageLayout.html :: scripts}"></div>
+</body>
+</html>
