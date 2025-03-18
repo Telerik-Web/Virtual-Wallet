@@ -78,7 +78,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void alterBlockPermissions(int id, User user, boolean isBlocked) {
+    public void alterBlockPermissions(long id, User user, boolean isBlocked) {
         checkIfAdmin(user);
 
         User userToUpdate = userRepository.getById(id);

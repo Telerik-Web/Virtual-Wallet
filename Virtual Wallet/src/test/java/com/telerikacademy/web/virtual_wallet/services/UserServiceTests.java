@@ -141,6 +141,19 @@ public class UserServiceTests {
     }
 
     @Test
+    void getByPhoneNumber_Should_Return_User() {
+        // Arrange
+        when(userRepository.getByPhoneNumber("0888")).thenReturn(user1);
+
+        // Act
+        User result = userService.getByPhoneNumber("0888");
+
+        // Assert
+        Assertions.assertEquals(user1.getUsername(), result.getUsername());
+        Mockito.verify(userRepository, Mockito.times(1)).getByPhoneNumber("0888");
+    }
+
+    @Test
     void AlterAdminPermission_Should_Throw_UserNotAdmin() {
         // Arrange, Act & Assert
         Assertions.assertThrows(UnauthorizedOperationException.class,
@@ -148,7 +161,7 @@ public class UserServiceTests {
     }
 
     @Test
-    void AlterAdminPermissions_Should_Update_WhenValid() {
+    void AlterAdminPermissions_Should_Admin_WhenValid() {
         // Arrange
         when(userRepository.getById(user2.getId())).thenReturn(user2);
 
@@ -158,6 +171,54 @@ public class UserServiceTests {
         // Assert
         Assertions.assertTrue(user2.getIsAdmin());
         Mockito.verify(userRepository, Mockito.times(1)).alterAdminPermissions(user2);
+    }
+
+    @Test
+    void AlterAdminPermissions_Should_NotAdmin_WhenValid() {
+        // Arrange
+        when(userRepository.getById(user2.getId())).thenReturn(user2);
+        user2.setIsAdmin(true);
+
+        // Act
+        userService.alterAdminPermissions(user2.getId(), user1, false);
+
+        // Assert
+        Assertions.assertFalse(user2.getIsAdmin());
+        Mockito.verify(userRepository, Mockito.times(1)).alterAdminPermissions(user2);
+    }
+
+    @Test
+    void AlterBlockPermission_Should_Throw_UserNotBlocked() {
+        // Arrange, Act & Assert
+        Assertions.assertThrows(UnauthorizedOperationException.class,
+                () -> userService.alterBlockPermissions(1, user2, true));
+    }
+
+    @Test
+    void AlterBlockPermissions_Should_Block_WhenValid() {
+        // Arrange
+        when(userRepository.getById(user2.getId())).thenReturn(user2);
+
+        // Act
+        userService.alterBlockPermissions(user2.getId(), user1, true);
+
+        // Assert
+        Assertions.assertTrue(user2.getIsBlocked());
+        Mockito.verify(userRepository, Mockito.times(1)).alterBlockPermissions(user2);
+    }
+
+    @Test
+    void AlterBlockPermissions_Should_Unblock_WhenValid() {
+        // Arrange
+        when(userRepository.getById(user2.getId())).thenReturn(user2);
+        user2.setIsBlocked(true);
+
+        // Act
+        userService.alterBlockPermissions(user2.getId(), user1, false);
+
+        // Assert
+        Assertions.assertFalse(user2.getIsBlocked());
+        Mockito.verify(userRepository, Mockito.times(1)).alterBlockPermissions(user2);
     }
 
     @Test
@@ -181,6 +242,32 @@ public class UserServiceTests {
 
         // Assert
         Mockito.verify(userRepository, Mockito.times(1)).create(newUser);
+    }
+
+    @Test
+    void verifyUser_Should_Return_False_WhenUserNotFound() {
+        // Arrange
+        String token = "testUser";
+        Mockito.when(userRepository.findByVerificationToken(token)).thenReturn(null);
+
+        // Act
+        boolean result = userService.verifyUser(token);
+
+        // Assert
+        Assertions.assertFalse(result);
+    }
+
+    @Test
+    void verifyUser_Should_Return_True_WhenUserFound() {
+        // Arrange
+        String token = "testUser";
+        Mockito.when(userRepository.findByVerificationToken(token)).thenReturn(user2);
+
+        // Act
+        boolean result = userService.verifyUser(token);
+
+        // Assert
+        Assertions.assertTrue(result);
     }
 
     @Test
