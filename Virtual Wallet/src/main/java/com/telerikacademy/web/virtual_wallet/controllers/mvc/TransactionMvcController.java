@@ -1,5 +1,6 @@
 package com.telerikacademy.web.virtual_wallet.controllers.mvc;
 
+import com.telerikacademy.web.virtual_wallet.enums.Status;
 import com.telerikacademy.web.virtual_wallet.exceptions.AuthenticationFailureException;
 import com.telerikacademy.web.virtual_wallet.exceptions.EntityNotFoundException;
 import com.telerikacademy.web.virtual_wallet.helpers.AuthenticationHelper;
@@ -238,10 +239,12 @@ public class TransactionMvcController {
                 sender.setVerificationToken(token);
                 userService.update(sender, sender, sender.getId());
                 largeTransactionService.sendVerificationEmail(sender.getEmail(), token);
+                transactionService.transferFunds(sender, recipient, amount);
                 return "ConfirmTransaction";
             }
 
             transactionService.transferFunds(sender, recipient, amount);
+            //session.setAttribute("transaction", transaction);
             return "redirect:/transactions/all";
         } catch (Exception e) {
             return "redirect:/transactions/new";
@@ -255,6 +258,7 @@ public class TransactionMvcController {
 //                return "AccessDenied";
 //            }
 
+        //Transaction transaction = (Transaction) session.getAttribute("transaction");
         String senderUsername = jwtUtil.getUserUsernameFromToken(token);
         User sender = userService.getByUsername(senderUsername);
 
@@ -267,7 +271,7 @@ public class TransactionMvcController {
         User recipient = userService.getById(recipientId);
         Double amount = jwtUtil.getAmountFromToken(token);
 
-        transactionService.transferFunds(sender, recipient, amount);
+        transactionService.transferFundsVerified(sender, recipient, amount);
 
 //            User sender = authenticationHelper.tryGetUser(session);
 //

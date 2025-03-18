@@ -31,6 +31,8 @@ public interface TransactionService {
 
     Transaction transferFunds(User sender, User recipient, Double amount);
 
+    Transaction transferFundsVerified(User sender, User recipient, Double amount);
+
     Page<Transaction> getPaginatedTransactions(int page, int size);
 
     List<Transaction> getAllTransactionsForUser(long userId);

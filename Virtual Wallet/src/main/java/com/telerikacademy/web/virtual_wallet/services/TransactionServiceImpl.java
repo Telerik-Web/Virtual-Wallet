@@ -1,6 +1,7 @@
 package com.telerikacademy.web.virtual_wallet.services;
 
 import com.telerikacademy.web.virtual_wallet.enums.Status;
+import com.telerikacademy.web.virtual_wallet.exceptions.EntityNotFoundException;
 import com.telerikacademy.web.virtual_wallet.helpers.TokenGenerator;
 import com.telerikacademy.web.virtual_wallet.models.Transaction;
 import com.telerikacademy.web.virtual_wallet.models.TransactionDTO;
@@ -87,42 +88,57 @@ public class TransactionServiceImpl implements TransactionService {
     @Override
     @Transactional
     public Transaction transferFunds(User sender, User recipient, Double amount) {
-
         if (sender == null || recipient == null) {
             throw new IllegalArgumentException("Sender and recipient must be provided.");
         }
         if (amount <= 0) {
             throw new IllegalArgumentException("Amount must be greater than zero.");
         }
-
         if (sender.getBalance() < amount) {
-            throw new IllegalArgumentException("Sender balance must be greater than zero.");
+            throw new IllegalArgumentException("Sender does not have enough balance.");
         }
 
         Transaction transaction = new Transaction();
         transaction.setAmount(amount);
-        transaction.setStatus(Status.COMPLETED);
         transaction.setSender(sender);
         transaction.setRecipient(recipient);
         transaction.setCreatedAt(LocalDateTime.now());
 
-        if (amount > 10000) {
-            String token = TokenGenerator.generateToken();
-            sender.setVerificationToken(token);
-            largeTransactionService.sendVerificationEmail(sender.getEmail(), sender.getVerificationToken());
-
+        if (amount >= 10000) {
             transaction.setStatus(Status.PENDING);
-            return transactionRepository.save(transaction);
+        } else {
+            sender.setBalance(sender.getBalance() - amount);
+            recipient.setBalance(recipient.getBalance() + amount);
+
+            userRepository.update(sender, sender.getId());
+            userRepository.update(recipient, recipient.getId());
+
+            transaction.setStatus(Status.COMPLETED);
         }
 
+        return transactionRepository.save(transaction);
+    }
+
+    @Override
+    @Transactional
+    public Transaction transferFundsVerified(User sender, User recipient, Double amount) {
+
+        Transaction transaction = transactionRepository.findBySenderRecipientAmountAndStatus
+                        (sender, recipient, amount, Status.PENDING);
+        if (!transaction.getSender().getVerificationToken().equals(sender.getVerificationToken())
+                || transaction.getAmount() != amount) {
+            throw new EntityNotFoundException("transaction", transaction.getId());
+        }
         sender.setBalance(sender.getBalance() - amount);
         recipient.setBalance(recipient.getBalance() + amount);
 
         userRepository.update(sender, sender.getId());
         userRepository.update(recipient, recipient.getId());
 
+        transaction.setStatus(Status.COMPLETED);
         return transactionRepository.save(transaction);
     }
+
 
     @Override
     public Page<Transaction> getPaginatedTransactions(int page, int size) {

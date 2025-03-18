@@ -1,9 +1,12 @@
 package com.telerikacademy.web.virtual_wallet.services;
 
+import com.telerikacademy.web.virtual_wallet.enums.Status;
+import com.telerikacademy.web.virtual_wallet.exceptions.EntityNotFoundException;
 import com.telerikacademy.web.virtual_wallet.models.Transaction;
 import com.telerikacademy.web.virtual_wallet.models.User;
 import com.telerikacademy.web.virtual_wallet.repositories.TransactionRepository;
 import com.telerikacademy.web.virtual_wallet.repositories.UserRepositoryImpl;
+import com.telerikacademy.web.virtual_wallet.services.email_verification.LargeTransactionService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -12,12 +15,14 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 import static com.telerikacademy.web.virtual_wallet.Helpers.*;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class TransactionServiceTests {
@@ -27,6 +32,9 @@ public class TransactionServiceTests {
 
     @Mock
     TransactionRepository transactionRepository;
+
+    @Mock
+    LargeTransactionService largeTransactionService;
 
     @InjectMocks
     TransactionServiceImpl transactionService;
@@ -92,9 +100,60 @@ public class TransactionServiceTests {
         Assertions.assertEquals(99, sender.getBalance());
         Assertions.assertEquals(51, recipient.getBalance());
 
-        Mockito.verify(userRepository, Mockito.times(1)).update(sender, sender.getId());
-        Mockito.verify(userRepository, Mockito.times(1)).update(recipient, recipient.getId());
-        Mockito.verify(transactionRepository, Mockito.times(1)).save(Mockito.any());
+        verify(userRepository, times(1)).update(sender, sender.getId());
+        verify(userRepository, times(1)).update(recipient, recipient.getId());
+        verify(transactionRepository, times(1)).save(Mockito.any());
+    }
+
+    @Test
+    void transferFunds_Should_SetTransactionToPending_WhenAmountExceedsThreshold() {
+        // Arrange
+        User sender = createMockAdminUser();
+        sender.setBalance(20000);
+        User recipient = createMockUser();
+        double amount = 15000.0;
+
+        Transaction mockTransaction = new Transaction();
+        mockTransaction.setAmount(amount);
+        mockTransaction.setSender(sender);
+        mockTransaction.setRecipient(recipient);
+        mockTransaction.setCreatedAt(LocalDateTime.now());
+        mockTransaction.setStatus(Status.PENDING);
+
+        when(transactionRepository.save(Mockito.any(Transaction.class))).thenReturn(mockTransaction);
+
+        // Act
+        Transaction result = transactionService.transferFunds(sender, recipient, amount);
+
+        // Assert
+        Assertions.assertNotNull(result, "Transaction should not be null");
+        Assertions.assertEquals(Status.PENDING, result.getStatus(), "Transaction should be marked as PENDING");
+
+        verify(transactionRepository, times(1)).save(Mockito.any(Transaction.class));
+    }
+
+    @Test
+    void transferFundsVerified_Should_Throw_When_TokenDoesNotMatch() {
+        // Arrange
+        User sender = createMockUser();
+        sender.setVerificationToken("valid-token");
+
+        User recipient = createMockUser();
+        double amount = 15000.0;
+
+        Transaction pendingTransaction = createMockTransaction();
+        pendingTransaction.getSender().setVerificationToken("invalid-token");
+
+        when(transactionRepository.findBySenderRecipientAmountAndStatus(sender, recipient, amount, Status.PENDING))
+                .thenReturn(pendingTransaction);
+
+        // Act & Assert
+        Assertions.assertThrows(EntityNotFoundException.class, () ->
+                transactionService.transferFundsVerified(sender, recipient, amount)
+        );
+
+        verify(transactionRepository, times(1))
+                .findBySenderRecipientAmountAndStatus(sender, recipient, amount, Status.PENDING);
     }
 
     @Test
@@ -106,7 +165,17 @@ public class TransactionServiceTests {
         Assertions.assertDoesNotThrow(() -> transactionService.getAllTransactionsForUser(user.getId()));
 
         // Verify interactions
-        Mockito.verify(transactionRepository, Mockito.times(1)).findAllByUserId(user.getId());
+        verify(transactionRepository, times(1)).findAllByUserId(user.getId());
+    }
+
+    @Test
+    void getPaginatedTransactionsForUser_Should_Return_All_PaginatedTransactions() {
+        // Act & Assert
+        Assertions.assertDoesNotThrow(() -> transactionService.getPaginatedTransactions(1, 2));
+
+        // Verify interactions
+        verify(transactionRepository,
+                times(1)).findAll(PageRequest.of(1, 2));
     }
 
     @Test
@@ -119,7 +188,7 @@ public class TransactionServiceTests {
                 transactionService.filterTransactions(null, null, null, null, user));
 
         // Verify repository call
-        Mockito.verify(transactionRepository, Mockito.times(1)).findAllByUserId(user.getId());
+        verify(transactionRepository, times(1)).findAllByUserId(user.getId());
     }
 
     @Test
@@ -136,7 +205,7 @@ public class TransactionServiceTests {
                 transactionService.filterTransactions(null, null, null, true, user));
 
         // Verify repository call
-        Mockito.verify(transactionRepository, Mockito.times(1)).findAllByUserId(user.getId());
+        verify(transactionRepository, times(1)).findAllByUserId(user.getId());
     }
 
     @Test
@@ -153,7 +222,7 @@ public class TransactionServiceTests {
                 transactionService.filterTransactions(null, null, null, false, user));
 
         // Verify repository call
-        Mockito.verify(transactionRepository, Mockito.times(1)).findAllByUserId(user.getId());
+        verify(transactionRepository, times(1)).findAllByUserId(user.getId());
     }
 
     @Test
