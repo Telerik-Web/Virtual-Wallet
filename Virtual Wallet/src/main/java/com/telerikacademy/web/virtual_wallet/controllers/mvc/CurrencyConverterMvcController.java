@@ -30,6 +30,9 @@ public class CurrencyConverterMvcController {
     public String convertCurrency(@Valid @ModelAttribute("currency") CurrencyDTO currencyDTO,
                                   BindingResult errors,
                                   Model model) {
+        if (errors.hasErrors()) {
+            return "indexNotLogged";
+        }
         try {
             Double.parseDouble(currencyDTO.getAmount());
         } catch (NumberFormatException e) {
@@ -43,8 +46,8 @@ public class CurrencyConverterMvcController {
             convertedAmount = exchangeRateFetcher.convertCurrency(Double.parseDouble(currencyDTO.getAmount()),
                     currencyDTO.getFrom().toUpperCase(),
                     currencyDTO.getTo().toUpperCase());
-        } catch (IllegalArgumentException e) {
-            errors.rejectValue("currencyDTO.getFrom()", "error.amount");
+        } catch (Exception e) {
+            errors.rejectValue("from", "error.from", "Both currencies must be valid.");
             return "indexNotLogged";
         }
 

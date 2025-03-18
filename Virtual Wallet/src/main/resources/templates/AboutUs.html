@@ -54,7 +54,7 @@
   </div>
 </section>
 
-<section class="container text-center mt-5">
+<section th:unless="${isAuthenticated}" class="container text-center mt-5">
   <h2 class="text-dark font-weight-bold">Join FlowPay Today</h2>
   <p class="text-muted"><strong>Start making hassle-free digital payments in seconds.</strong></p>
   <a href="/register" class="btn btn-primary btn-lg" th:href="@{/auth/register}">Get Started</a>

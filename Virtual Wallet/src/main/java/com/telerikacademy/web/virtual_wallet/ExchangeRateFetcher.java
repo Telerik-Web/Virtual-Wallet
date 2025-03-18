@@ -17,7 +17,6 @@ public class ExchangeRateFetcher {
     public Map<String, Double> fetchExchangeRates() {
         WebClient webClient = WebClient.builder().baseUrl(API_URL).build();
 
-        // Fetch JSON response
         String response = webClient.get().retrieve().bodyToMono(String.class).block();
 
         Map<String, Double> exchangeRates = new HashMap<>();
@@ -65,11 +64,7 @@ public class ExchangeRateFetcher {
         double rateFromUSD = exchangeRates.get(fromCurrency);
         double rateToUSD = exchangeRates.get(toCurrency);
 
-        // Convert to USD first, then to the target currency
         return (amount / rateFromUSD) * rateToUSD;
     }
 
 }
-
-
-//a5c192e177f538a2e3353e2a
