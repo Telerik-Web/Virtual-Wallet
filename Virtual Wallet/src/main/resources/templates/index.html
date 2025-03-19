@@ -312,28 +312,44 @@
     fetchLatestNews();
 </script>
 
+<script>
+    var loggedInUsername = "[[${session.loggedInUser.username}]]";
+</script>
 
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         var ctx = document.getElementById("earningsChart").getContext("2d");
 
-        // Function to fetch earnings data
+        var loggedInUsername = window.loggedInUsername; // Get from Thymeleaf
+
         function fetchEarnings(days) {
             let startDate = new Date().toISOString();
             let endDate = new Date();
             endDate.setDate(endDate.getDate() - days);
             endDate = endDate.toISOString();
 
-            let url = `/api/transactions/filter?startDate=${encodeURIComponent(startDate)}&endDate=${encodeURIComponent(endDate)}`;
-            fetch(url)
-                .then(response => response.json())
+            let url = `/api/transactions/filter?startDate=${encodeURIComponent(startDate)}&endDate=${encodeURIComponent(endDate)}&username=${encodeURIComponent(loggedInUsername)}`;
+
+            fetch(url, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Accept": "application/json"
+                },
+                credentials: "include" // Ensure session authentication is used
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error("Server error");
+                    }
+                    return response.json();
+                })
                 .then(data => {
                     updateChart(data);
                 })
                 .catch(error => console.error("Error fetching earnings:", error));
         }
 
-        // Function to update chart with new data
         function updateChart(data) {
             let labels = Object.keys(data);
             let values = Object.values(data);
@@ -358,8 +374,8 @@
                     responsive: true,
                     maintainAspectRatio: false,
                     scales: {
-                        x: {title: {display: true, text: 'Date'}},
-                        y: {title: {display: true, text: 'Amount ($)'}, beginAtZero: true}
+                        x: { title: { display: true, text: 'Date' } },
+                        y: { title: { display: true, text: 'Amount ($)' }, beginAtZero: true }
                     }
                 }
             });
@@ -368,7 +384,6 @@
         // Load initial data for 7 days
         fetchEarnings(7);
 
-        // Handle dropdown change
         document.getElementById("transactionPeriod").addEventListener("change", function () {
             fetchEarnings(this.value);
         });

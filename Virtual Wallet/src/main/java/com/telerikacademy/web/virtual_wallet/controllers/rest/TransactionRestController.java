@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -87,8 +88,8 @@ public class TransactionRestController {
             @RequestParam(defaultValue = "date") String sortBy,
             @RequestParam(defaultValue = "true") boolean ascending) {
 
-        LocalDateTime start = (startDate != null) ? LocalDateTime.parse(startDate) : null;
-        LocalDateTime end = (endDate != null) ? LocalDateTime.parse(endDate) : null;
+        LocalDateTime start = (startDate != null) ? OffsetDateTime.parse(startDate).toLocalDateTime() : null;
+        LocalDateTime end = (endDate != null) ? OffsetDateTime.parse(endDate).toLocalDateTime() : null;
 
         User user = authenticationHelper.tryGetUser(headers);
 

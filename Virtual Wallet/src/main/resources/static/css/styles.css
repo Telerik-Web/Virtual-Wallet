@@ -11395,6 +11395,13 @@ input::placeholder {
   border-radius: 5px;
   transition: 0.3s;
 }
+
 .verify-link:hover {
   background-color: var(--green);
 }
+
+/*#earningsChart {*/
+/*  width: 100% !important;*/
+/*  height: 400px !important;*/
+/*  display: block !important;*/
+/*}*/
