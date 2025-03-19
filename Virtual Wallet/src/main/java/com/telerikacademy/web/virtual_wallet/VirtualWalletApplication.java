@@ -12,6 +12,5 @@ public class VirtualWalletApplication {
     }
     //deposits in transactions
     //userRepository - JPA
-    //contact support v footer
     //javascript nai otgore v faila
 }
