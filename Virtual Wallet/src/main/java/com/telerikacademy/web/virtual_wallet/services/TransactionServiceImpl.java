@@ -110,8 +110,8 @@ public class TransactionServiceImpl implements TransactionService {
             sender.setBalance(sender.getBalance() - amount);
             recipient.setBalance(recipient.getBalance() + amount);
 
-            userRepository.update(sender, sender.getId());
-            userRepository.update(recipient, recipient.getId());
+            userRepository.save(sender);
+            userRepository.save(recipient);
 
             transaction.setStatus(Status.COMPLETED);
         }
@@ -132,8 +132,8 @@ public class TransactionServiceImpl implements TransactionService {
         sender.setBalance(sender.getBalance() - amount);
         recipient.setBalance(recipient.getBalance() + amount);
 
-        userRepository.update(sender, sender.getId());
-        userRepository.update(recipient, recipient.getId());
+        userRepository.save(sender);
+        userRepository.save(recipient);
 
         transaction.setStatus(Status.COMPLETED);
         return transactionRepository.save(transaction);

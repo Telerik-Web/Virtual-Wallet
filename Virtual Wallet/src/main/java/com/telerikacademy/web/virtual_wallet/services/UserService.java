@@ -7,12 +7,13 @@ import com.telerikacademy.web.virtual_wallet.models.User;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.hibernate.Hibernate;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 import java.util.Set;
 
 public interface UserService {
-    List<User> getAll(FilterUserOptions filterOptions);
+    Page<User> getAll(FilterUserOptions filterOptions, int page, int size, String sortBy, String direction);
 
     long getUserCount();
 

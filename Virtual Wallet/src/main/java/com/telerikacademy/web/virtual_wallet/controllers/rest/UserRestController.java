@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -42,12 +43,18 @@ public class UserRestController {
     @Operation(summary = "Returns all users", description = "Returns all users with their proper fields.")
     @GetMapping
     public List<UserDtoOut> getAll(@RequestParam(required = false) String username,
-                                   @RequestParam(required = false) String email,
-                                   @RequestParam(required = false) String phone,
-                                   @RequestParam(required = false) String sortBy,
-                                   @RequestParam(required = false) String orderBy) {
+                             @RequestParam(required = false) String email,
+                             @RequestParam(required = false) String phone,
+                             @RequestParam(required = false) String sortBy,
+                             @RequestParam(required = false) String orderBy,
+                             @RequestParam(defaultValue = "0") int page,
+                             @RequestParam(defaultValue = "10") int size,
+                             @RequestParam(defaultValue = "id") String sortBySpecific,
+                             @RequestParam(defaultValue = "ASC") String direction) {
         FilterUserOptions filterOptions = new FilterUserOptions(username, phone, email, sortBy, orderBy);
-        return userMapper.toDTOOut(userService.getAll(filterOptions));
+
+        Page<User> pageOfUsers = userService.getAll(filterOptions, page, size, sortBySpecific, direction);
+        return userMapper.toDTOOut(pageOfUsers.getContent());
     }
 
     @Operation(summary = "Get user by ID", description = "Fetches a user by their unique ID")

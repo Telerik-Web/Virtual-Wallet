@@ -1,36 +1,19 @@
 package com.telerikacademy.web.virtual_wallet.repositories;
 
-
-import com.telerikacademy.web.virtual_wallet.models.FilterUserOptions;
 import com.telerikacademy.web.virtual_wallet.models.User;
-import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.stereotype.Repository;
 
-import java.util.List;
-import java.util.Optional;
+@Repository
+public interface UserRepository extends JpaRepository<User, Long>, JpaSpecificationExecutor<User> {
 
-public interface UserRepository {
-
-    List<User> getAll(FilterUserOptions filterOptions);
-
-    long getUserCount();
-
-    User getById(long id);
-
-    User getByUsername(String username);
-
-    User getByEmail(String email);
-
-    User getByPhoneNumber(String phoneNumber);
-
-    void alterAdminPermissions(User user);
-
-    void alterBlockPermissions(User user);
-
-    void create(@Valid User user);
-
-    void update(@Valid User user, long id);
-
-    void delete(long id);
-
+    Page<User> findAll(Specification<User> filters, Pageable pageable);
+    User findByUsername(String username);
+    User findByEmail(String email);
+    User findByPhoneNumber(String phoneNumber);
     User findByVerificationToken(String token);
 }
