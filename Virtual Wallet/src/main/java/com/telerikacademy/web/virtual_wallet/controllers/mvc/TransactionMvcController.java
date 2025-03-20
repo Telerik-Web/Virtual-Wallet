@@ -174,6 +174,11 @@ public class TransactionMvcController {
                     break;
             }
 
+            if(recipient.getUsername().equals(authenticationHelper.tryGetUser(session).getUsername())) {
+                errors.rejectValue("value", "error.recipient");
+                return "CreateTransaction";
+            }
+
             User user;
             try {
                 user = authenticationHelper.tryGetUser(session);
