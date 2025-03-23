@@ -70,7 +70,7 @@
     </tbody>
 </table>
 
-<nav>
+<nav th:unless="${users.isEmpty()}">
     <ul class="pagination justify-content-center">
         <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
             <a class="page-link" th:href="@{/users/admin(page=${currentPage - 1}, size=${size}, direction=${direction})}">Previous</a>
