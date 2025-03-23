@@ -3,59 +3,106 @@
 <head th:replace="~{fragments/PageLayout.html :: head('Account')}"></head>
 <body>
 
+<!-- Navbar -->
 <nav th:replace="~{fragments/PageLayout.html :: navbar}"></nav>
 
-<section class="container-fluid d-flex align-items-center justify-content-center vh-100">
-    <div class="masthead vh-100 justify-content-center">
-        <div class="card o-hidden border-0 shadow-lg my-5">
-            <div class="card-body p-5">
-                <h2 class="text-center text-gray-900 font-weight-bold">Account Information</h2>
-                <br/>
-                <div>
-                    <img th:src="${image != 'assets/img/default-user.jpg' ? image : '/assets/img/default-user.jpg'}"
-                         alt="Profile Photo"
-                         width="150"
-                         onclick="openFilePicker()"
-                         style="cursor: pointer;" />
+<!-- Main Content -->
+<section class="container-fluid d-flex align-items-center justify-content-center min-vh-100">
+    <div class="row justify-content-center w-100">
+        <div class="col-lg-8 col-md-10 col-sm-12">
+            <!-- Card Container -->
+            <div class="card shadow-lg border-0 rounded-3">
+                <div class="card-body p-5">
+                    <!-- Profile Header -->
+                    <div class="text-center mb-4">
+                        <h2 class="fw-bold text-primary">Account Information</h2>
+                        <p class="text-muted">View and manage your account details.</p>
+                    </div>
+
+                    <!-- Profile Photo Section -->
+                    <div class="text-center mb-4">
+                        <img th:src="${image != 'assets/img/default-user.jpg' ? image : '/assets/img/default-user.jpg'}"
+                             alt="Profile Photo"
+                             class="rounded-circle img-thumbnail shadow-sm"
+                             width="150"
+                             onclick="openFilePicker()"
+                             style="cursor: pointer;" />
+
+                        <!-- Hidden File Input -->
+                        <form id="profileForm" th:action="@{/auth/account/photo/upload}" method="post" enctype="multipart/form-data">
+                            <input type="file" id="profileImageInput" name="profileImage" accept="image/*" style="display: none;" onchange="handleFileSelection()" />
+                        </form>
+
+                        <!-- Remove Photo Button -->
+                        <form th:if="${image != 'assets/img/default-user.jpg'}" th:action="@{/auth/account/photo/remove}" method="post" class="mt-3">
+                            <button class="btn btn-danger btn-sm">Remove Photo</button>
+                        </form>
+                    </div>
+
+                    <!-- Error Message -->
+                    <div th:if="${error}" class="alert alert-danger text-center" role="alert">
+                        <span th:text="${error}"></span>
+                    </div>
+
+                    <!-- User Information -->
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <!-- First Name -->
+                            <h5 class="mb-2">
+                                <span class="font-weight-bold fw-bold text-dark">First Name:</span>
+                                <span class="text-dark fw-semibold" th:text="${user.firstName}">John</span>
+                            </h5>
+                        </div>
+                        <div class="col-md-6">
+                            <!-- Last Name -->
+                            <h5 class="mb-2">
+                                <span class="font-weight-bold fw-bold text-dark">Last Name:</span>
+                                <span class="text-dark fw-semibold" th:text="${user.lastName}">Doe</span>
+                            </h5>
+                        </div>
+                        <div class="col-md-6">
+                            <!-- Username -->
+                            <h5 class="mb-2">
+                                <span class="font-weight-bold fw-bold text-dark">Username:</span>
+                                <span class="text-dark fw-semibold" th:text="${user.username}">johndoe</span>
+                            </h5>
+                        </div>
+                        <div class="col-md-6">
+                            <!-- Email -->
+                            <h5 class="mb-2">
+                                <span class="font-weight-bold fw-bold text-dark">Email:</span>
+                                <span class="text-dark fw-semibold" th:text="${user.email}">john.doe@example.com</span>
+                            </h5>
+                        </div>
+                        <div class="col-md-6">
+                            <!-- Phone Number -->
+                            <h5 class="mb-2">
+                                <span class="font-weight-bold fw-bold text-dark">Phone Number:</span>
+                                <span class="text-dark fw-semibold" th:text="${user.phone}">+1 234 567 890</span>
+                            </h5>
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="d-flex justify-content-between mt-4">
+                        <a class="btn btn-primary" th:href="@{/auth/account/update}">
+                            <i class="fas fa-edit me-2"></i> Update Account
+                        </a>
+                        <a class="btn btn-danger" th:href="@{/auth/account/delete}">
+                            <i class="fas fa-trash-alt me-2"></i> Delete Account
+                        </a>
+                    </div>
                 </div>
-
-
-                <form id="profileForm" th:action="@{/auth/account/upload}" method="post" enctype="multipart/form-data">
-                    <input type="file" id="profileImageInput" name="profileImage" accept="image/*" style="display: none;" onchange="handleFileSelection()" />
-                </form>
-
-
-                <div th:if="${error}">
-                    <p class="error" th:text="${error}"></p>
-                </div>
-
-                <br/>
-                
-                <h4 class="text-gray-900 font-weight-bold">First Name</h4>
-                <p th:text="${user.firstName}">First Name</p>
-                <br/>
-                <h4 class="text-gray-900 font-weight-bold">Last Name</h4>
-                <p th:text="${user.lastName}">Last Name</p>
-                <br/>
-                <h4 class="text-gray-900 font-weight-bold">Username</h4>
-                <p th:text="${user.username}">Username</p>
-                <br/>
-                <h4 class="text-gray-900 font-weight-bold">Email</h4>
-                <p th:text="${user.email}">Email</p>
-                <br/>
-                <h4 class="text-gray-900 font-weight-bold">Phone number</h4>
-                <p th:text="${user.phone}">Phone number</p>
-                <br/>
-
-                <a class="btn btn-primary" th:href="@{/auth/account/update}">Update</a>
-                <a class="btn btn-danger" th:href="@{/auth/account/delete}">Delete</a>
             </div>
         </div>
     </div>
 </section>
-<br/><br/><br/><br/>
+
+<!-- Footer -->
 <footer th:replace="~{fragments/PageLayout.html :: footer}"></footer>
+<!-- Scripts -->
 <div th:replace="~{/fragments/PageLayout.html :: scripts}"></div>
+
 
 </body>
 </html>

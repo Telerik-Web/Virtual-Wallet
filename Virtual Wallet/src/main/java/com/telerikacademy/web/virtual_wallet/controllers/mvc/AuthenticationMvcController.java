@@ -192,41 +192,60 @@ public class AuthenticationMvcController {
         }
     }
 
-    @PostMapping("/account/upload")
+    @PostMapping("/account/photo/upload")
     public String uploadProfilePhoto(@RequestParam("profileImage") MultipartFile profileImage,
                                      HttpSession session,
                                      Model model) {
 
-        User user = authenticationHelper.tryGetUser(session);
+        try {
+            User user = authenticationHelper.tryGetUser(session);
 
-        if (profileImage != null && !profileImage.isEmpty()) {
-            try {
+            if (profileImage != null && !profileImage.isEmpty()) {
+                try {
 
-                if (!isValidImageFile(profileImage)) {
-                    model.addAttribute("error", "Invalid image file. Only JPG, PNG, or GIF files are allowed.");
+                    if (!isValidImageFile(profileImage)) {
+                        model.addAttribute("error", "Invalid image file. Only JPG, PNG, or GIF files are allowed.");
+                        return "Account";
+                    }
+
+                    if (profileImage.getSize() > MAX_FILE_SIZE) {
+                        model.addAttribute("error", "File is too large! Max size is 5MB.");
+                        return "Account";
+                    }
+
+
+                    String imageUrl = cloudinaryHelper.uploadUserProfilePhoto(profileImage, user);
+
+
+                    user.setPhoto(imageUrl);
+                    userService.update(user, user, authenticationHelper.tryGetUser(session).getId());
+
+                } catch (IOException e) {
+                    model.addAttribute("error", "An error occurred while uploading the image.");
                     return "Account";
                 }
-
-                if (profileImage.getSize() > MAX_FILE_SIZE) {
-                    model.addAttribute("error", "File is too large! Max size is 5MB.");
-                    return "Account";
-                }
-
-
-                String imageUrl = cloudinaryHelper.uploadUserProfilePhoto(profileImage, user);
-
-
-                user.setPhoto(imageUrl);
-                userService.update(user, user, authenticationHelper.tryGetUser(session).getId());
-
-            } catch (IOException e) {
-                model.addAttribute("error", "An error occurred while uploading the image.");
-                return "Account";
             }
-        }
 
-        // Redirect to the account page after successful upload
-        return "redirect:/auth/account";
+            // Redirect to the account page after successful upload
+            return "redirect:/auth/account";
+        } catch (AuthenticationFailureException e) {
+            return "AccessDenied";
+        }
+    }
+
+    @PostMapping("/account/photo/remove")
+    public String removeProfilePhoto(HttpSession session, Model model) {
+        try {
+
+            User user = authenticationHelper.tryGetUser(session);
+
+            user.setPhoto("assets/img/default-user.jpg");
+            userService.update(user, user, authenticationHelper.tryGetUser(session).getId());
+
+            return "redirect:/auth/account";
+        } catch (AuthenticationFailureException e) {
+            return "AccessDenied";
+        }
     }
 
     @GetMapping("/account/delete")
