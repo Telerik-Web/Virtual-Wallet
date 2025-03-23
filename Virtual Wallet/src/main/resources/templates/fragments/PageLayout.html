@@ -102,6 +102,18 @@
 <!--  <script src="@{../static/js/scripts.js}"></script>-->
   <script src="/static/js/sb-admin-2.js"></script>
   <script src="/static/js/dark-mode.js"></script>
+  <script>
+    function openFilePicker() {
+      document.getElementById("profileImageInput").click();
+    }
+
+    function handleFileSelection() {
+      const fileInput = document.getElementById("profileImageInput");
+      if (fileInput.files.length > 0) {
+        document.getElementById("profileForm").submit();
+      }
+    }
+  </script>
 </div>
 
 

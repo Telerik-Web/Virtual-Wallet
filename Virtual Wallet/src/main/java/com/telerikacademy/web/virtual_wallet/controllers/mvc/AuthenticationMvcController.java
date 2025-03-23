@@ -5,6 +5,7 @@ import com.telerikacademy.web.virtual_wallet.exceptions.AuthenticationFailureExc
 import com.telerikacademy.web.virtual_wallet.exceptions.DuplicateEntityException;
 import com.telerikacademy.web.virtual_wallet.exceptions.EntityNotFoundException;
 import com.telerikacademy.web.virtual_wallet.helpers.AuthenticationHelper;
+import com.telerikacademy.web.virtual_wallet.helpers.CloudinaryHelper;
 import com.telerikacademy.web.virtual_wallet.helpers.JwtUtil;
 import com.telerikacademy.web.virtual_wallet.helpers.TokenGenerator;
 import com.telerikacademy.web.virtual_wallet.mappers.CardMapper;
@@ -23,12 +24,18 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
+
+import static com.telerikacademy.web.virtual_wallet.helpers.PermissionHelper.isValidImageFile;
 
 @Controller
 @RequestMapping("/auth")
 public class AuthenticationMvcController {
+
+    final long MAX_FILE_SIZE = 5 * 1024 * 1024;
 
     private final AuthenticationHelper authenticationHelper;
     private final UserService userService;
@@ -38,12 +45,13 @@ public class AuthenticationMvcController {
     private final EmailServiceImpl emailService;
     private final TransactionService transactionService;
     private final JwtUtil jwtUtil;
+    private final CloudinaryHelper cloudinaryHelper;
 
     @Autowired
     public AuthenticationMvcController(AuthenticationHelper authenticationHelper,
                                        UserService userService,
                                        UserMapper userMapper, CardService cardService, CardMapper cardMapper,
-                                       EmailServiceImpl emailService, TransactionService transactionService, JwtUtil jwtUtil) {
+                                       EmailServiceImpl emailService, TransactionService transactionService, JwtUtil jwtUtil, CloudinaryHelper cloudinaryHelper) {
         this.authenticationHelper = authenticationHelper;
         this.userService = userService;
         this.userMapper = userMapper;
@@ -52,6 +60,7 @@ public class AuthenticationMvcController {
         this.emailService = emailService;
         this.transactionService = transactionService;
         this.jwtUtil = jwtUtil;
+        this.cloudinaryHelper = cloudinaryHelper;
     }
 
     @ModelAttribute("isAuthenticated")
@@ -140,6 +149,7 @@ public class AuthenticationMvcController {
             User user = authenticationHelper.tryGetUser(session);
             UserDTO userDto = userMapper.fromUsertoUserDto(user);
             model.addAttribute("user", userDto);
+            model.addAttribute("image", user.getPhoto());
             return "Account";
         } catch (AuthenticationFailureException e) {
             return "AccessDenied";
@@ -175,11 +185,48 @@ public class AuthenticationMvcController {
             user.setAccountVerified(authenticationHelper.tryGetUser(session).isAccountVerified());
             user.setCards(authenticationHelper.tryGetUser(session).getCards());
             userService.update(user, user, authenticationHelper.tryGetUser(session).getId());
-            return "redirect:/auth/account";
+            return "redirect:/account";
         } catch (DuplicateEntityException e) {
             errors.rejectValue("password", "password_error", e.getMessage());
             return "UpdateUser";
         }
+    }
+
+    @PostMapping("/account/upload")
+    public String uploadProfilePhoto(@RequestParam("profileImage") MultipartFile profileImage,
+                                     HttpSession session,
+                                     Model model) {
+
+        User user = authenticationHelper.tryGetUser(session);
+
+        if (profileImage != null && !profileImage.isEmpty()) {
+            try {
+
+                if (!isValidImageFile(profileImage)) {
+                    model.addAttribute("error", "Invalid image file. Only JPG, PNG, or GIF files are allowed.");
+                    return "Account";
+                }
+
+                if (profileImage.getSize() > MAX_FILE_SIZE) {
+                    model.addAttribute("error", "File is too large! Max size is 5MB.");
+                    return "Account";
+                }
+
+
+                String imageUrl = cloudinaryHelper.uploadUserProfilePhoto(profileImage, user);
+
+
+                user.setPhoto(imageUrl);
+                userService.update(user, user, authenticationHelper.tryGetUser(session).getId());
+
+            } catch (IOException e) {
+                model.addAttribute("error", "An error occurred while uploading the image.");
+                return "Account";
+            }
+        }
+
+        // Redirect to the account page after successful upload
+        return "redirect:/auth/account";
     }
 
     @GetMapping("/account/delete")

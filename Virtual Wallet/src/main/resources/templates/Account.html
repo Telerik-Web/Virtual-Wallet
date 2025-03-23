@@ -10,7 +10,27 @@
         <div class="card o-hidden border-0 shadow-lg my-5">
             <div class="card-body p-5">
                 <h2 class="text-center text-gray-900 font-weight-bold">Account Information</h2>
+                <br/>
+                <div>
+                    <img th:src="${image != 'assets/img/default-user.jpg' ? image : '/assets/img/default-user.jpg'}"
+                         alt="Profile Photo"
+                         width="150"
+                         onclick="openFilePicker()"
+                         style="cursor: pointer;" />
+                </div>
 
+
+                <form id="profileForm" th:action="@{/auth/account/upload}" method="post" enctype="multipart/form-data">
+                    <input type="file" id="profileImageInput" name="profileImage" accept="image/*" style="display: none;" onchange="handleFileSelection()" />
+                </form>
+
+
+                <div th:if="${error}">
+                    <p class="error" th:text="${error}"></p>
+                </div>
+
+                <br/>
+                
                 <h4 class="text-gray-900 font-weight-bold">First Name</h4>
                 <p th:text="${user.firstName}">First Name</p>
                 <br/>
@@ -33,7 +53,7 @@
         </div>
     </div>
 </section>
-
+<br/><br/><br/><br/>
 <footer th:replace="~{fragments/PageLayout.html :: footer}"></footer>
 <div th:replace="~{/fragments/PageLayout.html :: scripts}"></div>
 
