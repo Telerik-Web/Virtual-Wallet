@@ -11,27 +11,47 @@
     </div>
 </header>
 
+
 <div class="container mt-5">
     <div class="row justify-content-center">
-        <div th:each="card : ${cards}" class="col-lg-4 col-md-6 col-sm-12 mb-4">
-            <div class="card shadow border-0">
-                <div class="card-body text-center">
-                    <h5 class="card-title">Card ID: <span th:text="${card.getId()}"></span></h5>
-                    <p class="card-text"><strong>Card Number:</strong> <span th:text="${card.getCardNumber()}"></span></p>
-                    <p class="card-text"><strong>Expiration Date:</strong> <span th:text="${card.getExpirationDate()}"></span></p>
+        <!-- Loop through each card -->
+        <div th:each="card : ${cards}" class="col-md-4 mb-4">
+            <div class="credit-card position-relative">
+                <!-- Close Icon -->
+                <form style="position: absolute; top: 10px; right: 10px;">
+                    <a th:href="@{/auth/delete/card/{id}(id=${card.getId()})}"
+                              type="submit" class="btn-close text-white"></a>
+                </form>
 
-                    <div class="d-flex justify-content-center gap-2">
-                        <form>
-                            <a th:href="@{/auth/delete/card/{id}(id=${card.getId()})}"
-                               type="submit" class="btn btn-danger btn-danger:hover">Delete Card</a>
-                        </form>
+                <!-- Card Content -->
+                <div>
+                    <span class="bank-name">FlowPay</span>
+                </div>
+                <div th:text="${card.getCardNumber()}" class="card-number">
+                    **** **** **** 1234
+                </div>
+                <div class="d-flex justify-content-between">
+                    <!-- Cardholder Name -->
+                    <div class="card-details">
+                        <span class="label">Cardholder Name</span>
+                        <span th:text="${card.getCardHolder()}" class="value">John Doe</span>
+                    </div>
+                    <!-- Expiry Date -->
+                    <div class="card-details">
+                        <span class="label">Expiry Date</span>
+                        <span th:text="${card.getExpirationDate()}" class="value">12/25</span>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-<br/><br/><br/><br/>
+
+<div th:if="${cards.size() == 0}" class="container mt-5">
+    <br/><br/><br/><br/><br/><br/><br/>
+</div>
+
+<br/><br/><br/><br/><br/>
 <footer th:replace="~{fragments/PageLayout.html :: footer}"></footer>
 <div th:replace="~{/fragments/PageLayout.html :: scripts}"></div>
 
