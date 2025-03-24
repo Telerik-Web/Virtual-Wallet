@@ -14,4 +14,5 @@ public class VirtualWalletApplication {
     //userRepository - JPA
     //javascript nai otgore v faila
     //vkarai duplicat telefon v bazata pri registraciq
+    //$ sprq da izliza w home
 }

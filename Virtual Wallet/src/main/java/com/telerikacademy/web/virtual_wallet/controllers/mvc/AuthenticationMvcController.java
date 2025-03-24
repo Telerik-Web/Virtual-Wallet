@@ -123,29 +123,31 @@ public class AuthenticationMvcController {
     @PostMapping("/register")
     public String processRegister(@Valid @ModelAttribute("register") UserDTO registerDto,
                                   BindingResult errors) {
-        try {
-            if (errors.hasErrors()) {
-                return "Register";
-            }
-
-            if (!registerDto.getPassword().equals(registerDto.getPasswordConfirm())) {
-                return "Register";
-            }
-
-            try {
-                User user = userMapper.fromUserDto(registerDto);
-                userService.create(user);
-                return "VerifyEmail";
-            } catch (DuplicateEntityException e) {
-                errors.rejectValue("username", "duplicate.username",
-                        "Phone number is already taken!");
-                return "Register";
-            }
-        } catch (Exception e) {
-            errors.rejectValue("phone", "duplicate.phone",
-                    "Username is already taken!");
+//        try {
+        if (errors.hasErrors()) {
             return "Register";
         }
+
+        if (!registerDto.getPassword().equals(registerDto.getPasswordConfirm())) {
+            errors.rejectValue("passwordConfirm", "password.mismatch", "Passwords do not match.");
+            return "Register";
+        }
+
+
+        try {
+            User user = userMapper.fromUserDto(registerDto);
+            userService.create(user);
+            return "VerifyEmail";
+        } catch (DuplicateEntityException e) {
+            errors.rejectValue("username", "duplicate.username",
+                    "Phone number is already taken!");
+            return "Register";
+        }
+//        } catch (Exception e) {
+//            errors.rejectValue("phone", "duplicate.phone",
+//                    "Username is already taken!");
+//            return "Register";
+//        }
     }
 
     @GetMapping("/account")
