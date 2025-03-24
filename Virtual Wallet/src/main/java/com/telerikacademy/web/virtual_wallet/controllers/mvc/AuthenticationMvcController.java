@@ -334,10 +334,10 @@ public class AuthenticationMvcController {
         }
     }
 
-    @GetMapping("/delete/card/{id}")
+    @PostMapping("/delete/card/{id}")
     public String deleteCard(@PathVariable int id,
                              HttpSession session) {
-        User user = null;
+        User user;
         try {
             user = authenticationHelper.tryGetUser(session);
         } catch (AuthenticationFailureException e) {
