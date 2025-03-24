@@ -182,6 +182,9 @@ public class TransactionMvcController {
             User user;
             try {
                 user = authenticationHelper.tryGetUser(session);
+                if(user.getIsBlocked()){
+                    return "BlockedView";
+                }
             } catch (AuthenticationFailureException e) {
                 return "AccessDenied";
             } catch (EntityNotFoundException e) {

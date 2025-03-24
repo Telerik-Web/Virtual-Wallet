@@ -6,8 +6,8 @@
 <nav th:replace="~{fragments/PageLayout.html :: navbar}"></nav>
 
 <div class="access-denied-container">
-    <h1 class="access-denied-title">Access Denied</h1>
-    <p class="fieldName">Oops! You're not authorized to view this page!</p>
+    <h1 class="access-denied-title mb-3">Access Denied</h1>
+    <p class="fieldName mb-3">Oops! You're not authorized to view this page!</p>
 
     <div th:if="${isAuthenticated}">
         <a class="btn btn-primary" href="/" th:href="@{/}">Go Back Home</a>
