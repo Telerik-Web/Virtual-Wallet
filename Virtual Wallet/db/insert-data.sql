@@ -1,8 +1,8 @@
-INSERT INTO users (first_name, last_name, username, password, email, phone, balance, photo, isAdmin, isBlocked, account_verified)
-VALUES ('John', 'Doe', 'johndoe', 'pass1', 'john.doe@example.com', '1234567890', '1000', NULL, true, false, TRUE),
-       ('Alice', 'Smith', 'alicesmith', 'pass2', 'alice.smith@example.com', '2345678901', '1000', NULL, false, false, TRUE),
-       ('Bob', 'Johnson', 'bobjohnson', 'pass3', 'bob.johnson@example.com', '3456789012', '1000', NULL, false, false, TRUE),
-       ('Emma', 'Brown', 'emmabrownN@!2', 'emmabrownN@!2', 'emma.brown@example.com', '4567890123', '1000', NULL, false,
+INSERT INTO users (first_name, last_name, username, password, email, phone, balance, isAdmin, isBlocked, account_verified)
+VALUES ('John', 'Doe', 'johndoe', 'pass1', 'john.doe@example.com', '1234567890', '1000', true, false, TRUE),
+       ('Alice', 'Smith', 'alicesmith', 'pass2', 'alice.smith@example.com', '2345678901', '1000', false, false, TRUE),
+       ('Bob', 'Johnson', 'bobjohnson', 'pass3', 'bob.johnson@example.com', '3456789012', '1000', false, false, TRUE),
+       ('Emma', 'Brown', 'emmabrownN@!2', 'emmabrownN@!2', 'emma.brown@example.com', '4567890123', '1000', false,
         true, TRUE);
 
 

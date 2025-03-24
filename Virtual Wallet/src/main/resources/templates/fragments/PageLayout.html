@@ -40,8 +40,8 @@
 
         <li class="nav-item" th:if="${isAuthenticated}">
           <a class="nav-link text-dark font-weight-bold"
-             th:href="${#lists.isEmpty(session.cards)} ? @{/auth/account/cards/new} : @{/auth/account/cards}">
-            <span th:text="${#lists.isEmpty(session.cards)} ? 'Add Card' : 'Manage Cards'"></span>
+             th:href="@{/auth/account/cards}">
+            <span th:text="'Manage Cards'"></span>
           </a>
         </li>
 
@@ -102,6 +102,18 @@
 <!--  <script src="@{../static/js/scripts.js}"></script>-->
   <script src="/static/js/sb-admin-2.js"></script>
   <script src="/static/js/dark-mode.js"></script>
+  <script>
+    function openFilePicker() {
+      document.getElementById("profileImageInput").click();
+    }
+
+    function handleFileSelection() {
+      const fileInput = document.getElementById("profileImageInput");
+      if (fileInput.files.length > 0) {
+        document.getElementById("profileForm").submit();
+      }
+    }
+  </script>
 </div>
 
 

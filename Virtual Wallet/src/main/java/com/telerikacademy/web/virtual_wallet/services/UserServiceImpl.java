@@ -3,11 +3,17 @@ package com.telerikacademy.web.virtual_wallet.services;
 import com.telerikacademy.web.virtual_wallet.exceptions.DuplicateEntityException;
 import com.telerikacademy.web.virtual_wallet.exceptions.EntityNotFoundException;
 import com.telerikacademy.web.virtual_wallet.helpers.TokenGenerator;
+import com.telerikacademy.web.virtual_wallet.helpers.UserSpecifications;
 import com.telerikacademy.web.virtual_wallet.models.FilterUserOptions;
 import com.telerikacademy.web.virtual_wallet.models.User;
 import com.telerikacademy.web.virtual_wallet.repositories.UserRepository;
 import com.telerikacademy.web.virtual_wallet.services.email_verification.EmailServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -28,39 +34,65 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> getAll(FilterUserOptions filterOptions) {
-        return userRepository.getAll(filterOptions);
+    public Page<User> getAll(FilterUserOptions filterOptions, int page, int size, String sortBy, String direction) {
+
+        Sort sort = Sort.by(Sort.Direction.fromString(direction), sortBy);
+        Pageable pageable = PageRequest.of(page, size, sort);
+
+        // Build dynamic filters
+        Specification<User> spec = UserSpecifications.withFilters(filterOptions);
+
+
+        return userRepository.findAll(spec, pageable);
     }
 
     @Override
     public long getUserCount() {
-        return userRepository.getUserCount();
+        return userRepository.count();
+    }
+
+
+    @Override
+    public User getById(long id) {
+        User user = userRepository.findUserById(id);
+        if (user == null) {
+            throw new EntityNotFoundException("User", id);
+        }
+
+        return user;
     }
 
     @Override
     public User getById(User user, long id) {
         checkIfAdmin(user);
-        return userRepository.getById(id);
-    }
-
-    @Override
-    public User getById(long id) {
-        return userRepository.getById(id);
+        return getById(id);
     }
 
     @Override
     public User getByUsername(String username) {
-        return userRepository.getByUsername(username);
+        User user = userRepository.findByUsername(username);
+        if (user == null) {
+            throw new EntityNotFoundException("User", "username", username);
+        }
+        return user;
     }
 
     @Override
     public User getByEmail(String email) {
-        return userRepository.getByEmail(email);
+        User user = userRepository.findByEmail(email);
+        if (user == null) {
+            throw new EntityNotFoundException("User", "email", email);
+        }
+        return user;
     }
 
     @Override
     public User getByPhoneNumber(String phoneNumber) {
-        return userRepository.getByPhoneNumber(phoneNumber);
+        User user = userRepository.findByPhoneNumber(phoneNumber);
+        if (user == null) {
+            throw new EntityNotFoundException("User", "phone number", phoneNumber);
+        }
+        return user;
     }
 
     @Override
@@ -74,14 +106,14 @@ public class UserServiceImpl implements UserService {
         } else {
             userToUpdate.setIsAdmin(false);
         }
-        userRepository.alterAdminPermissions(userToUpdate);
+        userRepository.save(userToUpdate);
     }
 
     @Override
     public void alterBlockPermissions(long id, User user, boolean isBlocked) {
         checkIfAdmin(user);
 
-        User userToUpdate = userRepository.getById(id);
+        User userToUpdate = getById(id);
 
         if (isBlocked) {
             userToUpdate.setIsBlocked(true);
@@ -89,7 +121,7 @@ public class UserServiceImpl implements UserService {
         if (!isBlocked) {
             userToUpdate.setIsBlocked(false);
         }
-        userRepository.alterBlockPermissions(userToUpdate);
+        userRepository.save(userToUpdate);
     }
 
     @Override
@@ -97,7 +129,7 @@ public class UserServiceImpl implements UserService {
         boolean exists = true;
 
         try {
-            userRepository.getByUsername(user.getUsername());
+            userRepository.findByUsername(user.getUsername());
         } catch (EntityNotFoundException e) {
             exists = false;
         }
@@ -108,7 +140,7 @@ public class UserServiceImpl implements UserService {
         String token = TokenGenerator.generateToken();
         user.setVerificationToken(token);
         user.setAccountVerified(false);
-        userRepository.create(user);
+        userRepository.save(user);
         emailService.sendVerificationEmail(user.getEmail(), user.getVerificationToken());
     }
 
@@ -118,7 +150,7 @@ public class UserServiceImpl implements UserService {
         if (user != null) {
             user.setAccountVerified(true);
             user.setVerificationToken(null);
-            userRepository.update(user, user.getId());
+            userRepository.save(user);
             return true;
         }
         return false;
@@ -131,7 +163,7 @@ public class UserServiceImpl implements UserService {
         boolean exists = true;
 
         try {
-            userRepository.getByEmail(user.getEmail());
+            userRepository.findByEmail(user.getEmail());
             if (user.getId() == id) {
                 exists = false;
             }
@@ -143,14 +175,14 @@ public class UserServiceImpl implements UserService {
             throw new DuplicateEntityException("User", "email", user.getEmail());
         }
 
-        userRepository.update(user, id);
+        userRepository.save(user);
     }
 
     @Override
     public void delete(long id, User userFromHeader) {
         User user = getById(id);
         checkIfCreatorOrAdminForUser(userFromHeader, user);
-        userRepository.delete(id);
+        userRepository.delete(user);
     }
 
 }

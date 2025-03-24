@@ -8,7 +8,7 @@ CREATE TABLE users
     email              VARCHAR(255) NOT NULL UNIQUE,
     phone              VARCHAR(10)  NOT NULL UNIQUE,
     balance            VARCHAR(255) NOT NULL,
-    photo              LONGBLOB,
+    photo              VARCHAR(320) DEFAULT 'assets/img/default-user.jpg',
     isAdmin            BOOLEAN      NOT NULL,
     isBlocked          BOOLEAN      NOT NULL,
     verification_token VARCHAR(255) UNIQUE,

@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/PageLayout.html :: head('Blocked')}"></head>
+<body>
+
+<nav th:replace="~{fragments/PageLayout.html :: navbar}"></nav>
+
+<div class="access-denied-container">
+    <h1 class="access-denied-title">Blocked User</h1>
+    <p class="fieldName">Oops! Your transaction was unsuccessful because you have been blocked!</p>
+
+    <div th:if="${isAuthenticated}">
+        <a class="btn btn-primary" href="/" th:href="@{/transactions/new}">Try Again</a>
+    </div>
+</div>
+<footer th:replace="~{fragments/PageLayout.html :: footer}"></footer>
+<div th:replace="~{/fragments/PageLayout.html :: scripts}"></div>
+</body>
+</html>

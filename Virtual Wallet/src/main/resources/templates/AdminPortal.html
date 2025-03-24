@@ -5,27 +5,33 @@
 <nav th:replace="~{fragments/PageLayout :: navbar}"></nav>
 
 <br/><br/><br/><br/><br/>
-<div class="container d-flex justify-content-center align-items-center mb-5 mt-5">
-    <form class="filter-form p-4 border rounded bg-light shadow"
-          action="#" th:action="@{/users/admin}" method="get" th:object="${filterUserOptions}">
+<div class="container my-3">
+    <form class="p-4 bg-light rounded shadow-sm" th:action="@{/users/admin}" method="get" th:object="${filterUserOptions}">
+        <h4 class="text-center mb-4">User Search</h4>
 
-        <h4 class="text-center" th:text="#{users.list}">User Search</h4>
-        <br/>
+        <div class="row g-2">
+            <!-- Username Field -->
+            <div class="col-md-4">
+                <label class="form-label fw-bold text-gray-900" for="username">Username</label>
+                <input type="text" id="username" name="username" class="form-control" th:field="*{username}" placeholder="Enter username">
+            </div>
 
-        <div class="mb-3">
-            <input type="text" class="form-control" placeholder="Username" th:field="*{username}"/>
+            <!-- Email Field -->
+            <div class="col-md-4">
+                <label class="form-label fw-bold text-gray-900" for="email">Email</label>
+                <input type="text" id="email" name="email" class="form-control" th:field="*{email}" placeholder="Enter email">
+            </div>
+
+            <!-- Phone Number Field -->
+            <div class="col-md-4">
+                <label class="form-label fw-bold text-gray-900" for="phoneNumber">Phone Number</label>
+                <input type="text" id="phoneNumber" name="phoneNumber" class="form-control" th:field="*{phoneNumber}" placeholder="Enter phone number">
+            </div>
         </div>
 
-        <div class="mb-3">
-            <input type="text" class="form-control" placeholder="Email" th:field="*{email}"/>
-        </div>
-
-        <div class="mb-3">
-            <input type="text" class="form-control" placeholder="Phone" th:field="*{phoneNumber}"/>
-        </div>
-
-        <div class="d-grid">
-            <input type="submit" class="btn btn-primary" value="Search"/>
+        <!-- Centered Search Button -->
+        <div class="text-center mt-4">
+            <button type="submit" class="btn btn-primary px-4">Search</button>
         </div>
     </form>
 </div>
@@ -47,20 +53,45 @@
         <td th:text="${user.email}" class="text-center"></td>
         <td th:text="${user.phoneNumber}" class="text-center"></td>
         <td th:if="${currentUser.username != user.username}" class="d-flex gap-2 justify-content-center align-items-center">
-            <form th:action="@{/users/{id}/promote(id=${user.id})}" method="post">
-                <button type="submit" class="btn pr-5 px-3 py-2 justify-content-center">
-                    <i class="fas fa-user fa-2x" th:classappend="${user.getIsAdmin() == true ? 'text-danger' : 'text-primary'}"></i>
+            <form class="col-md-4" th:action="@{/users/{id}/promote(id=${user.id})}" method="post">
+                <button type="submit" class="btn px-3 py-2 mr-2 w-75"
+                        th:classappend="${user.getIsAdmin() == false} ? 'btn-success' : 'btn-danger'"
+                        th:text="${user.getIsAdmin() == false} ? 'Enable Admin Access' : 'Remove Admin Access'">
                 </button>
             </form>
-            <form th:action="@{/users/{id}/block(id=${user.id})}" method="post">
-                <button type="submit" class="btn pl-5 px-3 py-2">
-                    <i class="fas fa-ban fa-2x" th:classappend="${user.getIsBlocked() == true ? 'text-dark' : 'text-danger'}"></i>
+            <form class="col-md-4" th:action="@{/users/{id}/block(id=${user.id})}" method="post">
+                <button type="submit" class="btn px-3 py-2 w-50"
+                        th:classappend="${user.getIsBlocked() == false} ? 'btn-danger' : 'btn-success'"
+                        th:text="${user.getIsBlocked() == false} ? 'Block' : 'Unblock'">
                 </button>
             </form>
+            <form class="col-md-4" th:action="@{/users/{id}/transactions(id=${user.id})}" method="get">
+                <button type="submit" class="btn btn-primary px-3 py-2 w-50">
+                    Transactions
+                </button>
+            </form>
+
+
+
         </td>
     </tr>
     </tbody>
 </table>
+
+<nav th:unless="${users.isEmpty()}">
+    <ul class="pagination justify-content-center">
+        <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
+            <a class="page-link" th:href="@{/users/admin(page=${currentPage - 1}, size=${size}, direction=${direction})}">Previous</a>
+        </li>
+        <li class="page-item" th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
+            th:classappend="${i == currentPage} ? 'active'">
+            <a class="page-link" th:href="@{/users/admin(page=${i}, size=${size}, direction=${direction})}" th:text="${i + 1}">1</a>
+        </li>
+        <li class="page-item" th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
+            <a class="page-link" th:href="@{/users/admin(page=${currentPage + 1}, size=${size}, direction=${direction})}">Next</a>
+        </li>
+    </ul>
+</nav>
 
 <br/><br/><br/>
 

@@ -1,19 +1,16 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments/PageLayout.html :: head('AccessDenied')}"></head>
+<head th:replace="~{fragments/PageLayout.html :: head('No Transactions')}"></head>
 <body>
 
 <nav th:replace="~{fragments/PageLayout.html :: navbar}"></nav>
 
 <div class="access-denied-container">
-    <h1 class="access-denied-title mb-3">Access Denied</h1>
-    <p class="fieldName mb-3">Oops! You're not authorized to view this page!</p>
+    <h1 class="access-denied-title">No Transactions!</h1>
+    <p class="fieldName">This user currently doesn't have any transactions.</p>
 
     <div th:if="${isAuthenticated}">
         <a class="btn btn-primary" href="/" th:href="@{/}">Go Back Home</a>
-    </div>
-    <div th:unless="${isAuthenticated}">
-        <a class="btn btn-primary" href="/auth/login" th:href="@{/auth/login}">Login</a>
     </div>
 </div>
 <footer th:replace="~{fragments/PageLayout.html :: footer}"></footer>

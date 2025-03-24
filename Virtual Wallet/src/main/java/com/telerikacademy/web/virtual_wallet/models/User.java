@@ -37,11 +37,8 @@ public class User {
     @Column(name = "phone")
     private String phoneNumber;
 
-    @Lob
-    @JsonIgnore
-    @Basic(fetch = FetchType.EAGER)
     @Column(name = "photo")
-    private byte[] photo;
+    private String photo;
 
     @Column(name = "isAdmin")
     private Boolean isAdmin;

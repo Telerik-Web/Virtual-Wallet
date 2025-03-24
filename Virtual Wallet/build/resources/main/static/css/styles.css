@@ -11400,6 +11400,73 @@ input::placeholder {
   background-color: var(--green);
 }
 
+/* Credit Card Container */
+.credit-card {
+  width: 300px;
+  height: 180px;
+  background: linear-gradient(135deg, #6a11cb, #2575fc);
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  color: white;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Card Header */
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.bank-name {
+  font-size: 14px;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.card-logo {
+  width: 40px;
+  height: auto;
+}
+
+/* Card Number */
+.card-number {
+  font-size: 20px;
+  font-weight: bold;
+  letter-spacing: 2px;
+  text-align: center;
+  margin-top: 10px;
+}
+
+/* Card Footer */
+.card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.card-details {
+  display: flex;
+  flex-direction: column;
+}
+
+.label {
+  font-size: 10px;
+  text-transform: uppercase;
+  opacity: 0.7;
+}
+
+.value {
+  font-size: 14px;
+  font-weight: bold;
+  margin-top: 2px;
+}
 /*#earningsChart {*/
 /*  width: 100% !important;*/
 /*  height: 400px !important;*/
