@@ -1,6 +1,7 @@
 package com.telerikacademy.web.virtual_wallet;
 
 import com.telerikacademy.web.virtual_wallet.models.Card;
+import com.telerikacademy.web.virtual_wallet.models.FilterUserOptions;
 import com.telerikacademy.web.virtual_wallet.models.Transaction;
 import com.telerikacademy.web.virtual_wallet.models.User;
 
@@ -87,5 +88,9 @@ public class Helpers {
         List<Card> cardsList = new ArrayList<>();
         cardsList.add(createMockCard());
         return cardsList;
+    }
+
+    public static FilterUserOptions createMockFilterUserOptions() {
+        return new FilterUserOptions(null, null, null, null, null);
     }
 }

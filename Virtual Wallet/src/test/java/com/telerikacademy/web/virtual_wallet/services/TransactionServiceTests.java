@@ -5,7 +5,7 @@ import com.telerikacademy.web.virtual_wallet.exceptions.EntityNotFoundException;
 import com.telerikacademy.web.virtual_wallet.models.Transaction;
 import com.telerikacademy.web.virtual_wallet.models.User;
 import com.telerikacademy.web.virtual_wallet.repositories.TransactionRepository;
-import com.telerikacademy.web.virtual_wallet.repositories.UserRepositoryImpl;
+import com.telerikacademy.web.virtual_wallet.repositories.UserRepository;
 import com.telerikacademy.web.virtual_wallet.services.email_verification.LargeTransactionService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -28,7 +28,7 @@ import static org.mockito.Mockito.*;
 public class TransactionServiceTests {
 
     @Mock
-    UserRepositoryImpl userRepository;
+    UserRepository userRepository;
 
     @Mock
     TransactionRepository transactionRepository;
@@ -100,8 +100,8 @@ public class TransactionServiceTests {
         Assertions.assertEquals(99, sender.getBalance());
         Assertions.assertEquals(51, recipient.getBalance());
 
-        verify(userRepository, times(1)).update(sender, sender.getId());
-        verify(userRepository, times(1)).update(recipient, recipient.getId());
+        verify(userRepository, times(1)).save(sender);
+        verify(userRepository, times(1)).save(recipient);
         verify(transactionRepository, times(1)).save(Mockito.any());
     }
 

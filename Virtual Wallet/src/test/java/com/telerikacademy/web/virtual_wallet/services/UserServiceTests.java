@@ -3,7 +3,6 @@ package com.telerikacademy.web.virtual_wallet.services;
 import com.telerikacademy.web.virtual_wallet.exceptions.DuplicateEntityException;
 import com.telerikacademy.web.virtual_wallet.exceptions.EntityNotFoundException;
 import com.telerikacademy.web.virtual_wallet.exceptions.UnauthorizedOperationException;
-import com.telerikacademy.web.virtual_wallet.models.FilterUserOptions;
 import com.telerikacademy.web.virtual_wallet.models.User;
 import com.telerikacademy.web.virtual_wallet.repositories.UserRepository;
 import com.telerikacademy.web.virtual_wallet.services.email_verification.EmailServiceImpl;
@@ -15,11 +14,18 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
-import static org.mockito.ArgumentMatchers.any;
+import static com.telerikacademy.web.virtual_wallet.Helpers.*;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -75,82 +81,82 @@ public class UserServiceTests {
     @Test
     void getAll_Should_Return_All_Users() {
         // Arrange
-        List<User> users = Arrays.asList(user1, user2);
-        when(userRepository.getAll(any())).thenReturn(users);
+        List<User> listUsers = Arrays.asList(user1, user2);
+        Page<User> users = new PageImpl<>(listUsers);
+        when(userRepository.findAll(any(Specification.class), any(Pageable.class))).thenReturn(users);
 
         // Act
-        List<User> result = userService.getAll(new FilterUserOptions());
+        Page<User> result = userService.getAll(createMockFilterUserOptions(), 1, 10, "username", "desc");
 
         // Assert
-        Assertions.assertEquals(2, result.size());
-        Assertions.assertEquals("john_doe", result.get(0).getUsername());
-        Assertions.assertEquals("jane_smith", result.get(1).getUsername());
-        Mockito.verify(userRepository, Mockito.times(1)).getAll(any());
+        Assertions.assertEquals(2, result.getContent().size());
+        Assertions.assertEquals("john_doe", result.getContent().get(0).getUsername());
+        Assertions.assertEquals("jane_smith", result.getContent().get(1).getUsername());
     }
 
     @Test
     void getUserCount_Should_Return_All_CountedUsers() {
         // Arrange
-        when(userRepository.getUserCount()).thenReturn(2L);
+        when(userRepository.count()).thenReturn(2L);
 
         // Act
         long count = userService.getUserCount();
 
         // Assert
         Assertions.assertEquals(2, count);
-        Mockito.verify(userRepository, Mockito.times(1)).getUserCount();
+        Mockito.verify(userRepository, Mockito.times(1)).count();
     }
 
     @Test
     void getById_Should_Return_User() {
         // Arrange
-        when(userRepository.getById(1)).thenReturn(user1);
+        when(userRepository.findUserById(anyLong())).thenReturn(user1);
 
         // Act
         User result = userService.getById(1L);
 
         // Assert
         Assertions.assertEquals(user1.getUsername(), result.getUsername());
-        Mockito.verify(userRepository, Mockito.times(1)).getById(1L);
+        Mockito.verify(userRepository, Mockito.times(1)).findUserById(anyLong());
     }
 
     @Test
     void getByUsername_Should_Return_User() {
         // Arrange
-        when(userRepository.getByUsername("john_doe")).thenReturn(user1);
+        when(userRepository.findByUsername("john_doe")).thenReturn(user1);
 
         // Act
         User result = userService.getByUsername("john_doe");
 
         // Assert
         Assertions.assertEquals(user1.getUsername(), result.getUsername());
-        Mockito.verify(userRepository, Mockito.times(1)).getByUsername("john_doe");
+        Mockito.verify(userRepository, Mockito.times(1)).findByUsername("john_doe");
     }
 
     @Test
     void getByEmail_Should_Return_User() {
         // Arrange
-        when(userRepository.getByEmail("john.doe@example.com")).thenReturn(user1);
+        when(userRepository.findByEmail("john.doe@example.com")).thenReturn(user1);
 
         // Act
         User result = userService.getByEmail("john.doe@example.com");
 
         // Assert
         Assertions.assertEquals(user1.getUsername(), result.getUsername());
-        Mockito.verify(userRepository, Mockito.times(1)).getByEmail("john.doe@example.com");
+        Mockito.verify(userRepository, Mockito.times(1)).findByEmail("john.doe@example.com");
     }
 
     @Test
     void getByPhoneNumber_Should_Return_User() {
         // Arrange
-        when(userRepository.getByPhoneNumber("0888")).thenReturn(user1);
+        when(userRepository.findByPhoneNumber("0888")).thenReturn(user1);
 
         // Act
         User result = userService.getByPhoneNumber("0888");
 
         // Assert
         Assertions.assertEquals(user1.getUsername(), result.getUsername());
-        Mockito.verify(userRepository, Mockito.times(1)).getByPhoneNumber("0888");
+        Mockito.verify(userRepository, Mockito.times(1)).findByPhoneNumber("0888");
     }
 
     @Test
@@ -163,20 +169,20 @@ public class UserServiceTests {
     @Test
     void AlterAdminPermissions_Should_Admin_WhenValid() {
         // Arrange
-        when(userRepository.getById(user2.getId())).thenReturn(user2);
+        when(userRepository.findUserById(anyLong())).thenReturn(user2);
 
         // Act
         userService.alterAdminPermissions(user2.getId(), user1, true);
 
         // Assert
         Assertions.assertTrue(user2.getIsAdmin());
-        Mockito.verify(userRepository, Mockito.times(1)).alterAdminPermissions(user2);
+        Mockito.verify(userRepository, Mockito.times(1)).save(user2);
     }
 
     @Test
     void AlterAdminPermissions_Should_NotAdmin_WhenValid() {
         // Arrange
-        when(userRepository.getById(user2.getId())).thenReturn(user2);
+        when(userRepository.findUserById(anyLong())).thenReturn(user2);
         user2.setIsAdmin(true);
 
         // Act
@@ -184,7 +190,7 @@ public class UserServiceTests {
 
         // Assert
         Assertions.assertFalse(user2.getIsAdmin());
-        Mockito.verify(userRepository, Mockito.times(1)).alterAdminPermissions(user2);
+        Mockito.verify(userRepository, Mockito.times(1)).save(user2);
     }
 
     @Test
@@ -197,20 +203,20 @@ public class UserServiceTests {
     @Test
     void AlterBlockPermissions_Should_Block_WhenValid() {
         // Arrange
-        when(userRepository.getById(user2.getId())).thenReturn(user2);
+        when(userRepository.findUserById(anyLong())).thenReturn(user2);
 
         // Act
         userService.alterBlockPermissions(user2.getId(), user1, true);
 
         // Assert
         Assertions.assertTrue(user2.getIsBlocked());
-        Mockito.verify(userRepository, Mockito.times(1)).alterBlockPermissions(user2);
+        Mockito.verify(userRepository, Mockito.times(1)).save(user2);
     }
 
     @Test
     void AlterBlockPermissions_Should_Unblock_WhenValid() {
         // Arrange
-        when(userRepository.getById(user2.getId())).thenReturn(user2);
+        when(userRepository.findUserById(anyLong())).thenReturn(user2);
         user2.setIsBlocked(true);
 
         // Act
@@ -218,7 +224,7 @@ public class UserServiceTests {
 
         // Assert
         Assertions.assertFalse(user2.getIsBlocked());
-        Mockito.verify(userRepository, Mockito.times(1)).alterBlockPermissions(user2);
+        Mockito.verify(userRepository, Mockito.times(1)).save(user2);
     }
 
     @Test
@@ -234,14 +240,14 @@ public class UserServiceTests {
         User newUser = new User();
         newUser.setUsername("testUser");
 
-        Mockito.when(userRepository.getByUsername("testUser"))
+        Mockito.when(userRepository.findByUsername("testUser"))
                 .thenThrow(new EntityNotFoundException("User", "username", newUser.getUsername()));
 
         // Act
         userService.create(newUser);
 
         // Assert
-        Mockito.verify(userRepository, Mockito.times(1)).create(newUser);
+        Mockito.verify(userRepository, Mockito.times(1)).save(newUser);
     }
 
     @Test
@@ -289,41 +295,50 @@ public class UserServiceTests {
 
     @Test
     void Update_Should_Update_WhenValid() {
-        // Arrange
-        User newUser = new User();
-        newUser.setEmail("test@example.com");
+        User existingUser = new User();
+        existingUser.setId(1L);
+        existingUser.setEmail("test@example.com");
+        existingUser.setUsername("john_doe");
 
-        Mockito.when(userService.getByEmail("test@example.com"))
-                .thenThrow(new EntityNotFoundException("User", "email", newUser.getEmail()));
+        User updatedUser = new User();
+        updatedUser.setId(1L);
+        updatedUser.setEmail("test@example.com");
+        updatedUser.setUsername("updated_john_doe");
 
-        // Act
-        userService.update(newUser, user1, user2.getId());
+        Mockito.when(userRepository.findByEmail("test@example.com")).thenReturn(existingUser);
+        Mockito.when(userService.getByEmail("test@example.com")).thenReturn(existingUser);
 
-        // Assert
-        Mockito.verify(userRepository, Mockito.times(1)).update(newUser, user2.getId());
+        userService.update(updatedUser, existingUser, existingUser.getId());
+
+        Mockito.verify(userRepository, Mockito.times(1)).save(updatedUser);
     }
 
     @Test
     void delete_Should_Throw_When_UserNotFound() {
         // Arrange
-        Mockito.when(userService.getById(user1, 7))
-                .thenThrow(new EntityNotFoundException("User", "id", "7"));
+        Mockito.when(userRepository.findUserById(anyLong())).thenReturn(user1);
+
+        Mockito.when(userService.getById(anyLong())).thenThrow(new EntityNotFoundException("User", "username", user1.getUsername()));
 
         // Act & Assert
         Assertions.assertThrows(EntityNotFoundException.class,
-                () -> userService.delete(7, user1));
+                () -> userService.delete(anyLong(), user1));
     }
 
     @Test
     void delete_Should_Delete_WhenValid() {
         // Arrange
-        Mockito.when(userService.getById(user1, user2.getId()))
-                .thenReturn(user2);
+        User adminUser = createMockAdminUser();
+        User user = createMockUser();
+        when(userRepository.findUserById(anyLong())).thenReturn(user);
+
+        Mockito.when(userService.getById(adminUser, anyLong()))
+                .thenReturn(user);
 
         // Act
-        userService.delete(user2.getId(), user1);
+        userService.delete(adminUser.getId(), user);
 
         // Assert
-        Mockito.verify(userRepository, Mockito.times(1)).delete(user2.getId());
+        Mockito.verify(userRepository, Mockito.times(1)).delete(user);
     }
 }
