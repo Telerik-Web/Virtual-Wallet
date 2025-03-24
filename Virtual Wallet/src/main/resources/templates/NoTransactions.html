@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/PageLayout.html :: head('No Transactions')}"></head>
+<body>
+
+<nav th:replace="~{fragments/PageLayout.html :: navbar}"></nav>
+
+<div class="access-denied-container">
+    <h1 class="access-denied-title">No Transactions!</h1>
+    <p class="fieldName">This user currently doesn't have any transactions.</p>
+
+    <div th:if="${isAuthenticated}">
+        <a class="btn btn-primary" href="/" th:href="@{/}">Go Back Home</a>
+    </div>
+</div>
+<footer th:replace="~{fragments/PageLayout.html :: footer}"></footer>
+<div th:replace="~{/fragments/PageLayout.html :: scripts}"></div>
+</body>
+</html>
