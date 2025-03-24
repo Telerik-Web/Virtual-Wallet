@@ -126,17 +126,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void create(User user) {
-        boolean exists = true;
-
-        try {
-            userRepository.findByUsername(user.getUsername());
-        } catch (EntityNotFoundException e) {
-            exists = false;
-        }
+        boolean exists = userRepository.findByUsername(user.getUsername()) != null;
 
         if (exists) {
             throw new DuplicateEntityException("User", "username", user.getUsername());
         }
+
         String token = TokenGenerator.generateToken();
         user.setVerificationToken(token);
         user.setAccountVerified(false);

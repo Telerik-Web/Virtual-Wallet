@@ -318,77 +318,77 @@
 </script>
 
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        var ctx = document.getElementById("earningsChart").getContext("2d");
-
-        var loggedInUsername = window.loggedInUsername; // Get from Thymeleaf
-
-        function fetchEarnings(days) {
-            let startDate = new Date().toISOString();
-            let endDate = new Date();
-            endDate.setDate(endDate.getDate() - days);
-            endDate = endDate.toISOString();
-
-            let url = `/api/transactions/filter?startDate=${encodeURIComponent(startDate)}&endDate=${encodeURIComponent(endDate)}&username=${encodeURIComponent(loggedInUsername)}`;
-
-            fetch(url, {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Accept": "application/json"
-                },
-                credentials: "include" // Ensure session authentication is used
-            })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error("Server error");
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    updateChart(data);
-                })
-                .catch(error => console.error("Error fetching earnings:", error));
-        }
-
-        function updateChart(data) {
-            let labels = Object.keys(data);
-            let values = Object.values(data);
-
-            if (window.earningsChart) {
-                window.earningsChart.destroy();
-            }
-
-            window.earningsChart = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: labels,
-                    datasets: [{
-                        label: "Total Transactions ($)",
-                        data: values,
-                        borderColor: "#4e73df",
-                        backgroundColor: "rgba(78, 115, 223, 0.1)",
-                        borderWidth: 2
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        x: { title: { display: true, text: 'Date' } },
-                        y: { title: { display: true, text: 'Amount ($)' }, beginAtZero: true }
-                    }
-                }
-            });
-        }
-
-        // Load initial data for 7 days
-        fetchEarnings(7);
-
-        document.getElementById("transactionPeriod").addEventListener("change", function () {
-            fetchEarnings(this.value);
-        });
-    });
+    // document.addEventListener("DOMContentLoaded", function () {
+    //     var ctx = document.getElementById("earningsChart").getContext("2d");
+    //
+    //     var loggedInUsername = window.loggedInUsername; // Get from Thymeleaf
+    //
+    //     function fetchEarnings(days) {
+    //         let startDate = new Date().toISOString();
+    //         let endDate = new Date();
+    //         endDate.setDate(endDate.getDate() - days);
+    //         endDate = endDate.toISOString();
+    //
+    //         let url = `/api/transactions/filter?startDate=${encodeURIComponent(startDate)}&endDate=${encodeURIComponent(endDate)}&username=${encodeURIComponent(loggedInUsername)}`;
+    //
+    //         fetch(url, {
+    //             method: "GET",
+    //             headers: {
+    //                 "Content-Type": "application/json",
+    //                 "Accept": "application/json"
+    //             },
+    //             credentials: "include" // Ensure session authentication is used
+    //         })
+    //             .then(response => {
+    //                 if (!response.ok) {
+    //                     throw new Error("Server error");
+    //                 }
+    //                 return response.json();
+    //             })
+    //             .then(data => {
+    //                 updateChart(data);
+    //             })
+    //             .catch(error => console.error("Error fetching earnings:", error));
+    //     }
+    //
+    //     function updateChart(data) {
+    //         let labels = Object.keys(data);
+    //         let values = Object.values(data);
+    //
+    //         if (window.earningsChart) {
+    //             window.earningsChart.destroy();
+    //         }
+    //
+    //         window.earningsChart = new Chart(ctx, {
+    //             type: 'bar',
+    //             data: {
+    //                 labels: labels,
+    //                 datasets: [{
+    //                     label: "Total Transactions ($)",
+    //                     data: values,
+    //                     borderColor: "#4e73df",
+    //                     backgroundColor: "rgba(78, 115, 223, 0.1)",
+    //                     borderWidth: 2
+    //                 }]
+    //             },
+    //             options: {
+    //                 responsive: true,
+    //                 maintainAspectRatio: false,
+    //                 scales: {
+    //                     x: { title: { display: true, text: 'Date' } },
+    //                     y: { title: { display: true, text: 'Amount ($)' }, beginAtZero: true }
+    //                 }
+    //             }
+    //         });
+    //     }
+    //
+    //     // Load initial data for 7 days
+    //     fetchEarnings(7);
+    //
+    //     document.getElementById("transactionPeriod").addEventListener("change", function () {
+    //         fetchEarnings(this.value);
+    //     });
+    // });
 </script>
 
 
