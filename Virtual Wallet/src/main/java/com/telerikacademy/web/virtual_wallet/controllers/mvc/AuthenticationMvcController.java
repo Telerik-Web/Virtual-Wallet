@@ -133,6 +133,34 @@ public class AuthenticationMvcController {
             return "Register";
         }
 
+        try {
+            userService.getByPhoneNumber(registerDto.getPhone());
+            errors.rejectValue("phone", "phone.duplicate", "Phone number already exists.");
+            return "Register";
+        } catch (EntityNotFoundException e) {
+        }
+
+        try {
+            userService.getByEmail(registerDto.getEmail());
+            errors.rejectValue("email", "email.duplicate", "Email already exists.");
+            return "Register";
+        } catch (EntityNotFoundException e) {
+        }
+
+        try {
+            userService.getByUsername(registerDto.getUsername());
+            errors.rejectValue("username", "username.duplicate", "Username already exists.");
+            return "Register";
+        } catch (EntityNotFoundException e) {
+        }
+
+//        if (userService.getByPhoneNumber(registerDto.getPhone()) != null) {
+//            errors.rejectValue("phone", "phone.duplicate", "Phone number already exists.");
+//            return "Register";
+//        } else if (userService.getByEmail(registerDto.getEmail()) != null) {
+//            errors.rejectValue("email", "email.duplicate", "Email already exists.");
+//            return "Register";
+//        }
 
         try {
             User user = userMapper.fromUserDto(registerDto);

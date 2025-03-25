@@ -22,7 +22,7 @@
                     register.firstName.isEmpty()}">
                         First name can't be empty
                     </label>
-                    <label class="error" th:if="${#fields.hasErrors()} and ${not #strings.isEmpty(register.firstName)}">
+                    <label class="error" th:if="${#fields.hasErrors() and (register.firstName.length() < 1 or register.firstName.length() > 16)}">
                         First name must be between 1 and 16 characters.
                     </label>
 
@@ -35,7 +35,7 @@
                            th:if="${#fields.hasErrors()} and ${register.lastName == null or register.lastName.isEmpty()}">
                         Last name can't be empty.
                     </label>
-                    <label class="error" th:if="${#fields.hasErrors()} and ${not #strings.isEmpty(register.lastName)}">
+                    <label class="error" th:if="${#fields.hasErrors() and (register.lastName.length() < 1 or register.lastName.length() > 16)}">
                         Last name must be between 1 and 16 characters.
                     </label>
 
@@ -48,7 +48,7 @@
                            th:if="${#fields.hasErrors()} and ${register.username == null or register.username.isEmpty()}">
                         Username can't be empty.
                     </label>
-                    <label class="error" th:if="${#fields.hasErrors()} and ${not #strings.isEmpty(register.username)}">
+                    <label class="error" th:if="${#fields.hasErrors() and (register.username.length() < 2 or register.username.length() > 20)}">
                         Username must be between 2 and 20 symbols.
                     </label>
 
@@ -105,8 +105,8 @@
                            th:if="${#fields.hasErrors()} and ${register.phone == null or register.phone.isEmpty()}">
                         Phone number can't be empty.
                     </label>
-                    <label class="error" th:if="${#fields.hasErrors()} and ${not #strings.isEmpty(register.phone)}">
-                        Phone number must be exactly 10 digits
+                    <label class="error" th:if="${#fields.hasErrors()} and ${register.phone.length() != 10}">
+                        Phone number must be exactly 10 digits!
                     </label>
                     <br/><br/>
 
