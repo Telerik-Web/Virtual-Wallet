@@ -131,6 +131,8 @@
                         <div class="card shadow mb-4">
                             <!-- Card Header - Dropdown -->
                             <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+
+
                                 <h6 class="m-0 font-weight-bold text-primary">Earnings Overview</h6>
                                 <div class="dropdown no-arrow">
                                     <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
@@ -146,16 +148,17 @@
                                         <a class="dropdown-item" href="#">Something else here</a>
                                     </div>
                                 </div>
-                                <select id="transactionPeriod" class="form-control-sm">
-                                    <option value="7">Last 7 days</option>
-                                    <option value="30">Last 30 days</option>
-                                    <option value="365">Last Year</option>
-                                </select>
+<!--                                <select id="transactionPeriod" class="form-control-sm">-->
+<!--                                    <option value="7">Last 7 days</option>-->
+<!--                                    <option value="30">Last 30 days</option>-->
+<!--                                    <option value="365">Last Year</option>-->
+<!--                                </select>-->
                             </div>
                             <!-- Card Body -->
                             <div class="card-body">
-                                <div class="chart-area">
-                                    <canvas id="earningsChart"></canvas>
+                                <div class="d-flex justify-content-center align-items-center" style="height: 300px;">
+                                    <h2 class="text-muted">Coming Soon!</h2>
+                                <!--                                    <canvas id="earningsChart"></canvas>-->
                                 </div>
                             </div>
                         </div>
@@ -314,81 +317,82 @@
 </script>
 
 <script>
-    var loggedInUsername = "[[${session.loggedInUser.username}]]";
+    var loggedInUsername = "[[${session.currentUser}]]";
 </script>
 
+<script src="/static/js/demo/chart.js"></script>
+
 <script>
-    // document.addEventListener("DOMContentLoaded", function () {
-    //     var ctx = document.getElementById("earningsChart").getContext("2d");
-    //
-    //     var loggedInUsername = window.loggedInUsername; // Get from Thymeleaf
-    //
-    //     function fetchEarnings(days) {
-    //         let startDate = new Date().toISOString();
-    //         let endDate = new Date();
-    //         endDate.setDate(endDate.getDate() - days);
-    //         endDate = endDate.toISOString();
-    //
-    //         let url = `/api/transactions/filter?startDate=${encodeURIComponent(startDate)}&endDate=${encodeURIComponent(endDate)}&username=${encodeURIComponent(loggedInUsername)}`;
-    //
-    //         fetch(url, {
-    //             method: "GET",
-    //             headers: {
-    //                 "Content-Type": "application/json",
-    //                 "Accept": "application/json"
-    //             },
-    //             credentials: "include" // Ensure session authentication is used
-    //         })
-    //             .then(response => {
-    //                 if (!response.ok) {
-    //                     throw new Error("Server error");
-    //                 }
-    //                 return response.json();
-    //             })
-    //             .then(data => {
-    //                 updateChart(data);
-    //             })
-    //             .catch(error => console.error("Error fetching earnings:", error));
-    //     }
-    //
-    //     function updateChart(data) {
-    //         let labels = Object.keys(data);
-    //         let values = Object.values(data);
-    //
-    //         if (window.earningsChart) {
-    //             window.earningsChart.destroy();
-    //         }
-    //
-    //         window.earningsChart = new Chart(ctx, {
-    //             type: 'bar',
-    //             data: {
-    //                 labels: labels,
-    //                 datasets: [{
-    //                     label: "Total Transactions ($)",
-    //                     data: values,
-    //                     borderColor: "#4e73df",
-    //                     backgroundColor: "rgba(78, 115, 223, 0.1)",
-    //                     borderWidth: 2
-    //                 }]
-    //             },
-    //             options: {
-    //                 responsive: true,
-    //                 maintainAspectRatio: false,
-    //                 scales: {
-    //                     x: { title: { display: true, text: 'Date' } },
-    //                     y: { title: { display: true, text: 'Amount ($)' }, beginAtZero: true }
-    //                 }
-    //             }
-    //         });
-    //     }
-    //
-    //     // Load initial data for 7 days
-    //     fetchEarnings(7);
-    //
-    //     document.getElementById("transactionPeriod").addEventListener("change", function () {
-    //         fetchEarnings(this.value);
-    //     });
-    // });
+    document.addEventListener("DOMContentLoaded", function () {
+        var ctx = document.getElementById("earningsChart").getContext("2d");
+
+        //var loggedInUsername = window.loggedInUsername;
+
+        function fetchEarnings(days) {
+            let startDate = new Date().toISOString();
+            let endDate = new Date();
+            endDate.setDate(endDate.getDate() - days);
+            endDate = endDate.toISOString();
+
+            let url = `/api/transactions/filter?startDate=${encodeURIComponent(startDate)}&endDate=${encodeURIComponent(endDate)}&username=${encodeURIComponent(loggedInUsername)}`;
+
+            fetch(url, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Accept": "application/json"
+                },
+                credentials: "include" // Ensure session authentication is used
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error("Server error");
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    updateChart(data);
+                })
+                .catch(error => console.error("Error fetching earnings:", error));
+        }
+
+        function updateChart(data) {
+            let labels = Object.keys(data);
+            let values = Object.values(data);
+
+            if (window.earningsChart) {
+                window.earningsChart.destroy();
+            }
+
+            window.earningsChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: "Total Transactions ($)",
+                        data: values,
+                        borderColor: "#4e73df",
+                        backgroundColor: "rgba(78, 115, 223, 0.1)",
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: {title: {display: true, text: 'Date'}},
+                        y: {title: {display: true, text: 'Amount ($)'}, beginAtZero: true}
+                    }
+                }
+            });
+        }
+
+        fetchEarnings(7);
+
+        document.getElementById("transactionPeriod").addEventListener("change", function () {
+            fetchEarnings(this.value);
+        });
+    });
 </script>
 
 
@@ -411,7 +415,8 @@
 
 <!--<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>-->
 
-<script src="/static/js/demo/chart.js"></script>
+
+<!--<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>-->
 
 <footer th:replace="~{fragments/PageLayout.html :: footer}"></footer>
 <div th:replace="~{/fragments/PageLayout.html :: scripts}"></div>
