@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{fragments/PageLayout.html :: head('Transactions')}"></head>
-<body>
+<body class="d-flex flex-column min-vh-100">
 
 <nav th:replace="~{fragments/PageLayout.html :: navbar}"></nav>
 <br/><br/>
@@ -14,7 +14,7 @@
 
 <h1 class="text-center">Filter Transactions</h1>
 
-<form class="container my-3 p-3 bg-light rounded shadow-sm" th:action="@{/transactions/all}" method="get">
+<form class="container my-3 p-3 bg-light rounded shadow-sm mb-3" th:action="@{/transactions/all}" method="get">
     <div class="row g-2 align-items-center">
         <div class="col-md-2">
             <label class="form-label fw-bold text-gray-900" for="recipient">Recipient</label>
@@ -69,7 +69,7 @@
 <h2 class="text-center" th:unless="${transactions.isEmpty()}">Transaction Results</h2>
 
 <div class="container mt-4">
-    <div class="list-group">
+    <div class="list-group mb-5">
         <div th:each="transaction : ${transactions}"
              class="list-group-item d-flex justify-content-between align-items-center border-bottom py-3">
 
@@ -116,8 +116,6 @@
         </ul>
     </nav>
 </div>
-
-<br/><br/><br/><br/>
 
 <footer th:replace="~{fragments/PageLayout.html :: footer}"></footer>
 <div th:replace="~{/fragments/PageLayout.html :: scripts}"></div>

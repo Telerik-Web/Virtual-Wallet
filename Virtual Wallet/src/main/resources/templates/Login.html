@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{fragments/PageLayout.html :: head('Login')}"></head>
-<body>
+<body class="d-flex flex-column min-vh-100">
 
 <nav th:replace="~{fragments/PageLayout.html :: navbar}"></nav>
 
-<section class="container-fluid d-flex align-items-center justify-content-center vh-100">
-    <div class="masthead vh-100 justify-content-center">
+<section class="container-fluid d-flex align-items-center justify-content-center">
+    <div class="masthead justify-content-center">
         <div class="card o-hidden border-0 shadow-lg my-5">
             <div class="card-body p-5">
                 <form action="#" th:action="@{/auth/login}" th:object="${login}" method="post">
