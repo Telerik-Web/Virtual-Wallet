@@ -123,7 +123,7 @@ public class AuthenticationMvcController {
     @PostMapping("/register")
     public String processRegister(@Valid @ModelAttribute("register") UserDTO registerDto,
                                   BindingResult errors) {
-//        try {
+
         if (errors.hasErrors()) {
             return "Register";
         }
@@ -140,7 +140,7 @@ public class AuthenticationMvcController {
             return "VerifyEmail";
         } catch (DuplicateEntityException e) {
             errors.rejectValue("username", "duplicate.username",
-                    "Phone number is already taken!");
+                    "Username is already taken!");
             return "Register";
         }
 //        } catch (Exception e) {
