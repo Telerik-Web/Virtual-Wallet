@@ -10,6 +10,9 @@ import com.telerikacademy.web.virtual_wallet.models.CardDTO;
 import com.telerikacademy.web.virtual_wallet.models.CardDTOOut;
 import com.telerikacademy.web.virtual_wallet.models.User;
 import com.telerikacademy.web.virtual_wallet.services.CardService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -21,6 +24,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("api/cards")
+@Tag(name = "Card Controller", description = "APIs for managing cards")
 public class CardRestController {
 
     private final CardService cardService;
@@ -34,7 +38,9 @@ public class CardRestController {
         this.authenticationHelper = authenticationHelper;
     }
 
+    @Operation(summary = "Return all cards", description = "Returns all created cards if user is an admin")
     @GetMapping
+    @SecurityRequirement(name = "authHeader")
     public List<CardDTOOut> getAllCards(@RequestHeader HttpHeaders headers) {
         try{
             User user = authenticationHelper.tryGetUser(headers);
@@ -46,7 +52,9 @@ public class CardRestController {
 
     }
 
+    @Operation(summary = "Return a card by ID", description = "Returns a card matching an ID")
     @GetMapping("/{cardId}")
+    @SecurityRequirement(name = "authHeader")
     public CardDTOOut getCardById(@PathVariable int cardId, @RequestHeader HttpHeaders headers) {
         try{
             User user = authenticationHelper.tryGetUser(headers);
@@ -59,7 +67,9 @@ public class CardRestController {
         }
     }
 
+    @Operation(summary = "Return all user's cards", description = "Get a single user by ID and then return his cards")
     @GetMapping("/users/{userId}")
+    @SecurityRequirement(name = "authHeader")
     public List<CardDTOOut> getUsersCards(@PathVariable int userId, @RequestHeader HttpHeaders headers) {
         try{
             User user = authenticationHelper.tryGetUser(headers);
@@ -72,7 +82,9 @@ public class CardRestController {
         }
     }
 
+    @Operation(summary = "Create a card", description = "Creates a card for logged in user")
     @PostMapping
+    @SecurityRequirement(name = "authHeader")
     public void create(@Valid @RequestBody CardDTO cardDTO, @RequestHeader HttpHeaders headers) {
         try{
             User user = authenticationHelper.tryGetUser(headers);
@@ -85,7 +97,9 @@ public class CardRestController {
         }
     }
 
+    @Operation(summary = "Update a card", description = "Updates a card for logged in user")
     @PutMapping("/{cardId}")
+    @SecurityRequirement(name = "authHeader")
     public void update(@Valid @RequestBody CardDTO cardDTO , @PathVariable int cardId, @RequestHeader HttpHeaders headers) {
         try{
             User user = authenticationHelper.tryGetUser(headers);
@@ -96,7 +110,9 @@ public class CardRestController {
         }
     }
 
+    @Operation(summary = "Delete a card", description = "Deletes a card for logged in user")
     @DeleteMapping("/{cardId}")
+    @SecurityRequirement(name = "authHeader")
     public void delete(@PathVariable int cardId, @RequestHeader HttpHeaders headers) {
         try{
             User user = authenticationHelper.tryGetUser(headers);

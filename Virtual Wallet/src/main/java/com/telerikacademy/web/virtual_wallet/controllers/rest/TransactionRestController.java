@@ -7,6 +7,8 @@ import com.telerikacademy.web.virtual_wallet.mappers.UserMapper;
 import com.telerikacademy.web.virtual_wallet.models.*;
 import com.telerikacademy.web.virtual_wallet.services.TransactionService;
 import com.telerikacademy.web.virtual_wallet.services.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -40,7 +42,9 @@ public class TransactionRestController {
         this.authenticationHelper = authenticationHelper;
     }
 
+    @Operation(summary = "Send money by phone", description = "Transfers funds to a recipient using their phone number.")
     @PostMapping("/{phone}")
+    @SecurityRequirement(name = "authHeader")
     public Transaction sendByPhone(@RequestHeader HttpHeaders headers,
                                    @PathVariable String phone,
                                    @RequestBody Transaction transaction) {
@@ -49,7 +53,9 @@ public class TransactionRestController {
         return transactionService.transferFunds(sender, recipient, transaction.getAmount());
     }
 
+    @Operation(summary = "Send money", description = "Transfers funds to a recipient using phone, email, or username.")
     @PostMapping("/send")
+    @SecurityRequirement(name = "authHeader")
     public Transaction sendMoney(@RequestHeader HttpHeaders headers,
                                  @RequestParam String type,
                                  @RequestParam String value,
@@ -70,15 +76,14 @@ public class TransactionRestController {
                 sender = authenticationHelper.tryGetUser(headers);
                 break;
             default:
-                recipient = null;
-                sender = null;
-                break;
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid type parameter");
         }
-
         return transactionService.transferFunds(sender, recipient, transaction.getAmount());
     }
 
+    @Operation(summary = "Filter transactions", description = "Filters transactions based on date, recipient, and other criteria.")
     @GetMapping("/filter")
+    @SecurityRequirement(name = "authHeader")
     public List<TransactionDTO> getFilteredTransactions(
             @RequestHeader HttpHeaders headers,
             @RequestParam(required = false) String startDate,
@@ -107,7 +112,9 @@ public class TransactionRestController {
         return transactionService.sortTransactions(TransactionDTOList, sortBy, ascending);
     }
 
+    @Operation(summary = "Deposit money", description = "Deposits money to a user’s balance from a card.")
     @PostMapping("/deposit")
+    @SecurityRequirement(name = "authHeader")
     public ResponseEntity<String> withdrawMoney(@RequestBody CreateTransactionRequest transaction,
                                                 @RequestHeader HttpHeaders headers) {
         User user;
