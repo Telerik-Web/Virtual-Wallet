@@ -33,7 +33,7 @@ public class UserDTOUpdate {
 
     @NotEmpty(message = "Phone number can't be empty.")
     @Pattern(
-            regexp = "(?=.*\\d{10})",
+            regexp = "^[0-9]{10}$",
             message = "Phone number must be 10 digits!"
     )
     private String phone;

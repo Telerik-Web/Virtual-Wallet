@@ -5,11 +5,11 @@ import com.telerikacademy.web.virtual_wallet.exceptions.UnauthorizedOperationExc
 import com.telerikacademy.web.virtual_wallet.models.User;
 import com.telerikacademy.web.virtual_wallet.services.UserService;
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -21,10 +21,12 @@ public class AuthenticationHelper {
     public static final String INVALID_AUTHENTICATION_ERROR = "Invalid authentication";
 
     private final UserService userService;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public AuthenticationHelper(UserService userService) {
+    public AuthenticationHelper(UserService userService, PasswordEncoder passwordEncoder) {
         this.userService = userService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public User tryGetUser(HttpSession session) {
@@ -51,7 +53,7 @@ public class AuthenticationHelper {
 
             User user = userService.getByUsername(username);
 
-            if(!user.getPassword().equals(password)){
+            if(!passwordEncoder.matches(password, user.getPassword())) {
                 throw new UnauthorizedOperationException(INVALID_AUTHENTICATION_ERROR);
             }
 
@@ -65,7 +67,7 @@ public class AuthenticationHelper {
     public User verifyAuthentication(String username, String password) {
         try {
             User user = userService.getByUsername(username);
-            if (!user.getPassword().equals(password)) {
+            if (!passwordEncoder.matches(password, user.getPassword())) {
                 throw new AuthenticationFailureException(INVALID_AUTHENTICATION_ERROR);
             }
             return user;

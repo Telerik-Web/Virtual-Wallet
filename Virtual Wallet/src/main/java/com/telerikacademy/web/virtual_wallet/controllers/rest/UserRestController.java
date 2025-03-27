@@ -14,15 +14,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
-import java.util.Set;
 
 
-//get each card by id and all cards
 
 @RestController
 @RequestMapping("/api/users")
@@ -113,7 +110,9 @@ public class UserRestController {
                              @RequestBody UserDTOUpdate userDtoUpdate) {
         try {
             User userFromHeader = authorizationHelper.tryGetUser(headers);
-            User user = userMapper.fromUserDtoUpdateToUser(userDtoUpdate, userId);
+
+            User userFromId = userService.getById(userId);
+            User user = userMapper.fromUserDtoUpdateToUser(userDtoUpdate, userFromId);
             userService.update(user, userFromHeader, userId);
             return userMapper.toUserDtoOut(getById2(headers, userId));
         } catch (EntityNotFoundException e) {

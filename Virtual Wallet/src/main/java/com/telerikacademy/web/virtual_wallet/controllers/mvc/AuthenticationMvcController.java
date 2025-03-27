@@ -6,20 +6,18 @@ import com.telerikacademy.web.virtual_wallet.exceptions.DuplicateEntityException
 import com.telerikacademy.web.virtual_wallet.exceptions.EntityNotFoundException;
 import com.telerikacademy.web.virtual_wallet.helpers.AuthenticationHelper;
 import com.telerikacademy.web.virtual_wallet.helpers.CloudinaryHelper;
-import com.telerikacademy.web.virtual_wallet.helpers.JwtUtil;
 import com.telerikacademy.web.virtual_wallet.helpers.TokenGenerator;
 import com.telerikacademy.web.virtual_wallet.mappers.CardMapper;
 import com.telerikacademy.web.virtual_wallet.mappers.UserMapper;
 import com.telerikacademy.web.virtual_wallet.models.*;
 import com.telerikacademy.web.virtual_wallet.services.CardService;
-import com.telerikacademy.web.virtual_wallet.services.TransactionService;
-import com.telerikacademy.web.virtual_wallet.services.email_verification.EmailServiceImpl;
 import com.telerikacademy.web.virtual_wallet.services.UserService;
-import jakarta.servlet.http.Cookie;
+import com.telerikacademy.web.virtual_wallet.services.email_verification.EmailServiceImpl;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -43,24 +41,22 @@ public class AuthenticationMvcController {
     private final CardService cardService;
     private final CardMapper cardMapper;
     private final EmailServiceImpl emailService;
-    private final TransactionService transactionService;
-    private final JwtUtil jwtUtil;
     private final CloudinaryHelper cloudinaryHelper;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
     public AuthenticationMvcController(AuthenticationHelper authenticationHelper,
                                        UserService userService,
                                        UserMapper userMapper, CardService cardService, CardMapper cardMapper,
-                                       EmailServiceImpl emailService, TransactionService transactionService, JwtUtil jwtUtil, CloudinaryHelper cloudinaryHelper) {
+                                       EmailServiceImpl emailService, CloudinaryHelper cloudinaryHelper, PasswordEncoder passwordEncoder) {
         this.authenticationHelper = authenticationHelper;
         this.userService = userService;
         this.userMapper = userMapper;
         this.cardService = cardService;
         this.cardMapper = cardMapper;
         this.emailService = emailService;
-        this.transactionService = transactionService;
-        this.jwtUtil = jwtUtil;
         this.cloudinaryHelper = cloudinaryHelper;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @ModelAttribute("isAuthenticated")
@@ -86,13 +82,6 @@ public class AuthenticationMvcController {
         User user;
         try {
             user = authenticationHelper.verifyAuthentication(login.getUsername(), login.getPassword());
-//            String jwtToken = jwtUtil.generateToken(user, 0L, 0.0);
-//
-//            Cookie cookie = new Cookie("jwt", jwtToken);
-//            cookie.setHttpOnly(true);
-//            cookie.setPath("/");
-//            cookie.setMaxAge(24 * 60 * 60);
-//            response.addCookie(cookie);
 
             if (!user.isAccountVerified()) {
                 String token = TokenGenerator.renewToken(user.getVerificationToken());
@@ -154,14 +143,6 @@ public class AuthenticationMvcController {
         } catch (EntityNotFoundException e) {
         }
 
-//        if (userService.getByPhoneNumber(registerDto.getPhone()) != null) {
-//            errors.rejectValue("phone", "phone.duplicate", "Phone number already exists.");
-//            return "Register";
-//        } else if (userService.getByEmail(registerDto.getEmail()) != null) {
-//            errors.rejectValue("email", "email.duplicate", "Email already exists.");
-//            return "Register";
-//        }
-
         try {
             User user = userMapper.fromUserDto(registerDto);
             userService.create(user);
@@ -171,11 +152,6 @@ public class AuthenticationMvcController {
                     "Username is already taken!");
             return "Register";
         }
-//        } catch (Exception e) {
-//            errors.rejectValue("phone", "duplicate.phone",
-//                    "Username is already taken!");
-//            return "Register";
-//        }
     }
 
     @GetMapping("/account")
@@ -196,7 +172,7 @@ public class AuthenticationMvcController {
     public String showUpdatePage(Model model,
                                  HttpSession session) {
         try {
-            User user = authenticationHelper.tryGetUser(session);
+            UserDTOUpdate user = userMapper.fromUserToUserDtoUpdate(authenticationHelper.tryGetUser(session));
             model.addAttribute("user", user);
             return "UpdateUser";
         } catch (AuthenticationFailureException e) {
@@ -205,7 +181,7 @@ public class AuthenticationMvcController {
     }
 
     @PostMapping("/account/update")
-    public String showUserUpdateForm(@Valid @ModelAttribute("user") User user,
+    public String showUserUpdateForm(@Valid @ModelAttribute("user") UserDTOUpdate user,
                                      BindingResult errors,
                                      HttpSession session) {
         if (errors.hasErrors()) {
@@ -213,14 +189,9 @@ public class AuthenticationMvcController {
         }
 
         try {
-            user.setId(authenticationHelper.tryGetUser(session).getId());
-            user.setUsername(authenticationHelper.tryGetUser(session).getUsername());
-            user.setIsAdmin(authenticationHelper.tryGetUser(session).getIsAdmin());
-            user.setIsBlocked(authenticationHelper.tryGetUser(session).getIsBlocked());
-            user.setBalance(authenticationHelper.tryGetUser(session).getBalance());
-            user.setAccountVerified(authenticationHelper.tryGetUser(session).isAccountVerified());
-            user.setCards(authenticationHelper.tryGetUser(session).getCards());
-            userService.update(user, user, authenticationHelper.tryGetUser(session).getId());
+            User updatedUser = userMapper.fromUserDtoUpdateToUser(user, authenticationHelper.tryGetUser(session));
+
+            userService.update(updatedUser, updatedUser, authenticationHelper.tryGetUser(session).getId());
             return "redirect:/auth/account";
         } catch (DuplicateEntityException e) {
             errors.rejectValue("password", "password_error", e.getMessage());
@@ -262,7 +233,6 @@ public class AuthenticationMvcController {
                 }
             }
 
-            // Redirect to the account page after successful upload
             return "redirect:/auth/account";
         } catch (AuthenticationFailureException e) {
             return "AccessDenied";
@@ -287,16 +257,12 @@ public class AuthenticationMvcController {
     @GetMapping("/account/delete")
     public String deleteAccount(HttpSession session) {
         User user = authenticationHelper.tryGetUser(session);
-        System.out.println(user.getId() + " 0");
-        //userService.delete(user.getId(), user);
-        //session.invalidate();
         return "redirect:/auth/account/delete/confirm";
     }
 
     @GetMapping("/account/delete/confirm")
     public String showDeleteAccountConfirm(Model model, HttpSession session) {
         User user = authenticationHelper.tryGetUser(session);
-        System.out.println(user.getUsername() + " 1");
         session.setAttribute("user", user);
         model.addAttribute("user", user);
         return "AccountDeleteConfirm";

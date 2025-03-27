@@ -1,9 +1,7 @@
 package com.telerikacademy.web.virtual_wallet.controllers.rest;
 
 import com.telerikacademy.web.virtual_wallet.exceptions.AuthenticationFailureException;
-import com.telerikacademy.web.virtual_wallet.exceptions.EntityNotFoundException;
 import com.telerikacademy.web.virtual_wallet.helpers.AuthenticationHelper;
-import com.telerikacademy.web.virtual_wallet.mappers.UserMapper;
 import com.telerikacademy.web.virtual_wallet.models.*;
 import com.telerikacademy.web.virtual_wallet.services.TransactionService;
 import com.telerikacademy.web.virtual_wallet.services.UserService;
@@ -13,7 +11,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
@@ -21,7 +18,6 @@ import org.springframework.web.server.ResponseStatusException;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
 
 @RestController
