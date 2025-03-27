@@ -27,7 +27,13 @@
 [http://localhost:8080/swagger-ui/index.html](http://localhost:3308/swagger-ui/index.html#/)
 
 ## Configuration
-Before running the app, in order to use some of the functionalities you must configure `application.properties` and create an account in Cloudinary
+The current configuration has changed and will not work for you due to privacy reasons.
+<br/>
+That's why before running the app, in order to use some of the functionalities you must configure `application.properties` and create an account in Cloudinary.
+```
+Email verification and API key setup are not mandatory for the app to function,
+but if you want the full experience, feel free to set them up.
+```
 
 Navigate to:
 ```css
