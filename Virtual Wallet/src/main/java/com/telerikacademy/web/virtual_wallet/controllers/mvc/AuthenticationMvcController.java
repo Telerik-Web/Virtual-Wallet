@@ -154,14 +154,6 @@ public class AuthenticationMvcController {
         } catch (EntityNotFoundException e) {
         }
 
-//        if (userService.getByPhoneNumber(registerDto.getPhone()) != null) {
-//            errors.rejectValue("phone", "phone.duplicate", "Phone number already exists.");
-//            return "Register";
-//        } else if (userService.getByEmail(registerDto.getEmail()) != null) {
-//            errors.rejectValue("email", "email.duplicate", "Email already exists.");
-//            return "Register";
-//        }
-
         try {
             User user = userMapper.fromUserDto(registerDto);
             userService.create(user);
@@ -171,11 +163,6 @@ public class AuthenticationMvcController {
                     "Username is already taken!");
             return "Register";
         }
-//        } catch (Exception e) {
-//            errors.rejectValue("phone", "duplicate.phone",
-//                    "Username is already taken!");
-//            return "Register";
-//        }
     }
 
     @GetMapping("/account")
@@ -262,7 +249,6 @@ public class AuthenticationMvcController {
                 }
             }
 
-            // Redirect to the account page after successful upload
             return "redirect:/auth/account";
         } catch (AuthenticationFailureException e) {
             return "AccessDenied";
@@ -287,9 +273,6 @@ public class AuthenticationMvcController {
     @GetMapping("/account/delete")
     public String deleteAccount(HttpSession session) {
         User user = authenticationHelper.tryGetUser(session);
-        System.out.println(user.getId() + " 0");
-        //userService.delete(user.getId(), user);
-        //session.invalidate();
         return "redirect:/auth/account/delete/confirm";
     }
 

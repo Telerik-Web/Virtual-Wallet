@@ -1,6 +1,5 @@
 package com.telerikacademy.web.virtual_wallet.controllers.mvc;
 
-import com.telerikacademy.web.virtual_wallet.enums.Status;
 import com.telerikacademy.web.virtual_wallet.exceptions.AuthenticationFailureException;
 import com.telerikacademy.web.virtual_wallet.exceptions.EntityNotFoundException;
 import com.telerikacademy.web.virtual_wallet.helpers.AuthenticationHelper;
@@ -49,18 +48,6 @@ public class TransactionMvcController {
         return session.getAttribute("currentUser") != null;
     }
 
-//    @GetMapping
-//    public String showPaginatedTransactions(Model model,
-//                                            @RequestParam(defaultValue = "0") int page,
-//                                            @RequestParam(defaultValue = "5") int size) {
-//        Page<Transaction> productPage = transactionService.getPaginatedTransactions(page, size);
-//
-//        model.addAttribute("products", productPage.getContent());
-//        model.addAttribute("currentPage", page);
-//        model.addAttribute("totalPages", productPage.getTotalPages());
-//
-//
-//    }
 
     @GetMapping("/all")
     public String showAllTransactions(
@@ -231,16 +218,6 @@ public class TransactionMvcController {
             User recipient = (User) session.getAttribute("recipient");
             double amount = Double.parseDouble(session.getAttribute("amount").toString());
 
-//            if (amount >= 10000) {
-//                String token = TokenGenerator.generateToken();
-//                sender.setVerificationToken(token);
-//                userService.update(sender, sender, sender.getId());
-//                largeTransactionService.sendVerificationEmail(sender.getEmail(), token);
-//
-//                largeTransactionService.sendVerificationEmail(sender.getEmail(), token);
-//                session.setAttribute("pendingTransaction", new PendingTransaction(sender, recipient, amount));
-//                return "ConfirmTransaction";
-//            }
 
             if (amount >= 10000) {
                 String token = jwtUtil.generateToken(sender, recipient.getId(), amount);
@@ -261,12 +238,6 @@ public class TransactionMvcController {
 
     @GetMapping("/verify/transaction")
     public String confirmTransaction(@RequestParam String token, HttpSession session) {
-//        try {
-//            if (TokenGenerator.isTokenExpired(token)) {
-//                return "AccessDenied";
-//            }
-
-        //Transaction transaction = (Transaction) session.getAttribute("transaction");
         String senderUsername = jwtUtil.getUserUsernameFromToken(token);
         User sender = userService.getByUsername(senderUsername);
 
@@ -281,29 +252,12 @@ public class TransactionMvcController {
 
         transactionService.transferFundsVerified(sender, recipient, amount);
 
-//            User sender = authenticationHelper.tryGetUser(session);
-//
-//            if (!sender.getVerificationToken().equals(token)) {
-//                return "TokenFail";
-//            }
-//
-//            PendingTransaction pendingTransaction = (PendingTransaction) session.getAttribute("pendingTransaction");
-//            if (pendingTransaction == null) {
-//                return "TransactionNotFound";
-//            }
-//
-//            transactionService.transferFunds(pendingTransaction.getSender(),
-//                    pendingTransaction.getRecipient(),
-//                    pendingTransaction.getAmount());
 
         sender.setVerificationToken(null);
         userService.update(sender, sender, sender.getId());
         //session.removeAttribute("pendingTransaction");
 
         return "redirect:/transactions/all?token=" + token;
-//        } catch (Exception e) {
-//            return "redirect:/transactions/new";
-//        }
     }
 
     @GetMapping("/deposit")
@@ -354,36 +308,4 @@ public class TransactionMvcController {
         return "redirect:/";
     }
 
-//    @GetMapping("/deposits/all")
-//    public String showAllDeposits(
-//            HttpSession session,
-//            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDate,
-//            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDate,
-//            @RequestParam(required = false) String recipient,
-//            @RequestParam(required = false) Boolean isIncoming,
-//            @RequestParam(required = false) String sortBy,
-//            @RequestParam(required = false) boolean isAscending,
-//            Model model) {
-//        User user = authenticationHelper.tryGetUser(session);
-//        if (recipient != null && recipient.isEmpty()) {
-//            recipient = null;
-//        }
-//        if (sortBy == null) {
-//            sortBy = "amount";
-//        }
-//        List<Transaction> transactions = transactionService.filterTransactions(startDate, endDate, recipient,
-//                isIncoming, user);
-//
-//        List<Transaction> transactionDTOList2 = transactionService.sortTransactions2(transactions, sortBy, isAscending);
-//
-//        model.addAttribute("startDate", startDate);
-//        model.addAttribute("endDate", endDate);
-//        model.addAttribute("recipient", recipient);
-//        model.addAttribute("transactions", transactionDTOList2);
-//        model.addAttribute("isIncoming", isIncoming);
-//        model.addAttribute("sortBy", sortBy);
-//        model.addAttribute("isAscending", isAscending);
-//
-//        return "redirect:/";
-//    }
 }
