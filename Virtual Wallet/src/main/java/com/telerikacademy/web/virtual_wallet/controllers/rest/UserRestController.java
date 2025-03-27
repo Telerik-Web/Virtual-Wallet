@@ -110,7 +110,9 @@ public class UserRestController {
                              @RequestBody UserDTOUpdate userDtoUpdate) {
         try {
             User userFromHeader = authorizationHelper.tryGetUser(headers);
-            User user = userMapper.fromUserDtoUpdateToUser(userDtoUpdate, userId);
+
+            User userFromId = userService.getById(userId);
+            User user = userMapper.fromUserDtoUpdateToUser(userDtoUpdate, userFromId);
             userService.update(user, userFromHeader, userId);
             return userMapper.toUserDtoOut(getById2(headers, userId));
         } catch (EntityNotFoundException e) {

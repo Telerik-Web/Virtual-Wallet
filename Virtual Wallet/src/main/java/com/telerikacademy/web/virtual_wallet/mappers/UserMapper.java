@@ -2,6 +2,7 @@ package com.telerikacademy.web.virtual_wallet.mappers;
 
 import com.telerikacademy.web.virtual_wallet.models.*;
 import com.telerikacademy.web.virtual_wallet.repositories.UserRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -11,9 +12,11 @@ import java.util.List;
 public class UserMapper {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserMapper(UserRepository userRepository) {
+    public UserMapper(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public User fromUserDto(UserDTO userDto) {
@@ -21,7 +24,7 @@ public class UserMapper {
         user.setUsername(userDto.getUsername());
         user.setFirstName(userDto.getFirstName());
         user.setLastName(userDto.getLastName());
-        user.setPassword(userDto.getPassword());
+        user.setPassword(passwordEncoder.encode(userDto.getPassword()));
         user.setEmail(userDto.getEmail());
         user.setPhoneNumber(userDto.getPhone());
         user.setIsAdmin(false);
@@ -36,7 +39,7 @@ public class UserMapper {
         userDTO.setFirstName(user.getFirstName());
         userDTO.setLastName(user.getLastName());
         userDTO.setEmail(user.getEmail());
-        userDTO.setPassword(user.getPassword());
+        userDTO.setPassword(passwordEncoder.encode(user.getPassword()));
         userDTO.setPasswordConfirm(user.getPassword());
         return userDTO;
     }
@@ -71,19 +74,32 @@ public class UserMapper {
         return user;
     }
 
-    public User fromUserDtoUpdateToUser(UserDTOUpdate userDtoUpdate, long id) {
+    public User fromUserDtoUpdateToUser(UserDTOUpdate userDtoUpdate, User currentUser) {
         User user = new User();
-        User currentUser = userRepository.getById(id);
-        user.setId(id);
+        user.setId(currentUser.getId());
         user.setUsername(currentUser.getUsername());
         user.setIsAdmin(currentUser.getIsAdmin());
         user.setIsBlocked(currentUser.getIsBlocked());
+        user.setPhoto(currentUser.getPhoto());
+        user.setBalance(currentUser.getBalance());
+        user.setAccountVerified(currentUser.isAccountVerified());
+        user.setCards(currentUser.getCards());
 
         user.setFirstName(userDtoUpdate.getFirstName());
         user.setLastName(userDtoUpdate.getLastName());
-        user.setPassword(userDtoUpdate.getPassword());
+        user.setPassword(passwordEncoder.encode(userDtoUpdate.getPassword()));
         user.setEmail(userDtoUpdate.getEmail());
         user.setPhoneNumber(userDtoUpdate.getPhone());
         return user;
+    }
+
+    public UserDTOUpdate fromUserToUserDtoUpdate(User user) {
+        UserDTOUpdate userDtoUpdate = new UserDTOUpdate();
+        userDtoUpdate.setFirstName(user.getFirstName());
+        userDtoUpdate.setLastName(user.getLastName());
+        userDtoUpdate.setPassword(user.getPassword());
+        userDtoUpdate.setEmail(user.getEmail());
+        userDtoUpdate.setPhone(user.getPhoneNumber());
+        return userDtoUpdate;
     }
 }
