@@ -1,8 +1,6 @@
 package com.telerikacademy.web.virtual_wallet.models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.Data;
@@ -59,11 +57,6 @@ public class User {
     @Column(name = "account_verified", nullable = false)
     private boolean accountVerified = false;
 
-
-//    private boolean emailVerified;
-//
-//    private String verificationToken;
-
     public User() {
     }
 
@@ -72,10 +65,6 @@ public class User {
         int length = (firstName + " " + lastName).trim().length();
         return length >= 2 && length <= 32;
     }
-
-//    public void generateVerificationToken() {
-//        this.verificationToken = UUID.randomUUID().toString();
-//    }
 
     @Transient
     public String getFullName() {

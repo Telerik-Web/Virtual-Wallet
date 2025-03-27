@@ -10,14 +10,4 @@ public class TransactionMapper {
     public TransactionMapper(TransactionRepository transactionRepository) {
         this.transactionRepository = transactionRepository;
     }
-
-//    public TransactionFilter fromTransaction(Transaction transaction) {
-//        TransactionFilter transactionFilter = new TransactionFilter();
-//        transactionFilter.setAmount(transaction.getAmount());
-//        transactionFilter.setDate(transaction.getCreatedAt());
-//        transactionFilter.setIncoming(true);
-//        transactionFilter.setSender(transaction.getSender().getUsername());
-//        transactionFilter.setRecipient(transaction.getRecipient().getUsername());
-//        return transactionFilter;
-//    }
 }

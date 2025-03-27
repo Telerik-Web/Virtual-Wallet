@@ -40,51 +40,6 @@ public class TransactionServiceImpl implements TransactionService {
         this.largeTransactionService = largeTransactionService;
     }
 
-//    @Override
-//    public List<Transaction> findBySender(User sender) {
-//        return transactionRepository.findBySender(sender);
-//    }
-//
-//    @Override
-//    public List<Transaction> findByRecipient(User recipient) {
-//        return transactionRepository.findByRecipient(recipient);
-//    }
-//
-//    @Override
-//    public List<Transaction> findBySenderAndRecipient(User sender, User recipient) {
-//        return transactionRepository.findBySenderAndRecipient(sender, recipient);
-//    }
-//
-//    @Override
-//    public List<Transaction> findByCreatedAtBetween(LocalDateTime startDate, LocalDateTime endDate) {
-//        return transactionRepository.findByCreatedAtBetween(startDate, endDate);
-//    }
-//
-//    @Override
-//    public List<Transaction> findByStatus(Status status) {
-//        return transactionRepository.findByStatus(status);
-//    }
-//
-//    @Override
-//    public List<Transaction> findByAmountGreaterThan(BigDecimal amount) {
-//        return transactionRepository.findByAmountGreaterThan(amount);
-//    }
-//
-//    @Override
-//    public List<Transaction> findByAmountLessThan(BigDecimal amount) {
-//        return transactionRepository.findByAmountLessThan(amount);
-//    }
-//
-//    @Override
-//    public List<Transaction> findBySenderAndStatus(User sender, Status status) {
-//        return transactionRepository.findBySenderAndStatus(sender, status);
-//    }
-//
-//    @Override
-//    public List<Transaction> findByRecipientAndStatus(User recipient, Status status) {
-//        return transactionRepository.findByRecipientAndStatus(recipient, status);
-//    }
-
     @Override
     @Transactional
     public Transaction transferFunds(User sender, User recipient, Double amount) {
@@ -161,7 +116,6 @@ public class TransactionServiceImpl implements TransactionService {
                 .filter(t -> startDate == null || t.getCreatedAt().isAfter(startDate))
                 .filter(t -> endDate == null || t.getCreatedAt().isBefore(endDate))
                 .filter(t -> recipient == null || t.getRecipient().getUsername().equalsIgnoreCase(recipient))
-//                .filter(t -> user.getUsername() == null || t.getSender().getUsername().equalsIgnoreCase(user.getUsername()))
                 .filter(t -> {
                     if (isIncoming == null) return true;
                     boolean transactionIsIncoming = t.getRecipient().getId() == ((user.getId()));
@@ -214,14 +168,11 @@ public class TransactionServiceImpl implements TransactionService {
 
         Pageable pageable = PageRequest.of(page, size);
 
-        // Get the start and end indexes for pagination
         int start = (int) pageable.getOffset();
         int end = Math.min((start + pageable.getPageSize()), sortedTransactions.size());
 
-        // Slice the sorted list to return only the requested page
         List<Transaction> paginatedTransactions = sortedTransactions.subList(start, end);
 
-        // Return the results wrapped in a PageImpl object
         return new PageImpl<>(paginatedTransactions, pageable, sortedTransactions.size());
     }
 }

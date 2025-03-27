@@ -17,8 +17,6 @@ public class FinancialNewsFetcher {
 
         WebClient webClient = WebClient.builder().baseUrl(API_URL).build();
         String response = webClient.get().retrieve().bodyToMono(String.class).block();
-//        RestTemplate restTemplate = new RestTemplate();
-//        String response = restTemplate.getForObject(API_URL, String.class);
 
         List<String> newsList = new ArrayList<>();
 

@@ -221,7 +221,7 @@ public class AuthenticationMvcController {
             user.setAccountVerified(authenticationHelper.tryGetUser(session).isAccountVerified());
             user.setCards(authenticationHelper.tryGetUser(session).getCards());
             userService.update(user, user, authenticationHelper.tryGetUser(session).getId());
-            return "redirect:/account";
+            return "redirect:/auth/account";
         } catch (DuplicateEntityException e) {
             errors.rejectValue("password", "password_error", e.getMessage());
             return "UpdateUser";

@@ -1,7 +1,6 @@
 package com.telerikacademy.web.virtual_wallet.models;
 
 import lombok.Data;
-import lombok.Getter;
 
 @Data
 public class PendingTransaction {

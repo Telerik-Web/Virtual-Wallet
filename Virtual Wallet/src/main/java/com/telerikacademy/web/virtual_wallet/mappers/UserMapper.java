@@ -41,17 +41,6 @@ public class UserMapper {
         return userDTO;
     }
 
-//    public User fromRegisterDto(RegisterDto registerDto) {
-//        User user = new User();
-//        user.setFirstName(registerDto.getFirstName());
-//        user.setLastName(registerDto.getLastName());
-//        user.setUsername(registerDto.getUsername());
-//        user.setPassword(registerDto.getPassword());
-//        user.setEmail(registerDto.getEmail());
-//        user.setPhoneNumber(registerDto.getPhone());
-//        return user;
-//    }
-
     public List<UserDtoOut> toDTOOut(List<User> userList) {
         List<UserDtoOut> userDto = new ArrayList<>();
         for (User user : userList) {

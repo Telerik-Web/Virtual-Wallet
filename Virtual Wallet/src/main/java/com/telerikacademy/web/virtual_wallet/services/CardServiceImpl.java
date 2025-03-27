@@ -2,7 +2,6 @@ package com.telerikacademy.web.virtual_wallet.services;
 
 import com.telerikacademy.web.virtual_wallet.exceptions.DuplicateEntityException;
 import com.telerikacademy.web.virtual_wallet.exceptions.EntityNotFoundException;
-import com.telerikacademy.web.virtual_wallet.exceptions.UnauthorizedOperationException;
 import com.telerikacademy.web.virtual_wallet.models.Card;
 import com.telerikacademy.web.virtual_wallet.models.User;
 import com.telerikacademy.web.virtual_wallet.repositories.CardRepository;
@@ -11,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Set;
 
 import static com.telerikacademy.web.virtual_wallet.helpers.PermissionHelper.*;
 

@@ -2,7 +2,6 @@ package com.telerikacademy.web.virtual_wallet.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.telerikacademy.web.virtual_wallet.enums.Status;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 

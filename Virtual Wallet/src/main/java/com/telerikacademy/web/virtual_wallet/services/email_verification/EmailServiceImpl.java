@@ -39,13 +39,6 @@ public class EmailServiceImpl {
         };
 
         mailSender.send(msgPreparator);
-
-//        SimpleMailMessage mailMessage = new SimpleMailMessage();
-//        mailMessage.setFrom("ivan29654@gmail.com");
-//        mailMessage.setTo(email);
-//        mailMessage.setSubject(subject);
-//        mailMessage.setText(message);
-//        mailSender.send(mailMessage);
     }
 
     public String loadEmailTemplate() {
