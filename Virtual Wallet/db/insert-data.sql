@@ -1,15 +1,15 @@
 INSERT INTO users (first_name, last_name, username, password, email, phone, balance, isAdmin, isBlocked, account_verified)
 VALUES
-    ('John', 'Doe', 'johndoe', 'pass1', 'john.doe@example.com', '1234567890', 1000, true, false, TRUE),
-    ('Alice', 'Smith', 'alicesmith', 'pass2', 'alice.smith@example.com', '2345678901', 1000, false, false, TRUE),
-    ('Bob', 'Johnson', 'bobjohnson', 'pass3', 'bob.johnson@example.com', '3456789012', 1000, false, false, TRUE),
-    ('Emma', 'Brown', 'emmabrownN@!2', 'emmabrownN@!2', 'emma.brown@example.com', '4567890123', 1000, false, true, TRUE),
-    ('Michael', 'Davis', 'mikedavis', 'pass4', 'mike.davis@example.com', '5678901234', 1500, false, false, TRUE),
-    ('Sophia', 'Wilson', 'sophiawilson', 'pass5', 'sophia.wilson@example.com', '6789012345', 2000, false, false, TRUE),
-    ('James', 'Miller', 'jamesmiller', 'pass6', 'james.miller@example.com', '7890123456', 500, true, false, TRUE),
-    ('Olivia', 'Taylor', 'oliviataylor', 'pass7', 'olivia.taylor@example.com', '8901234567', 3000, false, false, TRUE),
-    ('William', 'Anderson', 'williamanderson', 'pass8', 'william.anderson@example.com', '9012345678', 2500, false, true, TRUE),
-    ('Ava', 'Thomas', 'avathomas', 'pass9', 'ava.thomas@example.com', '0123456789', 1200, false, false, TRUE);
+    ('John', 'Doe', 'johndoe', '$2a$12$XosuYXwzW.KIKZz4n5jwD.BZmCMn/UbWf4zbaCBesSesjMrRckGVC', 'john.doe@example.com', '1234567890', 1000, true, false, TRUE),
+    ('Alice', 'Smith','alicesmith' , '$2a$12$JgwUmATgYxAFY6gKpI6wYOFs9xc03X5hplYOMKWWQMxaP1anzJNP2', 'alice.smith@example.com', '2345678901', 1000, false, false, TRUE),
+    ('Bob', 'Johnson', 'bobjohnson', '$2a$12$YDawJBBfwAeAVYzkaDOvg.Cp7iSeb.ZTLQ.GDBQ1krC6z0zEMunvm', 'bob.johnson@example.com', '3456789012', 1000, false, false, TRUE),
+    ('Emma', 'Brown', 'emmabrownN@!2', '$2a$12$Zrj5fXiHx3kk1.w1oIXkEeHje3x9O/4LGwHQDbNULPeHa3uS82fQO', 'emma.brown@example.com', '4567890123', 1000, false, true, TRUE),
+    ('Michael', 'Davis', 'mikedavis', '$2a$12$HcJSg.nFI0nnlExQk2VB/elozQCyBuSmAWg7j5IlYWp3x5ks9.kma', 'mike.davis@example.com', '5678901234', 1500, false, false, TRUE),
+    ('Sophia', 'Wilson', 'sophiawilson', '$2a$12$MrvIvY7T3aPRi71BpYcioe4WiIdZZHI/yfGpl8znWXLd9vG30EWp6', 'sophia.wilson@example.com', '6789012345', 2000, false, false, TRUE),
+    ('James', 'Miller', 'jamesmiller', '$2a$12$/ux0EEdphkMw6tA9eAiRfuAU/Xdl3oQ4VxkJ/sIiIo25cgwgIWgY.', 'james.miller@example.com', '7890123456', 500, true, false, TRUE),
+    ('Olivia', 'Taylor', 'oliviataylor', '$2a$12$P7sjvVtEtNNSN4eEK14pZeFOs6SE7X1c8v.APUUXv7xMMVPhhW3j.', 'olivia.taylor@example.com', '8901234567', 3000, false, false, TRUE),
+    ('William', 'Anderson', 'williamanderson', '$2a$12$Slqfkl4cCLX651FHd6aMDe7tSnvdxMqWxzijpZU.fR3fMg.kf0AFi', 'william.anderson@example.com', '9012345678', 2500, false, true, TRUE),
+    ('Ava', 'Thomas', 'avathomas', '$2a$12$qooPGAZChSkYGYLiZM2aN.n/lMKq0rsmF7seKZuscl7VhzeMJ4aHq', 'ava.thomas@example.com', '0123456789', 1200, false, false, TRUE);
 
 -- Insert more cards
 INSERT INTO cards (card_number, expiration_date, check_number, user_id)
