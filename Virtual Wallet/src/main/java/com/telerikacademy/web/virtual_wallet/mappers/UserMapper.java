@@ -27,6 +27,7 @@ public class UserMapper {
         user.setPassword(passwordEncoder.encode(userDto.getPassword()));
         user.setEmail(userDto.getEmail());
         user.setPhoneNumber(userDto.getPhone());
+        user.setPhoto("assets/img/default-user.jpg");
         user.setIsAdmin(false);
         user.setIsBlocked(false);
         return user;
