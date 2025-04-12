@@ -6,10 +6,10 @@ import com.telerikacademy.web.virtual_wallet.exceptions.UnauthorizedOperationExc
 import com.telerikacademy.web.virtual_wallet.helpers.AuthenticationHelper;
 import com.telerikacademy.web.virtual_wallet.mappers.CardMapper;
 import com.telerikacademy.web.virtual_wallet.models.Card;
-import com.telerikacademy.web.virtual_wallet.models.CardDTO;
-import com.telerikacademy.web.virtual_wallet.models.CardDTOOut;
+import com.telerikacademy.web.virtual_wallet.models.dtos.CardDTO;
+import com.telerikacademy.web.virtual_wallet.models.dtos.CardDTOOut;
 import com.telerikacademy.web.virtual_wallet.models.User;
-import com.telerikacademy.web.virtual_wallet.services.CardService;
+import com.telerikacademy.web.virtual_wallet.services.contracts.CardService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;

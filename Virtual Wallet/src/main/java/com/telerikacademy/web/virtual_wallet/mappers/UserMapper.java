@@ -1,7 +1,9 @@
 package com.telerikacademy.web.virtual_wallet.mappers;
 
 import com.telerikacademy.web.virtual_wallet.models.*;
-import com.telerikacademy.web.virtual_wallet.repositories.UserRepository;
+import com.telerikacademy.web.virtual_wallet.models.dtos.UserDTO;
+import com.telerikacademy.web.virtual_wallet.models.dtos.UserDTOOut;
+import com.telerikacademy.web.virtual_wallet.models.dtos.UserDTOUpdate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -42,10 +44,10 @@ public class UserMapper {
         return userDTO;
     }
 
-    public List<UserDtoOut> toDTOOut(List<User> userList) {
-        List<UserDtoOut> userDto = new ArrayList<>();
+    public List<UserDTOOut> toDTOOut(List<User> userList) {
+        List<UserDTOOut> userDto = new ArrayList<>();
         for (User user : userList) {
-            UserDtoOut userDtoOut = new UserDtoOut();
+            UserDTOOut userDtoOut = new UserDTOOut();
             userDtoOut.setId(user.getId());
             userDtoOut.setUsername(user.getUsername());
             userDtoOut.setEmail(user.getEmail());
@@ -55,16 +57,16 @@ public class UserMapper {
         return userDto;
     }
 
-    public UserDtoOut toUserDtoOut(UserDTO userDto) {
-        UserDtoOut user = new UserDtoOut();
+    public UserDTOOut toUserDtoOut(UserDTO userDto) {
+        UserDTOOut user = new UserDTOOut();
         user.setUsername(userDto.getUsername());
         user.setEmail(userDto.getEmail());
         user.setPhone(userDto.getPhone());
         return user;
     }
 
-    public UserDtoOut toUserDtoOut(User user2) {
-        UserDtoOut user = new UserDtoOut();
+    public UserDTOOut toUserDtoOut(User user2) {
+        UserDTOOut user = new UserDTOOut();
         user.setId(user2.getId());
         user.setUsername(user2.getUsername());
         user.setEmail(user2.getEmail());

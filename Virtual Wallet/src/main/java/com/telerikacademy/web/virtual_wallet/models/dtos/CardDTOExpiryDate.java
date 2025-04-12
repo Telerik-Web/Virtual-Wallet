@@ -1,4 +1,4 @@
-package com.telerikacademy.web.virtual_wallet.models;
+package com.telerikacademy.web.virtual_wallet.models.dtos;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
@@ -10,7 +10,7 @@ import java.time.LocalDate;
 
 @Getter
 @Setter
-public class CardDTO2 {
+public class CardDTOExpiryDate {
 
     @NotNull(message = "Card number is required.")
     @Pattern(regexp = "^\\d{16}$", message = "Card number must be exactly 16 digits.")

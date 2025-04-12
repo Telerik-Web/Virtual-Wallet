@@ -6,6 +6,7 @@ import com.telerikacademy.web.virtual_wallet.models.Card;
 import com.telerikacademy.web.virtual_wallet.models.User;
 import com.telerikacademy.web.virtual_wallet.repositories.CardRepository;
 import com.telerikacademy.web.virtual_wallet.repositories.UserRepository;
+import com.telerikacademy.web.virtual_wallet.services.contracts.CardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

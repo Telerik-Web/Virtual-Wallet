@@ -10,14 +10,17 @@ import com.telerikacademy.web.virtual_wallet.helpers.TokenGenerator;
 import com.telerikacademy.web.virtual_wallet.mappers.CardMapper;
 import com.telerikacademy.web.virtual_wallet.mappers.UserMapper;
 import com.telerikacademy.web.virtual_wallet.models.*;
-import com.telerikacademy.web.virtual_wallet.services.CardService;
-import com.telerikacademy.web.virtual_wallet.services.UserService;
+import com.telerikacademy.web.virtual_wallet.models.dtos.CardDTOExpiryDate;
+import com.telerikacademy.web.virtual_wallet.models.dtos.LoginDTO;
+import com.telerikacademy.web.virtual_wallet.models.dtos.UserDTO;
+import com.telerikacademy.web.virtual_wallet.models.dtos.UserDTOUpdate;
+import com.telerikacademy.web.virtual_wallet.services.contracts.CardService;
+import com.telerikacademy.web.virtual_wallet.services.contracts.UserService;
 import com.telerikacademy.web.virtual_wallet.services.email_verification.EmailServiceImpl;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -64,12 +67,12 @@ public class AuthenticationMvcController {
 
     @GetMapping("/login")
     public String showLogin(Model model) {
-        model.addAttribute("login", new LogInDto());
+        model.addAttribute("login", new LoginDTO());
         return "Login";
     }
 
     @PostMapping("/login")
-    public String processLogin(@Valid @ModelAttribute("login") LogInDto login,
+    public String processLogin(@Valid @ModelAttribute("login") LoginDTO login,
                                BindingResult errors,
                                HttpSession session,
                                HttpServletResponse response) {
@@ -295,7 +298,7 @@ public class AuthenticationMvcController {
             User user = authenticationHelper.tryGetUser(session);
             UserDTO userDto = userMapper.fromUsertoUserDto(user);
             model.addAttribute("user", userDto);
-            model.addAttribute("card", new CardDTO2());
+            model.addAttribute("card", new CardDTOExpiryDate());
             return "AddCard";
         } catch (AuthenticationFailureException e) {
             return "AccessDenied";
@@ -303,7 +306,7 @@ public class AuthenticationMvcController {
     }
 
     @PostMapping("/account/cards/new")
-    public String addCard(@Valid @ModelAttribute("card") CardDTO2 cardDto,
+    public String addCard(@Valid @ModelAttribute("card") CardDTOExpiryDate cardDto,
                           BindingResult errors,
                           Model model,
                           HttpSession session) {

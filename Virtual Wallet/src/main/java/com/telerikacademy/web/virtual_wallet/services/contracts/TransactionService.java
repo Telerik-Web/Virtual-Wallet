@@ -1,7 +1,7 @@
-package com.telerikacademy.web.virtual_wallet.services;
+package com.telerikacademy.web.virtual_wallet.services.contracts;
 
 import com.telerikacademy.web.virtual_wallet.models.Transaction;
-import com.telerikacademy.web.virtual_wallet.models.TransactionDTO;
+import com.telerikacademy.web.virtual_wallet.models.dtos.TransactionDTO;
 import com.telerikacademy.web.virtual_wallet.models.User;
 import org.springframework.data.domain.Page;
 

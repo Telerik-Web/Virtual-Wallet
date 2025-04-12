@@ -7,6 +7,7 @@ import com.telerikacademy.web.virtual_wallet.helpers.UserSpecifications;
 import com.telerikacademy.web.virtual_wallet.models.FilterUserOptions;
 import com.telerikacademy.web.virtual_wallet.models.User;
 import com.telerikacademy.web.virtual_wallet.repositories.UserRepository;
+import com.telerikacademy.web.virtual_wallet.services.contracts.UserService;
 import com.telerikacademy.web.virtual_wallet.services.email_verification.EmailServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

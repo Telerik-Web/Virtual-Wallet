@@ -6,7 +6,10 @@ import com.telerikacademy.web.virtual_wallet.exceptions.UnauthorizedOperationExc
 import com.telerikacademy.web.virtual_wallet.helpers.AuthenticationHelper;
 import com.telerikacademy.web.virtual_wallet.mappers.UserMapper;
 import com.telerikacademy.web.virtual_wallet.models.*;
-import com.telerikacademy.web.virtual_wallet.services.UserService;
+import com.telerikacademy.web.virtual_wallet.models.dtos.UserDTO;
+import com.telerikacademy.web.virtual_wallet.models.dtos.UserDTOOut;
+import com.telerikacademy.web.virtual_wallet.models.dtos.UserDTOUpdate;
+import com.telerikacademy.web.virtual_wallet.services.contracts.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -40,15 +43,15 @@ public class UserRestController {
 
     @Operation(summary = "Returns all users", description = "Returns all users with their proper fields.")
     @GetMapping
-    public List<UserDtoOut> getAll(@RequestParam(required = false) String username,
-                             @RequestParam(required = false) String email,
-                             @RequestParam(required = false) String phone,
-                             @RequestParam(required = false) String sortBy,
-                             @RequestParam(required = false) String orderBy,
-                             @RequestParam(defaultValue = "0") int page,
-                             @RequestParam(defaultValue = "10") int size,
-                             @RequestParam(defaultValue = "id") String sortBySpecific,
-                             @RequestParam(defaultValue = "ASC") String direction) {
+    public List<UserDTOOut> getAll(@RequestParam(required = false) String username,
+                                   @RequestParam(required = false) String email,
+                                   @RequestParam(required = false) String phone,
+                                   @RequestParam(required = false) String sortBy,
+                                   @RequestParam(required = false) String orderBy,
+                                   @RequestParam(defaultValue = "0") int page,
+                                   @RequestParam(defaultValue = "10") int size,
+                                   @RequestParam(defaultValue = "id") String sortBySpecific,
+                                   @RequestParam(defaultValue = "ASC") String direction) {
         FilterUserOptions filterOptions = new FilterUserOptions(username, phone, email, sortBy, orderBy);
 
         Page<User> pageOfUsers = userService.getAll(filterOptions, page, size, sortBySpecific, direction);
@@ -58,7 +61,7 @@ public class UserRestController {
     @Operation(summary = "Get user by ID", description = "Fetches a user by their unique ID")
     @GetMapping("/{userId}")
     @SecurityRequirement(name = "authHeader")
-    public UserDtoOut getById(@RequestHeader HttpHeaders headers, @PathVariable long userId) {
+    public UserDTOOut getById(@RequestHeader HttpHeaders headers, @PathVariable long userId) {
         try {
             User user = authorizationHelper.tryGetUser(headers);
             User userToReturn = userService.getById(user, userId);
@@ -84,7 +87,7 @@ public class UserRestController {
 
     @Operation(summary = "Create a User", description = "Create a user with unique all its fields.")
     @PostMapping
-    public UserDtoOut create(@RequestBody UserDTO userDto) {
+    public UserDTOOut create(@RequestBody UserDTO userDto) {
         try {
             User user = userMapper.fromUserDto(userDto);
             userService.create(user);
@@ -99,7 +102,7 @@ public class UserRestController {
     @Operation(summary = "Updates user by an Id", description = "Updates the desired fields in an User")
     @PutMapping("/{userId}")
     @SecurityRequirement(name = "authHeader")
-    public UserDtoOut update(@RequestHeader HttpHeaders headers, @PathVariable long userId,
+    public UserDTOOut update(@RequestHeader HttpHeaders headers, @PathVariable long userId,
                              @Valid @RequestBody UserDTOUpdate userDtoUpdate) {
         try {
             User userFromHeader = authorizationHelper.tryGetUser(headers);

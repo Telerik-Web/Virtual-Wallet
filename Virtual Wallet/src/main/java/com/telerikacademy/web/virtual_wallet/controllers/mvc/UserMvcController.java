@@ -3,12 +3,12 @@ package com.telerikacademy.web.virtual_wallet.controllers.mvc;
 import com.telerikacademy.web.virtual_wallet.exceptions.AuthenticationFailureException;
 import com.telerikacademy.web.virtual_wallet.exceptions.UnauthorizedOperationException;
 import com.telerikacademy.web.virtual_wallet.helpers.AuthenticationHelper;
-import com.telerikacademy.web.virtual_wallet.models.FilterUserDto;
+import com.telerikacademy.web.virtual_wallet.models.dtos.FilterUserDTO;
 import com.telerikacademy.web.virtual_wallet.models.FilterUserOptions;
 import com.telerikacademy.web.virtual_wallet.models.Transaction;
 import com.telerikacademy.web.virtual_wallet.models.User;
-import com.telerikacademy.web.virtual_wallet.services.TransactionService;
-import com.telerikacademy.web.virtual_wallet.services.UserService;
+import com.telerikacademy.web.virtual_wallet.services.contracts.TransactionService;
+import com.telerikacademy.web.virtual_wallet.services.contracts.UserService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.data.domain.Page;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -49,7 +49,7 @@ public class UserMvcController {
     }
 
     @GetMapping("/admin")
-    public String showFilteredUsers(@ModelAttribute("filterUserOptions") FilterUserDto filterDto, Model model, HttpSession session,
+    public String showFilteredUsers(@ModelAttribute("filterUserOptions") FilterUserDTO filterDto, Model model, HttpSession session,
                                     @RequestParam(defaultValue = "0") int page,
                                     @RequestParam(defaultValue = "5") int size,
                                     @RequestParam(defaultValue = "id") String sortBySpecific,

@@ -1,4 +1,4 @@
-package com.telerikacademy.web.virtual_wallet.models;
+package com.telerikacademy.web.virtual_wallet.models.dtos;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.telerikacademy.web.virtual_wallet.enums.Status;

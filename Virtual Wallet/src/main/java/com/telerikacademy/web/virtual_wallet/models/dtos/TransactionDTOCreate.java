@@ -1,4 +1,4 @@
-package com.telerikacademy.web.virtual_wallet.models;
+package com.telerikacademy.web.virtual_wallet.models.dtos;
 
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Pattern;

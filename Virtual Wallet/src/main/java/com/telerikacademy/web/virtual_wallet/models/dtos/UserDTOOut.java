@@ -1,4 +1,4 @@
-package com.telerikacademy.web.virtual_wallet.models;
+package com.telerikacademy.web.virtual_wallet.models.dtos;
 
 
 import lombok.Getter;
@@ -6,17 +6,17 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class UserDtoOut {
+public class UserDTOOut {
 
     private long id;
     private String username;
     private String email;
     private String phone;
 
-    public UserDtoOut() {
+    public UserDTOOut() {
     }
 
-    public UserDtoOut(Integer id, String username, String email, String phone) {
+    public UserDTOOut(Integer id, String username, String email, String phone) {
         this.id = id;
         this.username = username;
         this.email = email;

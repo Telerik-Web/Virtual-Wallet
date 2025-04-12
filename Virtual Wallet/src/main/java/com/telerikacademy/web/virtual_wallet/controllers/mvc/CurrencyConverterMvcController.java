@@ -1,7 +1,7 @@
 package com.telerikacademy.web.virtual_wallet.controllers.mvc;
 
 import com.telerikacademy.web.virtual_wallet.ExchangeRateFetcher;
-import com.telerikacademy.web.virtual_wallet.models.CurrencyDTO;
+import com.telerikacademy.web.virtual_wallet.models.dtos.CurrencyDTO;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

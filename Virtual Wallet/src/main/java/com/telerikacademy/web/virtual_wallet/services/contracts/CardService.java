@@ -1,4 +1,4 @@
-package com.telerikacademy.web.virtual_wallet.services;
+package com.telerikacademy.web.virtual_wallet.services.contracts;
 
 import com.telerikacademy.web.virtual_wallet.models.Card;
 import com.telerikacademy.web.virtual_wallet.models.User;

@@ -4,8 +4,8 @@ import com.telerikacademy.web.virtual_wallet.exceptions.AuthenticationFailureExc
 import com.telerikacademy.web.virtual_wallet.helpers.AuthenticationHelper;
 import com.telerikacademy.web.virtual_wallet.models.Transaction;
 import com.telerikacademy.web.virtual_wallet.models.User;
-import com.telerikacademy.web.virtual_wallet.services.TransactionService;
-import com.telerikacademy.web.virtual_wallet.services.UserService;
+import com.telerikacademy.web.virtual_wallet.services.contracts.TransactionService;
+import com.telerikacademy.web.virtual_wallet.services.contracts.UserService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
