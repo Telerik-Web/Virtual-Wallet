@@ -10,8 +10,4 @@ public class VirtualWalletApplication {
     public static void main(String[] args) {
         SpringApplication.run(VirtualWalletApplication.class, args);
     }
-    //deposits in transactions
-    //userRepository - JPA
-    //javascript nai otgore v faila
-    //$ sprq da izliza w home
 }

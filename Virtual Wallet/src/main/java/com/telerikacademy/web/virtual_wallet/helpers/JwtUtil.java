@@ -37,15 +37,6 @@ public class JwtUtil {
                 .getSubject();
     }
 
-    public Long getUserIdFromToken(String token) {
-        return Jwts.parserBuilder()
-                .setSigningKey(key)
-                .build()
-                .parseClaimsJws(token)
-                .getBody()
-                .get("userId", Long.class);
-    }
-
     public Long getRecipientIdFromToken(String token) {
         return Jwts.parserBuilder()
                 .setSigningKey(key)
@@ -64,16 +55,5 @@ public class JwtUtil {
                 .get("amount", Double.class);
     }
 
-    public boolean validateToken(String token) {
-        try {
-            Jwts.parserBuilder()
-                    .setSigningKey(key)
-                    .build()
-                    .parseClaimsJws(token);
-            return true;
-        } catch (JwtException e) {
-            return false;
-        }
-    }
 
 }

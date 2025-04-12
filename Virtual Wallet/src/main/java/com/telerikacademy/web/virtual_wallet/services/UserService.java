@@ -1,16 +1,8 @@
 package com.telerikacademy.web.virtual_wallet.services;
 
-import com.telerikacademy.web.virtual_wallet.models.Card;
-import com.telerikacademy.web.virtual_wallet.models.CardDTO;
 import com.telerikacademy.web.virtual_wallet.models.FilterUserOptions;
 import com.telerikacademy.web.virtual_wallet.models.User;
-import jakarta.transaction.Transactional;
-import jakarta.validation.Valid;
-import org.hibernate.Hibernate;
 import org.springframework.data.domain.Page;
-
-import java.util.List;
-import java.util.Set;
 
 public interface UserService {
     Page<User> getAll(FilterUserOptions filterOptions, int page, int size, String sortBy, String direction);

@@ -42,13 +42,12 @@ public class AuthenticationMvcController {
     private final CardMapper cardMapper;
     private final EmailServiceImpl emailService;
     private final CloudinaryHelper cloudinaryHelper;
-    private final PasswordEncoder passwordEncoder;
 
     @Autowired
     public AuthenticationMvcController(AuthenticationHelper authenticationHelper,
                                        UserService userService,
                                        UserMapper userMapper, CardService cardService, CardMapper cardMapper,
-                                       EmailServiceImpl emailService, CloudinaryHelper cloudinaryHelper, PasswordEncoder passwordEncoder) {
+                                       EmailServiceImpl emailService, CloudinaryHelper cloudinaryHelper) {
         this.authenticationHelper = authenticationHelper;
         this.userService = userService;
         this.userMapper = userMapper;
@@ -56,7 +55,6 @@ public class AuthenticationMvcController {
         this.cardMapper = cardMapper;
         this.emailService = emailService;
         this.cloudinaryHelper = cloudinaryHelper;
-        this.passwordEncoder = passwordEncoder;
     }
 
     @ModelAttribute("isAuthenticated")

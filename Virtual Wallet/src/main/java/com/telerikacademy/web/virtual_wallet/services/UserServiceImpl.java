@@ -16,9 +16,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
-import static com.telerikacademy.web.virtual_wallet.helpers.PermissionHelper.*;
+import static com.telerikacademy.web.virtual_wallet.helpers.PermissionHelper.checkIfAdmin;
+import static com.telerikacademy.web.virtual_wallet.helpers.PermissionHelper.checkIfCreatorOrAdminForUser;
 
 @Service
 public class UserServiceImpl implements UserService {

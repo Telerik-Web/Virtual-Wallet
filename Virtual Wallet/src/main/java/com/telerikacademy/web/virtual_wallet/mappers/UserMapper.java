@@ -11,11 +11,9 @@ import java.util.List;
 @Component
 public class UserMapper {
 
-    private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public UserMapper(UserRepository userRepository, PasswordEncoder passwordEncoder) {
-        this.userRepository = userRepository;
+    public UserMapper(PasswordEncoder passwordEncoder) {
         this.passwordEncoder = passwordEncoder;
     }
 

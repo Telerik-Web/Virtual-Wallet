@@ -1,7 +1,6 @@
 package com.telerikacademy.web.virtual_wallet.controllers.mvc;
 
 import com.telerikacademy.web.virtual_wallet.exceptions.AuthenticationFailureException;
-import com.telerikacademy.web.virtual_wallet.exceptions.EntityNotFoundException;
 import com.telerikacademy.web.virtual_wallet.exceptions.UnauthorizedOperationException;
 import com.telerikacademy.web.virtual_wallet.helpers.AuthenticationHelper;
 import com.telerikacademy.web.virtual_wallet.models.FilterUserDto;
@@ -20,8 +19,6 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
-
-import static com.telerikacademy.web.virtual_wallet.helpers.PermissionHelper.checkIfAdmin;
 
 @Controller
 @RequestMapping("/users")

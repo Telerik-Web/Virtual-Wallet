@@ -28,12 +28,6 @@ public class PermissionHelper {
         }
     }
 
-    public static void checkIfBlocked(User user) {
-        if (user.getIsBlocked()) {
-            throw new UnauthorizedOperationException(BLOCKED_USER_ERROR);
-        }
-    }
-
     public static boolean isValidImageFile(MultipartFile file) {
         String contentType = file.getContentType();
         return contentType != null && (contentType.equals("image/jpeg")

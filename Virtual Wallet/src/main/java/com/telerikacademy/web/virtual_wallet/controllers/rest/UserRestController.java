@@ -10,6 +10,7 @@ import com.telerikacademy.web.virtual_wallet.services.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
@@ -93,21 +94,13 @@ public class UserRestController {
         } catch (DuplicateEntityException e) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
         }
-//        {
-//            "firstName": "Johgn",
-//                "lastName": "Doe",
-//                "username": "newUser",
-//                "email": "newuser@example.com",
-//                "phone": "123456789",
-//                "password": "securePassword"
-//        }
     }
 
     @Operation(summary = "Updates user by an Id", description = "Updates the desired fields in an User")
     @PutMapping("/{userId}")
     @SecurityRequirement(name = "authHeader")
     public UserDtoOut update(@RequestHeader HttpHeaders headers, @PathVariable long userId,
-                             @RequestBody UserDTOUpdate userDtoUpdate) {
+                             @Valid @RequestBody UserDTOUpdate userDtoUpdate) {
         try {
             User userFromHeader = authorizationHelper.tryGetUser(headers);
 
@@ -122,13 +115,6 @@ public class UserRestController {
         } catch (UnauthorizedOperationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         }
-//        {
-//            "firstName": "Ivan",
-//                "lastName": "Doe",
-//                "email": "newuser@example.com",
-//                "phone": "123456789",
-//                "password": "securePassword"
-//        }
     }
 
     @Operation(summary = "Alter admin permissions", description = "Changes user permissions " +

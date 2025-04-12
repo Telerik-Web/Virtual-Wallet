@@ -2,14 +2,11 @@ package com.telerikacademy.web.virtual_wallet.services;
 
 import com.telerikacademy.web.virtual_wallet.enums.Status;
 import com.telerikacademy.web.virtual_wallet.exceptions.EntityNotFoundException;
-import com.telerikacademy.web.virtual_wallet.helpers.TokenGenerator;
 import com.telerikacademy.web.virtual_wallet.models.Transaction;
 import com.telerikacademy.web.virtual_wallet.models.TransactionDTO;
 import com.telerikacademy.web.virtual_wallet.models.User;
 import com.telerikacademy.web.virtual_wallet.repositories.TransactionRepository;
 import com.telerikacademy.web.virtual_wallet.repositories.UserRepository;
-import com.telerikacademy.web.virtual_wallet.services.email_verification.EmailServiceImpl;
-import com.telerikacademy.web.virtual_wallet.services.email_verification.LargeTransactionService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -28,16 +25,13 @@ public class TransactionServiceImpl implements TransactionService {
 
     private final TransactionRepository transactionRepository;
     private final UserRepository userRepository;
-    private final EmailServiceImpl emailServiceImpl;
-    private final LargeTransactionService largeTransactionService;
+
 
     @Autowired
     public TransactionServiceImpl(TransactionRepository transactionRepository,
-                                  UserRepository userRepository, EmailServiceImpl emailServiceImpl, LargeTransactionService largeTransactionService) {
+                                  UserRepository userRepository) {
         this.transactionRepository = transactionRepository;
         this.userRepository = userRepository;
-        this.emailServiceImpl = emailServiceImpl;
-        this.largeTransactionService = largeTransactionService;
     }
 
     @Override
