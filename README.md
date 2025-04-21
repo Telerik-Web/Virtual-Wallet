@@ -56,6 +56,8 @@ cloudinary.cloud-name={your_cloud_name}
 cloudinary.api-key={your_api_key}
 cloudinary.api-secret={your_api_secret}
 ```
+You may need to go to `https://myaccount.google.com/apppasswords` and create an app password in order to use the email verification feature! This will act as a temporary password which you need to add next to `spring.mail.password`
+
 ### Login Details
     The provided credentials are for testing purposes only!
     It's essential to inform you that the application encripts passwords, 
