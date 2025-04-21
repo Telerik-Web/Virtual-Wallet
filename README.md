@@ -44,7 +44,7 @@ And modify the following properties:
 ```properties
 # Database Configuration
 spring.datasource.url=jdbc:mariadb://localhost:3306/virtual_wallet
-spring.datasource.username=root
+spring.datasource.username={yourusername}
 spring.datasource.password={yourpassword}
 
 # Email verification
